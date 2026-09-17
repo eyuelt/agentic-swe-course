@@ -8,6 +8,7 @@ on:
     branches: [main]
     paths:
       - curriculum.html
+      - assets/**
       - .github/workflows/pages.yml
   workflow_dispatch:
 
@@ -50,6 +51,7 @@ jobs:
           EOF
             cat curriculum.html
           } > _site/index.html
+          cp assets/* _site/
           touch _site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

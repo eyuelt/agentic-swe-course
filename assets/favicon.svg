@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The course's three nested building blocks: loop, context window, message. -->
+  <style>
+    .bg{fill:#0e6b72}.fg{fill:none;stroke:#eceeed;stroke-width:2.5}.dot{fill:#eceeed}
+    @media (prefers-color-scheme:dark){.bg{fill:#4fbfc4}.fg{stroke:#0e1214}.dot{fill:#0e1214}}
+  </style>
+  <rect class="bg" x="1" y="1" width="30" height="30" rx="7"/>
+  <rect class="fg" x="7.75" y="7.75" width="16.5" height="16.5" rx="3.5"/>
+  <rect class="dot" x="13" y="13" width="6" height="6" rx="1.5"/>
+</svg>

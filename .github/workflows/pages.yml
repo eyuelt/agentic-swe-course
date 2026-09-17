@@ -30,9 +30,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Assemble site
         run: |
-          # curriculum.html is an artifact fragment: no doctype, charset or viewport, because
-          # the artifact host supplies them. Wrap it in the same skeleton here, or browsers
-          # render it in quirks mode and phones get a desktop-width page.
+          # curriculum.html is a fragment: no doctype, charset or viewport (it began life as a
+          # hosted artifact, where the host supplied them). Wrap it in a skeleton here, or
+          # browsers render it in quirks mode and phones get a desktop-width page.
           mkdir _site
           {
             cat <<'EOF'

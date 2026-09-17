@@ -16,7 +16,7 @@ A self-paced curriculum in agentic software engineering. This file tells you how
 | `TOOLING.md` | Specs for six tools; two are built | Yes |
 | `MAINTENANCE.md` | Invariants, refresh procedure, change log | Append to §7 only |
 | `tools/` | `curriculum_lint.py`, `feedwatch.py`, `feeds.yaml` | Yes |
-| `curriculum.html` | Offline copy of the published artifact | Only alongside a doc change |
+| `curriculum.html` | Source of the public site (GitHub Pages deploys it on push) | Only alongside a doc change |
 
 ## Hard rules
 

@@ -21,7 +21,7 @@ These are load-bearing. If you change one, you are writing a different course, w
 
 **I5 — Experts are hypotheses, not authority.** The dossier presents disagreements and teaches a protocol for testing claims. Never resolve a disagreement by picking the most famous person. If you add a practitioner, add their context dependencies and their critics.
 
-**I6 — Security precedes autonomy.** M12 is a hard prerequisite for the unattended parts of M10 and M11. Do not reorder for narrative flow. The ordering is the safety argument.
+**I6 — Security precedes autonomy.** M13 is a hard prerequisite for the unattended parts of M11 and M12. Do not reorder for narrative flow. The ordering is the safety argument.
 
 **I7 — Honest about uncertainty.** Sources are dated and marked verified or not. Claims the course cannot support are labelled as the course's own position. Do not launder a plausible guess into an authoritative statement — the audience is experienced engineers who will notice, and correctly discount everything else.
 
@@ -58,7 +58,7 @@ These are load-bearing. If you change one, you are writing a different course, w
 
 **Do not change without a human deciding:**
 - The design invariants in §1
-- Removing a module or a stage
+- Removing a module or a phase
 - The security ordering (I6)
 - The assessment philosophy (I8)
 
@@ -99,7 +99,7 @@ Watch for these. Two or more means a full revision, not a refresh.
 1. **The linter reports staleness errors** — `STATE-OF-PLAY` is over six months old.
 2. **A practitioner in the dossier has publicly reversed a position the course still attributes to them.** Highest severity.
 3. **Learners report that a lab's tooling assumptions no longer hold** — e.g. a mechanism the course treats as universal no longer exists in any current harness.
-4. **A module's core technique has become automatic.** If harnesses now do intentional compaction correctly without instruction, M5 needs rewriting from "how to do it" to "how to verify your harness is doing it."
+4. **A module's core technique has become automatic.** If harnesses now do intentional compaction correctly without instruction, M6 needs rewriting from "how to do it" to "how to verify your harness is doing it."
 5. **The disagreement map has gone quiet** — everyone now agrees. Either the field matured (rewrite the map as settled practice) or you stopped tracking dissent (more likely; go find the critics).
 6. **The evidence section still cites only 2025–2026 studies** while the course is being taught in 2028.
 7. **Nobody has failed a capstone.** Rubrics have drifted toward participation.
@@ -128,8 +128,10 @@ The bar is deliberately high. The dossier is valuable because it is short.
 
 | Date | Maintainer | Change | Invariants touched |
 |---|---|---|---|
-| 2026-09-17 | Initial authoring (Claude, Opus 5) | v1.0 created. 17 modules, 5 stages, 3 gates, 3 capstones. Research base: primary sources verified live on this date; see `RESOURCES.md`. | — (establishes I1–I8) |
+| 2026-09-17 | Initial authoring (Claude, Opus 5) | v1.0 created. 17 modules, 5 phases, 3 gates, 3 capstones. Research base: primary sources verified live on this date; see `RESOURCES.md`. | — (establishes I1–I8) |
 | 2026-09-17 | Eyuel | Course renamed *Shipping With Agents*; agentic software engineering retained as the field, not the title. | none |
+| 2026-09-17 | Eyuel | Modules and phases renumbered to 1-index (M1–M17, Phase 1–5); "stages" renamed "phases". "Three layers" reframed as **three levels of practice**, defined by the unit of work and mapped to the phase that teaches each. 89 ungraded self-checks added (retrieval practice, not assessment — I8 holds). Anti-cheat framing removed throughout: this is voluntary self-study and integrity policing added nothing. `CLAUDE.md` and `/refresh-curriculum` added for agent-run maintenance. | I2, I8 (clarified) |
+| 2026-09-17 | Eyuel (caught) / Claude (applied) | **position-change**: DHH's entry was written from an April 2026 source and missed his August position — by Lex Fridman #501 (2026-08-26) he reports shipping two months of a project without hand-writing any code and reviewing *the shape* rather than every line. Entry and Disagreement Map row rewritten; R-45 added; R-43 marked superseded. All entries now carry **As of** stamps and the dossier carries a short currency note. Common public names (steipete, Boris, DHH, mitsuhiko, ghuntley) added. | I5, I7 (upheld) |
 | 2026-09-17 | Eyuel | First independent link run from an unrestricted network: 52 URLs, 0 dead, 1 redirect. R-10 corrected to its canonical path; R-81/R-90/R-102/R-103/R-151 promoted from unverified to verified on that evidence. Eight citations added to reduce orphaned resources. | I7 (upheld) |
 
 **Format for entries.** Date · who · what changed and why · which invariants were touched or deliberately broken. Keep it terse. A maintainer two years from now needs to know *why* a decision was made, which is the one thing the diff cannot tell them.
@@ -142,8 +144,8 @@ Stated honestly so the next maintainer does not have to rediscover them.
 
 - **Thin on non-code agentic work.** Infrastructure, data engineering, and ML workflows get less attention than application development. The principles transfer; the labs largely do not.
 - **Single-practitioner bias in the evidence.** Much of the dossier is self-reported by people with an incentive to report success. Thoughtworks-style field observation (R-151) is the only real counterweight and it is under-used.
-- **The junior-developer question is named and not answered** (M15). Nobody has answered it; the course should say so rather than invent a curriculum for it, but it deserves revisiting as evidence appears.
-- **Cost modelling is absent.** The course says Stage 3 is expensive without helping a learner budget. A cost-per-outcome module would be useful and would need real data.
-- **No treatment of regulated or safety-critical environments.** Medical, aerospace, finance-with-auditors. These have constraints the course simply ignores, and the M12 material is necessary but nowhere near sufficient for them.
+- **The junior-developer question is named and not answered** (M16). Nobody has answered it; the course should say so rather than invent a curriculum for it, but it deserves revisiting as evidence appears.
+- **Cost modelling is absent.** The course says Phase 4 is expensive without helping a learner budget. A cost-per-outcome module would be useful and would need real data.
+- **No treatment of regulated or safety-critical environments.** Medical, aerospace, finance-with-auditors. These have constraints the course simply ignores, and the M13 material is necessary but nowhere near sufficient for them.
 - **T3–T6 are specs, not code.** `TOOLING.md` ships only two working tools.
-- **The eval module (M13) deserves to be larger.** It is the most durable content in the course and currently gets less space than M7.
+- **The eval module (M14) deserves to be larger.** It is the most durable content in the course and currently gets less space than M8.

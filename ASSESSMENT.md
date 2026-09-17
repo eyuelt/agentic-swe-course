@@ -6,7 +6,7 @@
 
 ## 1. Philosophy
 
-This course assesses **judgment**, not output. An agent can produce every artifact here in an afternoon; what it cannot fake is a record of decisions you made, measurements you took, and predictions that turned out wrong.
+This course assesses **judgment**, not output. Artifacts are cheap to produce now; what makes one worth having is the record attached to it — decisions you made, measurements you took, predictions that turned out wrong.
 
 Accordingly, every rubric weights three things:
 
@@ -16,7 +16,7 @@ Accordingly, every rubric weights three things:
 
 A submission with an impressive artifact and no judgment trace scores **Working** at best. A submission with a modest artifact, an honest null result, and a sharp analysis of why, scores **Proficient**.
 
-**On failure reporting.** Any capstone or gate with no failures reported is presumed under-reported and does not pass. This is not a stylistic preference: unattended agent work fails regularly, and a practitioner who is not seeing failures is not looking.
+**On failure reporting.** If a capstone or gate produced no failures worth recording, go back and look again. Unattended agent work fails regularly; a run that appears clean usually means the logging was too coarse or the scope was too small to be interesting. Both are useful findings — write down which one it was.
 
 ---
 
@@ -51,23 +51,23 @@ Applied to every module artifact unless the module specifies otherwise.
 
 | Module | Artifact | The one thing assessors look for |
 |---|---|---|
-| M0 | Log (≥20 rows, ≥4 controls), beliefs statement, annotated session | Control tasks actually done; predictions recorded *before* |
-| M1 | Working agent, four-experiment table, one harness feature, teardown | Predictions written before running the break experiments |
-| M2 | 5 rewritten briefs, calibration factor, abandonment log, briefing standard | Evidence of abandoning something that felt nearly done |
-| M3 | Verifier audit, <15s fast lane, same-context test comparison, gaming catalogue, non-test loop | A measured sub-15-second command that the agent runs unprompted |
-| M4 | Review-method comparison, comprehension audit, tuned reviewer, upstream experiment | Read ratio measured honestly and a repaid module |
-| M5 | Context census, before/after audit, compaction artifact, rot threshold, subagent spec | A deletion from the always-on file justified by evidence |
-| M6 | Verified research doc, plan with scored objections, ratio experiment, reused plan | Spot-checks of research claims against actual source |
-| M7 | Scored legibility audit, hygiene sweep, deterministic suite, greppability repair, 2 enforced conventions | Ten consecutive identical test runs |
-| M8 | Correction taxonomy, blocking hook, review subagent, MCP cost table | Every extension traced to a specific personal failure |
-| M9 | Isolation comparison, throughput curve, decomposition, control plane | A stated ceiling with the constraint that sets it |
-| M10 | Terminating loop, 3 stop conditions, overbaking account, verified fan-out, week of logs | A defect the verifier agent caught that the worker missed |
-| M11 | Handoff breakdown, phone friction list, review policy, CI agent + threat model | A review policy applied retrospectively with a misclassification rate |
-| M12 | Trifecta audit, red-team table, verified sandbox, threat model, supply-chain guardrail | A demonstrated successful injection against your own agent |
-| M13 | Eval suite (≥10 tasks), variance table, controlled comparison, memory-file eval | A minimum effect size stated before comparing |
-| M14 | Extended agent, token profile improvement, workflow agent, orchestration comparison | Survives compaction and restart on a multi-hour task |
-| M15 | Bottleneck analysis, team memory file, review policy, debt register | Memory file rules traced to ≥2 historical review comments |
-| M16 | Capstone C, doctrine document, re-run measurements, practice schedule, teaching artifact | The "what I changed my mind about" section, quoted against M0 |
+| M1 | Log (≥20 rows, ≥4 controls), beliefs statement, annotated session | Control tasks actually done; predictions recorded *before* |
+| M2 | Working agent, four-experiment table, one harness feature, teardown | Predictions written before running the break experiments |
+| M3 | 5 rewritten briefs, calibration factor, abandonment log, briefing standard | Evidence of abandoning something that felt nearly done |
+| M4 | Verifier audit, <15s fast lane, same-context test comparison, gaming catalogue, non-test loop | A measured sub-15-second command that the agent runs unprompted |
+| M5 | Review-method comparison, comprehension audit, tuned reviewer, upstream experiment | Read ratio measured honestly and a repaid module |
+| M6 | Context census, before/after audit, compaction artifact, rot threshold, subagent spec | A deletion from the always-on file justified by evidence |
+| M7 | Verified research doc, plan with scored objections, ratio experiment, reused plan | Spot-checks of research claims against actual source |
+| M8 | Scored legibility audit, hygiene sweep, deterministic suite, greppability repair, 2 enforced conventions | Ten consecutive identical test runs |
+| M9 | Correction taxonomy, blocking hook, review subagent, MCP cost table | Every extension traced to a specific personal failure |
+| M10 | Isolation comparison, throughput curve, decomposition, control plane | A stated ceiling with the constraint that sets it |
+| M11 | Terminating loop, 3 stop conditions, overbaking account, verified fan-out, week of logs | A defect the verifier agent caught that the worker missed |
+| M12 | Handoff breakdown, phone friction list, review policy, CI agent + threat model | A review policy applied retrospectively with a misclassification rate |
+| M13 | Trifecta audit, red-team table, verified sandbox, threat model, supply-chain guardrail | A demonstrated successful injection against your own agent |
+| M14 | Eval suite (≥10 tasks), variance table, controlled comparison, memory-file eval | A minimum effect size stated before comparing |
+| M15 | Extended agent, token profile improvement, workflow agent, orchestration comparison | Survives compaction and restart on a multi-hour task |
+| M16 | Bottleneck analysis, team memory file, review policy, debt register | Memory file rules traced to ≥2 historical review comments |
+| M17 | Capstone C, doctrine document, re-run measurements, practice schedule, teaching artifact | The "what I changed my mind about" section, quoted against M1 |
 
 ---
 
@@ -76,39 +76,39 @@ Applied to every module artifact unless the module specifies otherwise.
 Gates test **integration**, not recall. Each is a single recorded session or a single change, in a real repository, demonstrating several modules at once.
 
 ### ▸ Gate 1 — Operator
-*After M4. One recorded session, one real change, 60–120 minutes.*
+*After M5. One recorded session, one real change, 60–120 minutes.*
 
 Demonstrate, in order, in one session:
-1. A blast-radius assessment written before starting (M2)
-2. A four-part brief including the verification means (M2)
-3. A verifier the agent runs itself, at least once, unprompted (M3)
-4. One abandonment: a trajectory you discarded and re-briefed rather than corrected twice (M2)
-5. A risk-ordered review of the resulting diff, with your read ratio stated (M4)
-6. A log entry with prediction and actual (M0)
+1. A blast-radius assessment written before starting (M3)
+2. A four-part brief including the verification means (M3)
+3. A verifier the agent runs itself, at least once, unprompted (M4)
+4. One abandonment: a trajectory you discarded and re-briefed rather than corrected twice (M3)
+5. A risk-ordered review of the resulting diff, with your read ratio stated (M5)
+6. A log entry with prediction and actual (M1)
 
 **Pass:** all six present, plus a 300-word retrospective naming the weakest of the six and what you will change.
 **Common failure:** no abandonment, because the session went well. Then re-take it on a harder task — the abandonment reflex is the point, and it only trains under pressure.
 
 ### ▸ Gate 2 — Engineer
-*After M8. Assembled from Stage 2 work plus Capstone B.*
+*After M9. Assembled from Phase 3 work plus Capstone B.*
 
 Submit:
-1. A context budget for your main repo: what loads, what it costs, what you removed and why (M5)
-2. A change landed in unfamiliar code via research→plan→implement, with both artifacts and the spot-check record (M6)
-3. A legibility audit with at least three remediations executed and their effect measured (M7)
-4. An extension kit where every item traces to a named incident (M8)
+1. A context budget for your main repo: what loads, what it costs, what you removed and why (M6)
+2. A change landed in unfamiliar code via research→plan→implement, with both artifacts and the spot-check record (M7)
+3. A legibility audit with at least three remediations executed and their effect measured (M8)
+4. An extension kit where every item traces to a named incident (M9)
 
 **Pass:** all four, plus a written argument for one place where you deliberately deviated from the course's recommendation, with your evidence.
 
 ### ▸ Gate 3 — Orchestrator
-*After M12. The highest-stakes gate; it licenses unattended operation.*
+*After M13. The highest-stakes gate; it licenses unattended operation.*
 
 Submit:
-1. A parallelism ceiling with the throughput curve and the binding constraint (M9)
-2. A week of scheduled-loop logs with a correctness assessment, including at least one thing the loop got wrong (M10)
-3. A review policy in actual force, with its misclassification rate (M11)
-4. A completed trifecta audit with every all-three configuration remediated (M12)
-5. Evidence of one successful prompt injection against your own agent in a sandbox, and the fix (M12)
+1. A parallelism ceiling with the throughput curve and the binding constraint (M10)
+2. A week of scheduled-loop logs with a correctness assessment, including at least one thing the loop got wrong (M11)
+3. A review policy in actual force, with its misclassification rate (M12)
+4. A completed trifecta audit with every all-three configuration remediated (M13)
+5. Evidence of one successful prompt injection against your own agent in a sandbox, and the fix (M13)
 
 **Pass:** all five. Item 5 is non-negotiable — you do not get to run unattended agents on the basis of believing you are safe.
 
@@ -123,8 +123,8 @@ Build and ship a small but real tool, end to end, with agents. Real means: someo
 
 **Requirements**
 - Scope: something you could hand-write in 4–8 hours
-- Every task gets a verifier the agent can run (M3)
-- Log every task (M0)
+- Every task gets a verifier the agent can run (M4)
+- Log every task (M1)
 - Ship it — deployed, published, or installed by another human
 
 **Deliverables:** the working thing; the log; a 500-word retrospective covering where agents were faster, where they were slower, and your read ratio for the final codebase.
@@ -134,10 +134,10 @@ Build and ship a small but real tool, end to end, with agents. Real means: someo
 ### Capstone B — Land a Change in a Large Unfamiliar Codebase
 *After Gate 2. Effort ~15 h.*
 
-Take a real open-source project with >50k lines that you have never worked in. Find a real open issue. Land a fix using the full Stage 2 toolkit.
+Take a real open-source project with >50k lines that you have never worked in. Find a real open issue. Land a fix using the full Phase 3 toolkit.
 
 **Requirements**
-- Research phase with no edit permission; three claims spot-checked against source (M6)
+- Research phase with no edit permission; three claims spot-checked against source (M7)
 - Reviewed plan committed as an artifact before implementation
 - Verification appropriate to the project's own standards
 - **External signal required:** a submitted PR with maintainer response, or an independent review by a competent human who did not write it
@@ -155,10 +155,10 @@ Design, deploy, and operate an autonomous loop doing real work for seven consecu
 
 **Requirements**
 - Real work with real consequences — no toy tasks
-- All five loop components present (M10) plus persistent state
+- All five loop components present (M11) plus persistent state
 - Separate verifier agent; the worker does not grade itself
 - Hard budget caps on tokens and wall-clock; a tested rollback; a kill switch
-- Sandboxed per M12, with a written threat model
+- Sandboxed per M13, with a written threat model
 - An append-only action log
 - **An incident log** — every time it did something wrong, surprising, wasteful, or unsafe
 
@@ -172,12 +172,12 @@ Design, deploy, and operate an autonomous loop doing real work for seven consecu
 
 ## 7. The doctrine document
 
-The final deliverable and the one that outlives the course. 1,500–3,000 words. Structure in `CURRICULUM.md` M16.
+The final deliverable and the one that outlives the course. 1,500–3,000 words. Structure in `CURRICULUM.md` M17.
 
 | Dimension | Proficient | Expert |
 |---|---|---|
 | Positions | Takes clear positions with evidence from own work | Positions contradict at least one expert consensus, defensibly |
-| Mind-changes | Identifies ≥2 real changes against the M0 beliefs statement, quoted | Explains *why* the earlier belief was held — the reasoning error, not just the wrong answer |
+| Mind-changes | Identifies ≥2 real changes against the M1 beliefs statement, quoted | Explains *why* the earlier belief was held — the reasoning error, not just the wrong answer |
 | Verification stack | Documents each rung honestly, gaps included | Explains what each rung cannot catch |
 | Autonomy policy | Clear rules for what runs unattended | Rules derived from measured failure rates, not comfort |
 | Disagreements | ≥3 specific, argued disagreements with named practitioners | Includes a disagreement the practitioner would find difficult to answer |
@@ -186,12 +186,18 @@ The final deliverable and the one that outlives the course. 1,500–3,000 words.
 
 ---
 
-## 8. Self-assessment integrity
+## 8. Keeping yourself honest
 
-A self-paced course has no invigilator, so these three rules carry the weight:
+There is no invigilator and no reason for one — you are doing this to get better at the work. But three habits are
+easy to drop and expensive to lose, because each one protects a measurement you cannot reconstruct later:
 
-1. **Predictions before results, always.** A prediction written after the fact is not a prediction and quietly destroys the value of every measurement downstream.
-2. **Failures logged at the time.** Reconstructed failure logs are systematically rosier than real ones.
-3. **One external signal per stage.** Gate 1: show a colleague your session recording. Capstone B: a maintainer or independent reviewer. Capstone C: someone else reads your incident log and tells you what you are minimizing.
+1. **Predictions before results.** A prediction written after the fact is not a prediction, and it quietly destroys
+   the value of every calibration measurement downstream. This is the one that matters most.
+2. **Failures logged at the time.** Reconstructed failure logs are systematically rosier than real ones. You will
+   not remember the twenty minutes you spent arguing with a doomed session; the log will.
+3. **One external signal per phase.** Not for verification — for the blind spots you cannot see by definition. Show
+   a colleague your Gate 1 session recording. Get a maintainer's response on Capstone B. Have someone else read your
+   Capstone C incident log and tell you what you are minimizing.
 
-If you are using an agent to help produce these artifacts — and you should be, it would be strange not to — use it for the mechanical parts and write the judgment traces yourself. The judgment trace is the entire point. Outsourcing it means completing a course about thinking without doing any.
+Use agents freely for everything else. The judgment traces are worth writing yourself, not as a rule but because
+writing them is where most of the thinking happens.

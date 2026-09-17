@@ -24,11 +24,11 @@ Each claim is stamped with a confidence level:
 
 **[H]** **The harness co-authors the result.** Benchmark scores for the *same base model* vary by double digits depending on agent scaffolding. Never compare a model number without knowing its harness.
 
-**[M]** **Reasoning effort is now a dial, not a model choice.** Practitioners report using a higher effort setting for hard problems and long unattended runs, and a lower one for routine work. Treat effort as a parameter to tune per task class, and eval it (M13).
+**[M]** **Reasoning effort is now a dial, not a model choice.** Practitioners report using a higher effort setting for hard problems and long unattended runs, and a lower one for routine work. Treat effort as a parameter to tune per task class, and eval it (M14).
 
 **[M]** **Multi-model workflows are normal practice among experts**, typically a fast model for iteration and a stronger one for hard reasoning, run in parallel panes. DHH's reported setup is a clear example.
 
-**[H]** **Advice is model-generation-dependent.** Boris Cherny's guidance on plan mode inverted across model versions — first "always plan first, then auto-accept", later "skip plan mode, newer models plan implicitly." This is the canonical illustration of why technique must be re-tested rather than believed (see M13).
+**[H]** **Advice is model-generation-dependent.** Boris Cherny's guidance on plan mode inverted across model versions — first "always plan first, then auto-accept", later "skip plan mode, newer models plan implicitly." This is the canonical illustration of why technique must be re-tested rather than believed (see M14).
 
 ## 3. Benchmarks
 
@@ -36,7 +36,7 @@ Each claim is stamped with a confidence level:
 
 **[H]** Aggregators publishing these numbers carry the caveat explicitly: *"Pass-rate depends on agent scaffolding; two runs of the same base model can differ by double digits."*
 
-**Durable position:** use benchmarks for coarse capability trends and for deciding what to go test yourself. Use your own eval suite (M13) for decisions. A saturating benchmark tells you the benchmark is finished, not that the problem is.
+**Durable position:** use benchmarks for coarse capability trends and for deciding what to go test yourself. Use your own eval suite (M14) for decisions. A saturating benchmark tells you the benchmark is finished, not that the problem is.
 
 ## 4. Conventions and standards
 
@@ -80,7 +80,7 @@ Each claim is stamped with a confidence level:
 
 **[M]** **DORA 2026 (ROI of AI-Assisted Software Development, published ~May 2026):** a **J-curve** of value realisation — an initial dip described as "the tuition cost of transformation" (learning, verification tax, process adaptation) before gains; an **instability tax** (individual effectiveness up, delivery stability down); gains strongly task-dependent (**35–40% on simple tasks, ~10% or less on complex legacy code**); illustrative first-year ROI figures for a large engineering org; and the central finding that **AI amplifies the existing organizational system** rather than substituting for it. The report explicitly discourages headcount reduction in favour of retention and upskilling.
 
-**Durable position:** the literature is becoming structurally unable to answer "does this make me faster" for the individual practitioner, because clean control groups no longer exist. This is the standing argument for M0.
+**Durable position:** the literature is becoming structurally unable to answer "does this make me faster" for the individual practitioner, because clean control groups no longer exist. This is the standing argument for M1.
 
 ## 8. Security
 

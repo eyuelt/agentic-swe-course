@@ -54,7 +54,7 @@ Each new item is classified by a small model call into exactly one of:
 The classifier prompt must include the relevant dossier section, so "position-change" is judged against what the course currently claims the person believes. This is the feature that makes the tool worth building: **the dossier's most dangerous failure mode is quietly misrepresenting someone who has changed their mind**, and it has happened to every practitioner in it at least once.
 
 ### Output
-`inbox/YYYY-MM-DD.md`: grouped by class, highest priority first, each item with person, title, URL, date, a two-sentence summary, and the proposed curriculum action (`module: M7` / `state-of-play: §5` / `dossier: ronacher`).
+`inbox/YYYY-MM-DD.md`: grouped by class, highest priority first, each item with person, title, URL, date, a two-sentence summary, and the proposed curriculum action (`module: M8` / `state-of-play: §5` / `dossier: ronacher`).
 
 ### Implementation sketch
 Python. `feedparser` for RSS/Atom; GitHub REST for repo releases and new repos; YouTube channel RSS (`.../feeds/videos.xml?channel_id=`); podcast RSS. For sources without a feed, fetch the index page and diff the link set against the store — crude and adequate. One model call per new item for summary + classification. Respect `robots.txt`, cache with ETag/Last-Modified, and rate-limit.
@@ -84,7 +84,7 @@ curriculum-lint all --ci   # non-zero exit on any error-level finding
 
 **Staleness.** Parse volatility tags from `RESOURCES.md`. Thresholds: **F** → warn at 90 days, error at 180. **M** → warn at 365. **D** → never. Separately, error if `STATE-OF-PLAY-*.md`'s compile date is more than 180 days old, and warn at 90.
 
-**Graph.** Parse `⊢` prerequisite lines from `CURRICULUM.md`. Verify: every referenced module exists; no cycles; the hard-ordering constraints in Appendix A hold (M12 before the unattended parts of M10/M11; M3 before M4 and M9; M0 first); every `[R-nn]` citation resolves to an entry in `RESOURCES.md`; every `R-nn` entry is cited at least once (orphan resources are usually a sign of a deleted module); every module ID in `ASSESSMENT.md` §4 exists in `CURRICULUM.md`.
+**Graph.** Parse `⊢` prerequisite lines from `CURRICULUM.md`. Verify: every referenced module exists; no cycles; the hard-ordering constraints in Appendix A hold (M13 before the unattended parts of M11/M12; M4 before M5 and M10; M1 first); every `[R-nn]` citation resolves to an entry in `RESOURCES.md`; every `R-nn` entry is cited at least once (orphan resources are usually a sign of a deleted module); every module ID in `ASSESSMENT.md` §4 exists in `CURRICULUM.md`.
 
 **Effort:** ~4 hours. Shipped in `tools/curriculum_lint.py`.
 **Run as:** a pre-commit hook and a monthly scheduled job.
@@ -99,8 +99,8 @@ curriculum-lint all --ci   # non-zero exit on any error-level finding
 
 ### Interface
 ```
-lab-check L3.2 --repo ~/work/myrepo   # verify the <15s fast lane
-lab-check L7.3 --repo ~/work/myrepo   # verify 10 consecutive identical test runs
+lab-check L4.2 --repo ~/work/myrepo   # verify the <15s fast lane
+lab-check L8.3 --repo ~/work/myrepo   # verify 10 consecutive identical test runs
 lab-check status                      # progress across all checkable labs
 ```
 
@@ -108,14 +108,14 @@ lab-check status                      # progress across all checkable labs
 
 | Lab | Check |
 |---|---|
-| L0.1 | `ase/log.md` exists, ≥20 rows, ≥4 rows flagged as control tasks, predictions non-empty |
-| L3.2 | Named command exists and completes in <15s over 3 runs; is referenced in the repo's agent memory file |
-| L5.2 | Memory file line count decreased; relocation map file exists |
-| L7.1 | Audit file present with all 10 checks scored and evidence per score |
-| L7.3 | Test suite run 10× produces identical pass/fail sets |
-| L8.2 | A configured blocking hook exists and denies a scripted attempt |
-| L12.3 | Sandbox container builds; egress to a non-allowlisted host fails; no host credentials mounted |
-| L13.1 | Eval suite runs with one command and emits a score |
+| L1.1 | `ase/log.md` exists, ≥20 rows, ≥4 rows flagged as control tasks, predictions non-empty |
+| L4.2 | Named command exists and completes in <15s over 3 runs; is referenced in the repo's agent memory file |
+| L6.2 | Memory file line count decreased; relocation map file exists |
+| L8.1 | Audit file present with all 10 checks scored and evidence per score |
+| L8.3 | Test suite run 10× produces identical pass/fail sets |
+| L9.2 | A configured blocking hook exists and denies a scripted attempt |
+| L13.3 | Sandbox container builds; egress to a non-allowlisted host fails; no host credentials mounted |
+| L14.1 | Eval suite runs with one command and emits a score |
 
 Everything else — anything requiring judgment — is explicitly out of scope and reported as `manual`. **Do not extend this tool into judging judgment.** That is what the rubrics and the external signals are for; an autograder that scores reflection teaches people to write for the autograder.
 
@@ -125,7 +125,7 @@ Everything else — anything requiring judgment — is explicitly out of scope a
 
 ## T4 — `ase-log`: practice telemetry
 
-**The problem.** M0 requires manual logging, which decays after about ten entries. Automatic capture of the mechanical fields makes the manual fields survivable.
+**The problem.** M1 requires manual logging, which decays after about ten entries. Automatic capture of the mechanical fields makes the manual fields survivable.
 
 **Purpose.** Capture wall-clock, interventions, verification events, and token cost automatically; prompt for the judgment fields at task close.
 
@@ -147,16 +147,16 @@ Read ratio (0–100%). One-sentence note. Whether the prediction was met.
 ### Reports
 Calibration curve (predicted vs actual, over time). Intervention mix trend (steer:correct:rescue — a rising *rescue* share is the leading indicator that your briefs or your context have degraded). Read-ratio trend against blast radius. Verification events per task.
 
-**Implementation sketch.** A small CLI writing JSONL, plus a harness hook (`PostToolUse` matching the test/build command) that appends verification events. Render to the markdown log M0 requires so the two are the same artifact.
+**Implementation sketch.** A small CLI writing JSONL, plus a harness hook (`PostToolUse` matching the test/build command) that appends verification events. Render to the markdown log M1 requires so the two are the same artifact.
 
 **Effort:** ~1 day CLI + ~2 hours of hooks.
-**Caution:** this tool is itself a M0 hazard. Do not spend a week building telemetry instead of taking a baseline. Build it *after* twenty hand-written rows have proved what is worth capturing.
+**Caution:** this tool is itself a M1 hazard. Do not spend a week building telemetry instead of taking a baseline. Build it *after* twenty hand-written rows have proved what is worth capturing.
 
 ---
 
 ## T5 — `eval-suite`: personal golden-task runner
 
-**The problem.** M13's suite needs a runner: fresh checkout at a pinned commit, run the brief, score, repeat N times, aggregate with variance.
+**The problem.** M14's suite needs a runner: fresh checkout at a pinned commit, run the brief, score, repeat N times, aggregate with variance.
 
 **Purpose.** Answer "did that change help?" with a number and an error bar.
 

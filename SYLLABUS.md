@@ -22,19 +22,32 @@ The course takes a strong position, stated here so a reader can disagree with it
 
 We call this gap the **verification gap.** It is the organizing idea of the whole curriculum. When you evaluate a new tool, a new technique, or an expert's advice, the question is always the same: *what does this do to my verification gap?*
 
-## 2. The three layers, and why the course is shaped this way
+## 2. The three levels of practice
 
-The field has moved through three layers in roughly three years. Practitioners who are stuck are usually stuck one layer down from where their problem lives.
+**These are not parts of the course** — the five phases in §5 are that. These are three levels at which the
+discipline itself operates, each defined by **the unit of work you are manipulating**. They emerged roughly in this
+order, and each rests on the one below: you never stop needing a good brief because you have moved up to designing
+loops. Most people who feel stuck are working one level below where their problem actually lives.
 
-| Layer | Era | The unit of work | The skill | Failure mode when stuck here |
-|---|---|---|---|---|
-| **Prompting** | 2023–24 | The message | Phrasing, examples | Endless re-prompting; blaming the model |
-| **Context engineering** | 2025 | The context window | Curation, compaction, isolation | Context rot; agent "forgets"; huge CLAUDE.md that nobody reads |
-| **Loop engineering** | 2026 | The loop | System design, verification, autonomy budgeting | Human is the bottleneck; agents idle waiting for you |
+| Level | Name | Era | Unit of work | The skill | Stuck here looks like | Taught in |
+|---|---|---|---|---|---|---|
+| **3** | Loop engineering | 2026 | The loop | System design, verification, deciding how much autonomy a task can carry | You are the bottleneck; agents sit idle waiting for your attention | Phase 4 |
+| **2** | Context engineering | 2025 | The context window | Curation, compaction, isolation — budgeting what the model can see | Context rot; a huge memory file nobody reads; the agent "forgetting" | Phase 3 |
+| **1** | Prompting | 2023–24 | The message | Phrasing, examples, iteration by hand | Endless re-prompting; blaming the model when it doesn't land | Phase 2 |
 
-Each layer *subsumes* the one below — you still need good briefs at layer 3 — so the course proceeds in that order, then adds a fourth thing that is not a layer but a permanent obligation: **governance** (security, comprehension debt, org effects).
+Phase 1 sits underneath all three — it is measurement, so you can tell whether anything you do at any level is
+actually working. Phase 5 sits on top: building the harnesses, and carrying a team.
 
-A note on the 2026 term **"loop engineering."** Addy Osmani's formulation is the clearest: *"Loop engineering is replacing yourself as the person who prompts the agent. You design the system that does it instead."* Peter Steinberger puts it more bluntly: *"You shouldn't be prompting coding agents anymore. You should be designing loops that prompt your agents."* Treat the term as useful and probably transient — the underlying skill (designing self-verifying systems) is durable; the label may not be. `MAINTENANCE.md` explains how to swap labels without rewriting the course.
+Because each level subsumes the one below, the course proceeds bottom-up, then adds the thing that is not a level
+but a permanent obligation: **governance** — security, comprehension debt, and what happens when a team does this
+at scale.
+
+A note on the 2026 term **"loop engineering."** Addy Osmani's formulation is the clearest: *"Loop engineering is
+replacing yourself as the person who prompts the agent. You design the system that does it instead."* Peter
+Steinberger puts it more bluntly: *"You shouldn't be prompting coding agents anymore. You should be designing loops
+that prompt your agents."* Treat the term as useful and probably transient — the underlying skill (designing
+self-verifying systems) is durable; the label may not be. `MAINTENANCE.md` explains how to swap labels without
+rewriting the course.
 
 ## 3. Learning outcomes
 
@@ -82,38 +95,38 @@ Specific tools, models, prices and version numbers live in exactly one file: `ST
 
 ## 5. Structure
 
-Five stages, seventeen modules. Prerequisites form a DAG, not a line — Stage 2 modules can be taken in any order once Stage 1 is complete.
+Five phases, seventeen modules. Prerequisites form a DAG, not a line — Phase 3 modules can be taken in any order once Phase 2 is complete.
 
 ```
-STAGE 0 — CALIBRATION
-  M0  Baseline & Instrumentation
+PHASE 1 — CALIBRATION
+  M1  Baseline & Instrumentation
 
-STAGE 1 — OPERATOR  (drive one agent well)
-  M1  The Agentic Loop: build an agent
-  M2  Briefing, Steering, Abandoning
-  M3  Verification-First Development
-  M4  Reading the Machine: review discipline
+PHASE 2 — OPERATOR  (drive one agent well)
+  M2  The Agentic Loop: build an agent
+  M3  Briefing, Steering, Abandoning
+  M4  Verification-First Development
+  M5  Reading the Machine: review discipline
       ▸ GATE 1 + Capstone A
 
-STAGE 2 — ENGINEER  (shape the environment)
-  M5  Context Engineering
-  M6  Research → Plan → Implement
-  M7  Designing Codebases for Agents
-  M8  The Extension Surface
+PHASE 3 — ENGINEER  (shape the environment)
+  M6  Context Engineering
+  M7  Research → Plan → Implement
+  M8  Designing Codebases for Agents
+  M9  The Extension Surface
       ▸ GATE 2 + Capstone B
 
-STAGE 3 — ORCHESTRATOR  (scale beyond one agent)
-  M9   Parallelism
-  M10  Loop Engineering
-  M11  Async, Remote & Cloud Agents
-  M12  Security & Safety for Agentic Development
+PHASE 4 — ORCHESTRATOR  (scale beyond one agent)
+  M10   Parallelism
+  M11  Loop Engineering
+  M12  Async, Remote & Cloud Agents
+  M13  Security & Safety for Agentic Development
       ▸ GATE 3
 
-STAGE 4 — ARCHITECT  (build and lead)
-  M13  Evals for Your Own Work
-  M14  Building Harnesses & Agent Systems
-  M15  Teams, Orgs & Comprehension Debt
-  M16  Capstone C, Doctrine & Continuous Practice
+PHASE 5 — ARCHITECT  (build and lead)
+  M14  Evals for Your Own Work
+  M15  Building Harnesses & Agent Systems
+  M16  Teams, Orgs & Comprehension Debt
+  M17  Capstone C, Doctrine & Continuous Practice
 ```
 
 Full module specifications, labs and reading are in `CURRICULUM.md`.
@@ -123,7 +136,7 @@ Full module specifications, labs and reading are in `CURRICULUM.md`.
 | Instrument | Weight | What it tests |
 |---|---|---|
 | Module mastery artifacts (17) | 40% | Technique acquisition |
-| Gate assessments (3) | 15% | Integration across a stage |
+| Gate assessments (3) | 15% | Integration across a phase |
 | Capstone A — Ship it | 10% | O1, O3 |
 | Capstone B — Land a change in a large unfamiliar codebase | 15% | O1, O4, O5 |
 | Capstone C — Operate an autonomous loop for a week | 15% | O6, O7, O8 |
@@ -133,7 +146,7 @@ Rubrics use four levels — **Novice / Working / Proficient / Expert** — with 
 
 **Self-assessment is not sufficient for the capstones.** Capstone B requires an external signal (a merged PR, a maintainer's review, or a colleague's independent code review). Capstone C requires an incident log — including the failures. A capstone with no failures logged is presumed under-reported and does not pass.
 
-**Anti-cheat note, stated plainly:** you can have an agent produce every artifact in this course. If you do, you will have learned nothing and the artifacts will show it — the rubrics weight *judgment traces* (why you rejected an approach, what your measurement showed, what surprised you) far above output volume. Use agents to do the work. Do not use them to fake the reflection.
+**On using agents to do the coursework:** obviously yes — it would be strange not to, in this of all courses. Use them for the mechanical parts: building the labs, running the sweeps, drafting the write-ups. The one part worth doing yourself is the judgment trace — why you rejected an approach, what your measurement showed, what surprised you — because writing that down *is* the learning, and it is the only part of the artifact that is about your thinking rather than the artifact's.
 
 ## 7. Prerequisites
 
@@ -143,11 +156,11 @@ Required access: at least one agentic coding harness with a paid tier (paralleli
 
 Not required: ML background, prior agent use, prior prompt-engineering study.
 
-Budget note: Stage 3 is the expensive stage. Expect meaningful token spend during Capstone C. Practitioners operating at the level this course targets commonly report $200–$1,000/month in subscriptions; the labs are designed to be completable at the low end of that.
+Budget note: Phase 4 is the expensive phase. Expect meaningful token spend during Capstone C. Practitioners operating at the level this course targets commonly report $200–$1,000/month in subscriptions; the labs are designed to be completable at the low end of that.
 
 ## 8. Course policies
 
-**Safety.** No lab instructs you to run an agent with unrestricted permissions on a machine with production credentials. M12 is a prerequisite for the unattended portions of M10 and M11, and this ordering is not negotiable — the autonomy labs come *after* the security module, not before.
+**Safety.** No lab instructs you to run an agent with unrestricted permissions on a machine with production credentials. M13 is a prerequisite for the unattended portions of M11 and M12, and this ordering is not negotiable — the autonomy labs come *after* the security module, not before.
 
 **Honesty about volatility.** Any factual claim in this course about a specific product, model, price, or benchmark score is stamped with a date and lives in `STATE-OF-PLAY-2026-09.md`. If you are reading this more than ~6 months after the issue date and that file has not been refreshed, treat every product claim as unreliable and every principle as probably still fine.
 
@@ -158,8 +171,8 @@ Budget note: Stage 3 is the expensive stage. Expect meaningful token spend durin
 ## 9. How to start
 
 1. Read this syllabus and `MAINTENANCE.md` §1 (design invariants) — 30 minutes.
-2. Do **M0** before touching anything else. It is boring and it is the module people skip and later regret, because without a baseline you will spend the rest of the course unable to tell whether anything you did helped.
-3. Work Stage 1 in order. After that, follow the DAG and your interests.
+2. Do **M1** before touching anything else. It is boring and it is the module people skip and later regret, because without a baseline you will spend the rest of the course unable to tell whether anything you did helped.
+3. Work Phase 2 in order. After that, follow the DAG and your interests.
 4. Keep a single running `doctrine.md` from day one. It becomes your final deliverable.
 
 ---

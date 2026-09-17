@@ -78,7 +78,7 @@ Classes, in priority order — if more than one applies, choose the highest:
 
 Respond as JSON:
 {{"class": "...", "summary": "<two sentences>", "quote": "<required for
-position-change, else null>", "proposed_action": "<e.g. 'module: M7 — add to
+position-change, else null>", "proposed_action": "<e.g. 'module: M8 — add to
 what-agents-want list' or 'state-of-play: §5' or 'none'>", "confidence":
 "high|medium|low"}}
 

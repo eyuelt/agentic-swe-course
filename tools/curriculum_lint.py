@@ -37,7 +37,7 @@ STATE_OF_PLAY_WARN, STATE_OF_PLAY_ERROR = 90, 180
 
 # Hard ordering constraints from CURRICULUM.md Appendix A.
 # (earlier, later) — `earlier` must be a prerequisite of `later`, directly or transitively.
-HARD_ORDER = [("M12", "M10"), ("M3", "M4"), ("M3", "M9"), ("M1", "M14")]
+HARD_ORDER = [("M13", "M11"), ("M4", "M5"), ("M4", "M10"), ("M2", "M15")]
 
 USER_AGENT = "curriculum-lint/1.0 (+curriculum maintenance; contact repo owner)"
 

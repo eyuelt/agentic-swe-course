@@ -1,0 +1,59 @@
+name: Deploy site to GitHub Pages
+
+# Publishes curriculum.html as the site's index page. The file stays where it is in the
+# repo so there is one copy, not two that drift.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - curriculum.html
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble site
+        run: |
+          # curriculum.html is an artifact fragment: no doctype, charset or viewport, because
+          # the artifact host supplies them. Wrap it in the same skeleton here, or browsers
+          # render it in quirks mode and phones get a desktop-width page.
+          mkdir _site
+          {
+            cat <<'EOF'
+          <!doctype html>
+          <html lang="en">
+          <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+          <style>
+          :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+          body{margin:0;font:14px system-ui,sans-serif}
+          img{max-width:100%}
+          [hidden]{display:none!important}
+          </style>
+          EOF
+            cat curriculum.html
+          } > _site/index.html
+          touch _site/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

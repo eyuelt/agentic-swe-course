@@ -4,6 +4,8 @@
 
 **v1.0 · 2026-09-17 · Self-paced, mastery-based, project-driven**
 
+**Read it online:** <https://eyuelt.github.io/agentic-swe-course/> — the interactive single-page version, deployed from `curriculum.html` on every push to `main`.
+
 A complete curriculum for an experienced software engineer learning to produce, verify, and own software they did not type — built around how expert practitioners actually work, and designed so that another model can maintain it as the field moves.
 
 ## Start here

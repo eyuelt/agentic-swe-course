@@ -50,10 +50,15 @@ code,.mono{font-family:var(--f-mono);font-size:.86em;font-variant-numeric:tabula
 .brand b{font-family:var(--f-disp);font-weight:700;font-size:15px;letter-spacing:-.02em}
 .brand span{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);
   text-transform:uppercase;letter-spacing:.11em}
-nav.tabs{display:flex;gap:2px;flex-wrap:wrap}
+nav.tabs{display:flex;gap:2px;min-width:0;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs{--fl:#000;--fr:#000;-webkit-mask-image:linear-gradient(to right,var(--fl),#000 34px,#000 calc(100% - 34px),var(--fr));
+  mask-image:linear-gradient(to right,var(--fl),#000 34px,#000 calc(100% - 34px),var(--fr))}
+nav.tabs.more-l{--fl:transparent}
+nav.tabs.more-r{--fr:transparent}
 nav.tabs button{font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;
   text-transform:uppercase;background:none;border:0;color:var(--ink-3);cursor:pointer;
-  padding:6px 9px;border-radius:3px}
+  padding:6px 9px;border-radius:3px;flex:none;white-space:nowrap}
 nav.tabs button:hover{color:var(--ink);background:var(--sunk)}
 nav.tabs button[aria-current="true"]{color:var(--ink);background:var(--sunk);font-weight:700}
 .meter-mini{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;
@@ -310,13 +315,18 @@ footer{max-width:1220px;margin:0 auto;padding:22px 16px 40px;border-top:1px soli
   .rail .grp{width:100%;margin:8px 0 2px}
   .rail button.m{width:auto;padding:5px 9px;border:1px solid var(--line);border-radius:3px}
   .rail .gate{width:100%}
-  .brand{width:100%;margin-right:0}
+  .top-in{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px 12px;
+    grid-template-areas:"brand brand theme" "tabs meter meter"}
+  .brand{grid-area:brand;margin-right:0;flex-wrap:wrap}
+  .theme{grid-area:theme;justify-self:end}
+  nav.tabs{grid-area:tabs;margin-left:-9px}
+  .top .meter-mini{grid-area:meter;justify-self:end}
   body{font-size:15px}
 }
 </style>
 
 <div class="top"><div class="top-in">
-  <div class="brand"><b>Shipping With Agents</b><span>Agentic SWE · v1.0 · 2026-09</span></div>
+  <div class="brand"><b>Shipping With Agents</b><span>Agentic SWE · v1.0</span></div>
   <nav class="tabs" id="tabs"></nav>
   <div class="meter-mini" title="Modules complete">
     <div class="bar"><i id="mbar" style="width:0%"></i></div><span id="mtxt">0/17</span>
@@ -753,7 +763,19 @@ function renderTabs(){
   $("#tabs").innerHTML = TABS.map(([k,l]) =>
     '<button data-tab="'+k+'" aria-current="'+(tab===k)+'">'+l+'</button>').join("");
   $("#tabs").onclick = e => { const b = e.target.closest("button"); if(b) go(b.dataset.tab); };
+  const nav = $("#tabs"), cur = $('[aria-current="true"]', nav);   // keep the active tab in view when the row scrolls
+  if(cur){ const l = cur.offsetLeft - nav.offsetLeft, r = l + cur.offsetWidth;
+    const pad = 40;   // clear of the edge fade
+    if(l - pad < nav.scrollLeft) nav.scrollLeft = l - pad; else if(r + pad > nav.scrollLeft + nav.clientWidth) nav.scrollLeft = r + pad - nav.clientWidth; }
+  nav.onscroll = tabFade; tabFade();
 }
+function tabFade(){   // fade whichever edge of the tab row still has tabs beyond it
+  const nav = $("#tabs"); if(!nav) return;
+  nav.classList.toggle("more-l", nav.scrollLeft > 2);
+  nav.classList.toggle("more-r", nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 2);
+}
+addEventListener("resize", tabFade);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(tabFade);
 function go(t, mod){
   tab = t; if(mod){ current = mod; }
   TABS.forEach(([k]) => { $("#v-"+k).hidden = (k !== t); });

@@ -18,27 +18,34 @@ This course teaches the *practice*, not the vocabulary. Every module ends in an 
 
 The course takes a strong position, stated here so a reader can disagree with it deliberately:
 
-> **Generation is cheap. Verification is the bottleneck. Every durable technique in agentic engineering is a way of closing the gap between "code produced" and "code known-good" — faster than the agent can widen it.**
+> **Agents made code cheap to write. They did not make it cheap to ship. Verification is the bottleneck. Every durable technique in this course is a way of closing the gap between "code produced" and "code known-good" — faster than the agent can widen it.**
 
 We call this gap the **verification gap.** It is the organizing idea of the whole curriculum. When you evaluate a new tool, a new technique, or an expert's advice, the question is always the same: *what does this do to my verification gap?*
 
-## 2. The three levels of practice
+## 2. The building blocks of an agentic workflow
 
-**These are not parts of the course** — the five phases in §5 are that. These are three levels at which the
-discipline itself operates, each defined by **the unit of work you are manipulating**. They emerged roughly in this
-order, and each rests on the one below: you never stop needing a good brief because you have moved up to designing
-loops. Most people who feel stuck are working one level below where their problem actually lives.
+Every agentic workflow is built from three nested blocks: **the message, the context window, and the loop.** Each
+block contains the one before it — a context window holds many messages; a loop runs many context windows. Moving
+outward means taking the next block as the thing you design; the blocks inside it do not go away.
 
-| Level | Name | Era | Unit of work | The skill | Stuck here looks like | Taught in |
-|---|---|---|---|---|---|---|
-| **3** | Loop engineering | 2026 | The loop | System design, verification, deciding how much autonomy a task can carry | You are the bottleneck; agents sit idle waiting for your attention | Phase 4 |
-| **2** | Context engineering | 2025 | The context window | Curation, compaction, isolation — budgeting what the model can see | Context rot; a huge memory file nobody reads; the agent "forgetting" | Phase 3 |
-| **1** | Prompting | 2023–24 | The message | Phrasing, examples, iteration by hand | Endless re-prompting; blaming the model when it doesn't land | Phase 2 |
+This course builds your command of all three, working from the inside out. Prompting comes first, to get the message
+right; then context engineering, to get right everything the model can see; then loop engineering, to get right the
+system that runs without you. An outer block never replaces an inner one: you still need a good brief after you have
+moved on to designing loops.
 
-Phase 1 sits underneath all three — it is measurement, so you can tell whether anything you do at any level is
-actually working. Phase 5 sits on top: building the harnesses, and carrying a team.
+| Building block | Discipline | Era | The skill | Stuck here looks like | Taught in |
+|---|---|---|---|---|---|
+| **The message** | Prompting | 2023–24 | Phrasing, examples, iteration by hand | Endless re-prompting; blaming the model when it doesn't land | Phase 2 |
+| **The context window** | Context engineering | 2025 | Curation, compaction, isolation — budgeting what the model can see | Context rot; a huge memory file nobody reads; the agent "forgetting" | Phase 3 |
+| **The loop** | Loop engineering | 2026 | System design, verification, deciding how much autonomy a task can carry | You are the bottleneck; agents sit idle waiting for your attention | Phase 4 |
 
-Because each level subsumes the one below, the course proceeds bottom-up, then adds the thing that is not a level
+Most people who feel stuck are working one block inside where their problem actually lives.
+
+**The blocks are not the parts of the course** — the five phases in §5 are that — though the phases follow the same
+order. Phase 1 comes before all three: it is measurement, so you can tell whether anything you do on any of them is
+actually working. Phase 5 steps outside the outermost block: building the harnesses, and carrying a team.
+
+Because each block contains the one before it, the course proceeds from the inside out, then adds the thing that is not a block
 but a permanent obligation: **governance** — security, comprehension debt, and what happens when a team does this
 at scale.
 
@@ -80,7 +87,7 @@ There are no weeks. Each module has an **evidence-of-mastery artifact** and a **
 Toy repositories teach toy lessons. The single biggest predictor of whether this transfers is whether you do the labs on code you actually care about and will still be maintaining in six months. Where a lab needs an unfamiliar large codebase, we use real open-source projects, not fixtures.
 
 ### 4.3 Measure before you believe
-Module 0 exists because of one of the most important findings in the field: METR's randomized trial found experienced open-source developers were **19% slower** with early-2025 AI tools while believing they had been **20% faster**. The gap between felt and actual productivity is the default condition, not an anomaly. METR's own 2026 follow-up shows the picture shifting (a smaller, noisier slowdown, and the study design breaking down because developers now refuse to work without AI) — which is itself the lesson: **you cannot outsource this measurement to the literature. You have to take your own baseline.**
+Module 1 exists because of one of the most important findings in the field: METR's randomized trial found experienced open-source developers were **19% slower** with early-2025 AI tools while believing they had been **20% faster**. The gap between felt and actual productivity is the default condition, not an anomaly. METR's own 2026 follow-up shows the picture shifting (a smaller, noisier slowdown, and the study design breaking down because developers now refuse to work without AI) — which is itself the lesson: **you cannot outsource this measurement to the literature. You have to take your own baseline.**
 
 ### 4.4 Study experts as sources of hypotheses, not authority
 Experts disagree sharply and publicly, and the disagreements are where the learning is. Steinberger says he barely reads code any more; DHH reviews every diff before merge; Kent Beck makes tests the binding constraint; Dex Horthy says review the *plan*, because a bad line of research becomes thousands of bad lines of code. They are all shipping. They are not all right about your situation.
@@ -88,7 +95,7 @@ Experts disagree sharply and publicly, and the disagreements are where the learn
 The course uses a repeatable **Practitioner Teardown** protocol (`PRACTITIONER-DOSSIER.md`) for converting any expert's claim into an experiment you run on your own repo. You will do at least six.
 
 ### 4.5 Build one agent, early
-Module 1 has you build a working coding agent from scratch. This is not a detour into agent-system design for its own sake — it is the fastest known cure for magical thinking. Once you have written the loop, "the agent forgot" and "the agent hallucinated a file" stop being mysteries and become debuggable context problems.
+Module 2 has you build a working coding agent from scratch. This is not a detour into agent-system design for its own sake — it is the fastest known cure for magical thinking. Once you have written the loop, "the agent forgot" and "the agent hallucinated a file" stop being mysteries and become debuggable context problems.
 
 ### 4.6 Tools are quarantined
 Specific tools, models, prices and version numbers live in exactly one file: `STATE-OF-PLAY-2026-09.md`. The curriculum body refers to *capabilities* ("an agent harness with a plan mode", "a context-isolated subagent") rather than product names wherever possible. This is deliberate: it is what lets a successor maintainer refresh the course in an afternoon instead of a month.
@@ -116,7 +123,7 @@ PHASE 3 — ENGINEER  (shape the environment)
       ▸ GATE 2 + Capstone B
 
 PHASE 4 — ORCHESTRATOR  (scale beyond one agent)
-  M10   Parallelism
+  M10  Parallelism
   M11  Loop Engineering
   M12  Async, Remote & Cloud Agents
   M13  Security & Safety for Agentic Development
@@ -133,14 +140,14 @@ Full module specifications, labs and reading are in `CURRICULUM.md`.
 
 ## 6. Assessment
 
-| Instrument | Weight | What it tests |
-|---|---|---|
-| Module mastery artifacts (17) | 40% | Technique acquisition |
-| Gate assessments (3) | 15% | Integration across a phase |
-| Capstone A — Ship it | 10% | O1, O3 |
-| Capstone B — Land a change in a large unfamiliar codebase | 15% | O1, O4, O5 |
-| Capstone C — Operate an autonomous loop for a week | 15% | O6, O7, O8 |
-| Doctrine document | 5% | O9 |
+| Instrument | What it tests |
+| --- | --- |
+| Module mastery artifacts (17) | Technique acquisition |
+| Gate assessments (3) | Integration across a phase |
+| Capstone A — Ship it | O1, O3 |
+| Capstone B — Land a change in a large unfamiliar codebase | O1, O4, O5 |
+| Capstone C — Operate an autonomous loop for a week | O6, O7, O8 |
+| Doctrine document | O9 |
 
 Rubrics use four levels — **Novice / Working / Proficient / Expert** — with explicit descriptors per module. "Proficient" is the advancement bar. "Expert" descriptors exist so you can tell what you are still missing; nobody is expected to hit Expert on all seventeen.
 

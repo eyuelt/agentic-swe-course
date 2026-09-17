@@ -1845,10 +1845,10 @@ Hard ordering constraints (do not reorder):
 
 | Phase | Modules | Hours | Cumulative |
 |---|---|---|---|
-| 0 Calibration | M1 | 5 | 5 |
-| 1 Operator | M2–M5 + Capstone A | 34 | 39 |
-| 2 Engineer | M6–M9 + Capstone B | 47 | 86 |
-| 3 Orchestrator | M10–M13 | 34 | 120 |
-| 4 Architect | M14–M17 + Capstone C | 48 | 168 |
+| 1 · Calibration | M1 | 5 | 5 |
+| 2 · Operator | M2–M5 + Capstone A | 34 | 39 |
+| 3 · Engineer | M6–M9 + Capstone B | 47 | 86 |
+| 4 · Orchestrator | M10–M13 | 34 | 120 |
+| 5 · Architect | M14–M17 + Capstone C | 48 | 168 |
 
 Total ≈ 120–170 hours depending on lab depth and how much you do on real work (which takes longer and teaches more). Working 10 h/week: about four months. Full-time intensive: five to six weeks.

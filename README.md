@@ -32,14 +32,14 @@ A complete curriculum for an experienced software engineer learning to produce, 
 
 ## The thesis in one paragraph
 
-Generation is cheap; verification is the bottleneck. Every durable technique in agentic engineering is a way of closing the gap between *code produced* and *code known-good* faster than the agent widens it. The discipline operates at three levels, each defined by the unit of work you manipulate — the message, the context window, the loop — and each resting on the one below. The course teaches all three, plus the permanent obligation that is not a layer: security, comprehension debt, and what happens when a team does this at scale.
+Agents made code cheap to write. They did not make it cheap to ship. Verification is the bottleneck. Every durable technique in this course is a way of closing the gap between *code produced* and *code known-good* faster than the agent can widen it. Every agentic workflow is built from three nested blocks — the message, the context window, the loop — each containing the one before, and you master them from the inside out. The course teaches all three, plus the permanent obligation that is not a block: security, comprehension debt, and what happens when a team does this at scale.
 
 ## What makes this different from a list of tips
 
 - **It is organized around one idea**, not around tools, so it survives the tools changing.
 - **It teaches the disagreements.** Steinberger barely reads code; DHH reviews every diff; Horthy reviews the plan instead of the code; Beck makes tests the binding constraint. They are all shipping. The course teaches you to work out which is right *for you*, with measurements.
 - **It starts with measurement.** M1 exists because METR found experienced developers were 19% slower with AI while feeling 20% faster — and because the follow-up research is now structurally unable to answer the question for you.
-- **You build an agent in Module 1.** Not as theory. As the fastest available cure for magical thinking about everything downstream.
+- **You build an agent in Module 2.** Not as theory. As the fastest available cure for magical thinking about everything downstream.
 - **Every module ends in retrieval practice.** 89 ungraded self-checks across the 17 modules — answer from memory, then reveal. Nothing is recorded anywhere; the point is the effort of recalling.
 - **It is maintainable.** Volatile facts are quarantined in one file, the module graph is machine-checkable, and `MAINTENANCE.md` tells a successor exactly what may and may not be changed.
 

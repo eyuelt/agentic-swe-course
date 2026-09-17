@@ -40,6 +40,8 @@ Do this at least six times during the course, and monthly afterwards (M17).
 
 **As of — 2025-12-28 (*Shipping at Inference-Speed*); role updated 2026-02.**
 
+**Follow:** [Blog](https://steipete.me/) · [X](https://x.com/steipete) · [GitHub](https://github.com/steipete)
+
 **Who:** Founder of PSPDFKit; became one of the most visible high-volume agentic practitioners in 2025 through relentless public documentation of his workflow; creator of open-source agent tooling; joined OpenAI in February 2026 to work on agents, stating his mission as *"build an agent that even my mum can use."*
 
 **Doctrine.** Ceremony is waste. Model intuition beats process. Run many agents, commit atomically, refactor continuously, and let verification live in the loop rather than in your eyeballs.
@@ -65,6 +67,8 @@ Do this at least six times during the course, and monthly afterwards (M17).
 ### Boris Cherny — “Boris” — *delegation, verification, and the extension surface*
 
 **As of — 2026-06 (latest tips in the compiled index).**
+
+**Follow:** [X](https://x.com/bcherny) · [Blog](https://borischerny.com/) · [GitHub](https://github.com/bcherny) · [Tips compilation (fan-run)](https://howborisusesclaudecode.com/)
 
 **Who:** Creator and head of Claude Code at Anthropic — briefly departed to Cursor in late 2025 and returned within two weeks. As of early 2026 he reported Claude Code representing ~4% of public GitHub commits. He publishes practical tips continuously, which makes him unusual: you can watch his advice *change* as models improve, which is itself instructive.
 
@@ -93,6 +97,8 @@ Do this at least six times during the course, and monthly afterwards (M17).
 
 **As of — 2026-03-20 (No Priors).**
 
+**Follow:** [Blog](https://karpathy.bearblog.dev/) · [YouTube](https://www.youtube.com/@AndrejKarpathy) · [X](https://x.com/karpathy) · [GitHub](https://github.com/karpathy)
+
 **Who:** Co-founder of OpenAI, former director of AI at Tesla, founder of Eureka Labs. Coined "vibe coding" (February 2025) and has spent the time since refining and partly disowning the popular reading of it. Author of the *Software 2.0* essay and the *Software Is Changing Again* / Software 3.0 framing. His teaching repos — micrograd, nanoGPT, llm.c, nanochat — are the best available route to understanding what is under the agent.
 
 **Doctrine.** Autonomy is a slider, not a switch. Set it by how well the task can be verified. Remove yourself as the bottleneck where verification is objective; stay in the loop where it is not.
@@ -116,6 +122,8 @@ Do this at least six times during the course, and monthly afterwards (M17).
 ### David Heinemeier Hansson — “DHH” — *the documented mind-change, twice*
 
 **As of — 2026-08-26 (Lex Fridman #501).**
+
+**Follow:** [Blog](https://world.hey.com/dhh) · [X](https://x.com/dhh) · [YouTube](https://www.youtube.com/@dhh37) · [Podcast (REWORK)](https://37signals.com/podcast/)
 
 **Who:** Creator of Ruby on Rails, CTO of 37signals. The value of studying him is partly the content and
 substantially the worked example of **updating on evidence in public, repeatedly.**
@@ -154,6 +162,8 @@ including the current one.
 
 **As of — 2026-09-17 (ACE-FCA as published).**
 
+**Follow:** [Blog](https://www.humanlayer.dev/blog) · [X](https://x.com/dexhorthy) · [YouTube](https://www.youtube.com/@humanlayerdev) · [GitHub](https://github.com/humanlayer)
+
 **Who:** Founder of HumanLayer; author of the 12-Factor Agents framework and *Advanced Context Engineering for Coding Agents* (ACE-FCA). The most rigorous published methodology in the field, with the most specific outcome claims.
 
 **Doctrine.** The context window is the only lever. Design the entire workflow around it. Review research and plans, not code.
@@ -179,6 +189,8 @@ including the current one.
 
 **As of — 2026-09-17 (newsletter, ongoing).**
 
+**Follow:** [Newsletter](https://newsletter.kentbeck.com/) · [X](https://x.com/KentBeck) · [YouTube](https://www.youtube.com/@kentbeck) · [Site](https://kentbeck.com/)
+
 **Who:** Creator of extreme programming and modern TDD; author of *Tidy First?*. Has been publishing sustained experiments in working with agents since 2025 under the banner **"augmented coding."**
 
 **Doctrine.** *"In augmented coding you care about the code, its complexity, the tests, & their coverage… The value system is similar to hand coding — tidy code that works. It's just that I don't type much of that code."*
@@ -199,6 +211,8 @@ including the current one.
 ### Armin Ronacher — “mitsuhiko” — *design the environment, not the prompt*
 
 **As of — 2026-02-09 (*A Language For Agents*).**
+
+**Follow:** [Blog](https://lucumr.pocoo.org/) · [X](https://x.com/mitsuhiko) · [YouTube](https://www.youtube.com/@ArminRonacher) · [GitHub](https://github.com/mitsuhiko)
 
 **Who:** Creator of Flask, Jinja2, and much of the modern Python ecosystem; publishes unusually candid long-form on agentic coding, including what did *not* work.
 
@@ -221,6 +235,8 @@ including the current one.
 
 **As of — 2026-01 (Ralph retrospective).**
 
+**Follow:** [Blog](https://ghuntley.com/) · [X](https://x.com/GeoffreyHuntley) · [YouTube](https://www.youtube.com/@GeoffreyHuntley) · [GitHub](https://github.com/ghuntley)
+
 **Who:** Engineer who popularized the "Ralph" technique in 2025 — an agent loop reduced to its essentials — and pushed it to deliberately absurd extremes to find where it breaks, including generating a programming language with it.
 
 **Doctrine.** A fresh context working from a durable specification, repeated, beats one long context working from memory. The bash is trivial; the spec is everything.
@@ -240,6 +256,8 @@ including the current one.
 
 **As of — 2026-09-17 (the tutorial is stable).**
 
+**Follow:** [Newsletter](https://registerspill.thorstenball.com/) · [Podcast (Raising an Agent)](https://ampcode.com/podcast) · [X](https://x.com/thorstenball) · [Site](https://thorstenball.com/)
+
 **Who:** Author of *Writing an Interpreter in Go*; worked on Amp at Sourcegraph. His *How to Build an Agent* is the single most valuable technical artifact in this dossier for a practitioner.
 
 **Doctrine.** An agent is an LLM, a loop, and enough tokens. Under 400 lines. The mystique is the main obstacle to using them well.
@@ -253,6 +271,8 @@ including the current one.
 ### Addy Osmani — *the 2026 synthesis*
 
 **As of — 2026-09-17 (*Loop Engineering*).**
+
+**Follow:** [Blog](https://addyosmani.com/blog/) · [Newsletter](https://addyo.substack.com/) · [X](https://x.com/addyosmani) · [YouTube](https://www.youtube.com/@addyosmani)
 
 **Who:** Engineering leader at Google, prolific writer on AI-assisted engineering; among the clearest explainers of the 2026 shift to loop engineering.
 

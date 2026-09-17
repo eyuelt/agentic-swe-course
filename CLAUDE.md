@@ -7,7 +7,7 @@ A self-paced curriculum in agentic software engineering. This file tells you how
 
 | Path | Role | Change freely? |
 |---|---|---|
-| `SYLLABUS.md` | Goals, thesis, the three levels, phases, assessment overview | No — needs a human |
+| `SYLLABUS.md` | Goals, thesis, the three building blocks, phases, assessment overview | No — needs a human |
 | `CURRICULUM.md` | 17 modules, 70+ labs, self-checks, dependency graph | No — needs a human |
 | `ASSESSMENT.md` | Rubrics, 3 gates, 3 capstones | No — needs a human |
 | `PRACTITIONER-DOSSIER.md` | 10 practitioners, teardown protocol, disagreement map | No — needs a human |

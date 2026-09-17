@@ -14,18 +14,18 @@
   --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --paper:#0e1214; --surface:#161c1e; --sunk:#1e2527;
-  --ink:#e6eae9; --ink-2:#a8b4b4; --ink-3:#7c8a8b;
-  --line:#2c3639; --line-2:#222b2d;
+  --paper:#0e1214; --surface:#1b2326; --sunk:#283235;
+  --ink:#e6eae9; --ink-2:#bfc9c9; --ink-3:#97a5a6;
+  --line:#3d4a4d; --line-2:#2f3a3d;
   --signal:#4fbfc4; --signal-soft:#16333a;
   --gate:#d59a4a; --gate-soft:#33270f;
   --ok:#67b37c; --warn:#e0836f;
   --shadow:0 1px 0 rgba(0,0,0,.3);
 }}
 :root[data-theme="dark"]{
-  --paper:#0e1214; --surface:#161c1e; --sunk:#1e2527;
-  --ink:#e6eae9; --ink-2:#a8b4b4; --ink-3:#7c8a8b;
-  --line:#2c3639; --line-2:#222b2d;
+  --paper:#0e1214; --surface:#1b2326; --sunk:#283235;
+  --ink:#e6eae9; --ink-2:#bfc9c9; --ink-3:#97a5a6;
+  --line:#3d4a4d; --line-2:#2f3a3d;
   --signal:#4fbfc4; --signal-soft:#16333a;
   --gate:#d59a4a; --gate-soft:#33270f;
   --ok:#67b37c; --warn:#e0836f;
@@ -72,44 +72,92 @@ main{max-width:1220px;margin:0 auto;padding:0 16px;padding-block:26px 64px}
 .hero .kicker{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;
   letter-spacing:.13em;color:var(--signal);margin-bottom:9px}
 .hero p{max-width:62ch;color:var(--ink-2);margin:.7em 0 0}
-.thesis{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--signal);
-  padding:16px 18px;margin:26px 0;max-width:72ch}
-.thesis p{margin:0;font-size:17px}
-.thesis b{font-weight:600}
+.hero .hook{font-size:18px;line-height:1.5;color:var(--ink);max-width:58ch;margin-top:.75em}
+.hero .hook b{font-weight:600}
 
 .grid{display:grid;gap:14px}
-.stack{margin:20px 0 30px;max-width:900px}
-.lvl{display:flex;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow)}
-.lvl-n{flex:none;width:76px;background:var(--sunk);border-right:1px solid var(--line);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 0}
-.lvl-n span{font-family:var(--f-mono);font-size:8.5px;letter-spacing:.16em;color:var(--ink-3)}
-.lvl-n b{font-family:var(--f-disp);font-size:29px;font-weight:700;line-height:1.05;color:var(--signal)}
-.lvl-body{padding:13px 16px;flex:1;min-width:0}
-.lvl-hd{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-.lvl-hd h4{font-size:18px}
-.lvl-hd .era{font-family:var(--f-mono);font-size:11px;color:var(--ink-3)}
-.lvl-hd .taught{margin-left:auto;font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;
-  color:var(--signal);border:1px solid var(--signal);padding:2px 7px;border-radius:2px}
-.lvl-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;font-size:14px;
-  color:var(--ink-2)}
-.lvl-facts .k{display:block;font-family:var(--f-mono);font-size:9.5px;text-transform:uppercase;
+.lead{max-width:70ch;margin:0 0 14px;color:var(--ink-2)}
+.lead b{color:var(--ink);font-weight:600}
+.nest{display:flex;align-items:center;gap:14px 28px;flex-wrap:wrap;margin:18px 0 24px}
+.nest svg{flex:0 1 440px;min-width:0;width:100%;max-width:440px;height:auto;display:block}
+.nest figcaption{flex:1 1 260px;max-width:46ch;font-size:14px;color:var(--ink-2)}
+.nest figcaption b{color:var(--ink);font-weight:600}
+.nest text{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.08em;fill:var(--ink-2)}
+.nest .quiet{fill:var(--ink-3);letter-spacing:.04em}
+.nest .unit{fill:var(--surface);stroke:var(--signal);stroke-width:1.25}
+.nest .unit.in{fill:var(--paper)}
+.nest .unit.msg{fill:var(--signal-soft)}
+.nest .sib{fill:var(--paper);stroke:var(--line)}
+.nest .nb{fill:var(--sunk)}
+.nest .flow{fill:none;stroke:var(--ink-3);stroke-width:1.25}
+.nest .head{fill:var(--ink-3)}
+.levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0 0 30px}
+@media (max-width:820px){.levels{grid-template-columns:minmax(0,1fr)}}
+.lvl{display:flex;flex-direction:column;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow)}
+.lvl-hd{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--sunk);
+  border-bottom:1px solid var(--line)}
+.lvl-t{flex:1;min-width:0}
+.lvl-t h4{font-size:18px}
+.lvl-t .era{font-family:var(--f-mono);font-size:11px;color:var(--ink-3)}
+.lvl-g{flex:none;width:34px;height:34px}
+.lvl-g rect{fill:var(--surface);stroke:var(--line);stroke-width:1.25}
+.lvl-g rect.on{fill:var(--signal-soft);stroke:var(--signal);stroke-width:1.75}
+.lvl-facts{display:grid;gap:11px;padding:13px 14px;font-size:14px;color:var(--ink-2);flex:1;align-content:start}
+.lvl-facts .k{display:block;font-family:var(--f-mono);font-size:10px;text-transform:uppercase;
   letter-spacing:.11em;color:var(--ink-3);margin-bottom:2px}
-.rests{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--ink-3);padding:6px 0 6px 30px}
+.lvl .taught{margin:0 14px 13px;align-self:flex-start;font-family:var(--f-mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--signal);border:1px solid var(--signal);padding:2px 7px;border-radius:2px}
 h2.sec{font-size:13px;font-family:var(--f-mono);font-weight:700;text-transform:uppercase;
   letter-spacing:.13em;color:var(--ink-3);border-bottom:1px solid var(--line);
   padding-bottom:7px;margin:38px 0 16px}
 h2.sec:first-of-type{margin-top:0}
 
-.phases{grid-template-columns:repeat(auto-fit,minmax(245px,1fr))}
+.road{--rg:44px;--nx:22px;list-style:none;margin:22px 0 0;padding:0;display:grid;gap:18px;
+  grid-template-columns:minmax(0,1fr)}
+.stop{position:relative;display:flex;padding-left:32px}
+.stop .phase{flex:1;min-width:0}
+.stop::before{content:"";position:absolute;background:var(--line);left:6px;top:26px;width:2px;height:calc(100% + 18px)}
+.stop:last-child::before{display:none}
+.node{position:absolute;z-index:1;box-sizing:border-box;width:14px;height:14px;border-radius:50%;
+  border:2px solid var(--ink-3);background:var(--paper);left:0;top:19px}
+.stop:last-child .node{box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--ink-3)}
+.stop.done:last-child .node{box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--signal)}
+.gate-pad{display:none}
+.stop.begun .node{border-color:var(--signal)}
+.stop.done .node{border-color:var(--signal);background:var(--signal)}
+.stop.done::before,.stop.prev-done .node::before{background:var(--signal)}
+@media (min-width:620px){
+  .road{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:var(--rg);row-gap:26px}
+  .stop{padding:30px 0 0}
+  .gate-pad{display:block}
+  .node{left:var(--nx);top:3px}
+  .stop::before{left:calc(var(--nx) + 7px);top:9px;height:2px;width:calc(100% + var(--rg))}
+  .node::before{content:"";display:none;position:absolute;background:var(--line);height:2px;top:4px;
+    left:calc(-2px - var(--nx));width:var(--nx)}
+  .stop::after{content:"";display:none;position:absolute;top:5px;right:1px;width:8px;height:8px;
+    border-top:2px solid var(--line);border-right:2px solid var(--line);transform:rotate(45deg)}
+  .stop.done::after{border-color:var(--signal)}
+}
+@media (min-width:620px) and (max-width:979px){
+  .stop:nth-child(2n)::before{width:calc(100% - var(--nx) - 7px)}
+  .stop:nth-child(2n):not(:last-child)::after{display:block}
+  .stop:nth-child(2n+1):not(:first-child) .node::before{display:block}
+  .stop:last-child:nth-child(2n+1){grid-column:1/-1}
+}
+@media (min-width:980px){
+  .road{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .stop:nth-child(3n)::before{width:calc(100% - var(--nx) - 7px)}
+  .stop:nth-child(3n):not(:last-child)::after{display:block}
+  .stop:nth-child(3n+1):not(:first-child) .node::before{display:block}
+}
 .phase{background:var(--surface);border:1px solid var(--line);padding:15px;
   display:flex;flex-direction:column;gap:9px;box-shadow:var(--shadow)}
 .phase .hd{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-.phase .sn{font-family:var(--f-mono);font-size:10px;letter-spacing:.11em;color:var(--ink-3)}
+.phase .sn{font-family:var(--f-mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
 .phase h3{font-size:18px}
-.phase .goal{font-size:14px;color:var(--ink-2);flex:1}
+.phase .goal{font-size:14px;color:var(--ink-2);flex:1;margin-bottom:14px}
 .phase .mods{display:flex;gap:4px;flex-wrap:wrap}
-.chip{font-family:var(--f-mono);font-size:10.5px;padding:2px 6px;border:1px solid var(--line);
+.chip{font-family:var(--f-mono);font-size:11px;padding:2px 6px;border:1px solid var(--line);
   color:var(--ink-3);cursor:pointer;background:none;border-radius:2px}
 .chip:hover{border-color:var(--signal);color:var(--signal)}
 .chip.done{background:var(--signal-soft);border-color:var(--signal);color:var(--signal);font-weight:700}
@@ -193,7 +241,7 @@ h2.sec:first-of-type{margin-top:0}
 .people{grid-template-columns:repeat(auto-fit,minmax(288px,1fr))}
 .person{background:var(--surface);border:1px solid var(--line);padding:15px;box-shadow:var(--shadow)}
 .person h3{font-size:17px}
-.knownas{font-family:var(--f-mono);font-size:12px;color:var(--signal);font-weight:400;letter-spacing:-.01em}
+.knownas{font-family:var(--f-mono);font-size:12px;color:var(--signal);font-weight:400;letter-spacing:-.01em;margin-left:8px}
 .person .asof{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);letter-spacing:.06em;margin:-4px 0 8px}
 .warnbox{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--ink-3);padding:13px 16px;margin-bottom:24px;font-size:14px;color:var(--ink-2);max-width:78ch}
 .warnbox b{font-weight:600}
@@ -203,10 +251,16 @@ h2.sec:first-of-type{margin-top:0}
 .person .crit{border-top:1px dashed var(--line);padding-top:8px;margin-top:8px;font-size:13.5px}
 .person .crit b{font-family:var(--f-mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;
   color:var(--warn);display:block;margin-bottom:3px}
+.person{display:flex;flex-direction:column}
+.person .crit{flex:1}
+.person .follow{border-top:1px dashed var(--line);padding-top:9px;margin-top:10px;display:flex;flex-wrap:wrap;
+  gap:4px 12px;align-items:baseline;font-family:var(--f-mono);font-size:11px}
+.person .follow b{font-size:10px;text-transform:uppercase;letter-spacing:.11em;color:var(--ink-3);font-weight:700;
+  width:100%;margin-bottom:1px}
 .tbl-wrap{overflow-x:auto;border:1px solid var(--line)}
 table{border-collapse:collapse;width:100%;font-size:14px;min-width:620px;background:var(--surface)}
 th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line-2);vertical-align:top}
-th{font-family:var(--f-mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;
+th{font-family:var(--f-mono);font-size:10px;text-transform:uppercase;letter-spacing:.11em;
   color:var(--ink-3);background:var(--sunk);font-weight:700}
 tr:last-child td{border-bottom:0}
 td.q{font-weight:600;white-space:nowrap}
@@ -217,6 +271,17 @@ td.crs{border-left:2px solid var(--signal)}
 .filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
 .res{border:1px solid var(--line);background:var(--surface);padding:11px 13px;margin-bottom:7px;
   display:flex;gap:11px;align-items:flex-start}
+.res{flex-wrap:wrap}
+.res.is-p{box-shadow:inset 3px 0 0 color-mix(in srgb,var(--signal) 40%,transparent)}
+.res.is-r{box-shadow:inset 3px 0 0 var(--signal)}
+.rstat{display:flex;flex:none;margin-left:auto;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.rstat button{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;
+  padding:5px 8px;border:0;border-left:1px solid var(--line);background:none;color:var(--ink-3);cursor:pointer}
+.rstat button:first-child{border-left:0}
+.rstat button:hover{color:var(--ink)}
+.rstat button[aria-pressed="true"]{background:var(--sunk);color:var(--ink);font-weight:700}
+.rstat button.sp[aria-pressed="true"]{background:var(--signal-soft);color:var(--signal)}
+.rstat button.sr[aria-pressed="true"]{background:var(--signal);color:var(--paper)}
 .res .rid{font-family:var(--f-mono);font-size:11px;color:var(--signal);min-width:42px;flex:none}
 .res .rt{font-weight:600;font-size:14.5px}
 .res .rw{font-size:13.5px;color:var(--ink-2);margin-top:3px}
@@ -226,6 +291,7 @@ td.crs{border-left:2px solid var(--signal)}
 .tag.t1{border-color:var(--signal);color:var(--signal)}
 .tag.vF{border-color:var(--warn);color:var(--warn)}
 .note{font-size:13.5px;color:var(--ink-3);max-width:70ch;margin-bottom:18px}
+.note b{font-weight:600}
 
 /* ---- maintain ---- */
 .inv{background:var(--surface);border:1px solid var(--line);padding:13px 15px;margin-bottom:8px}
@@ -528,40 +594,40 @@ M17:{t:"Capstone C, Doctrine & Continuous Practice",st:4,pre:"M16",hrs:"20–30 
 };
 
 const PEOPLE = [
- {n:"Peter Steinberger",k:"steipete",asof:"Dec 2025; role Feb 2026",d:"Maximum throughput, minimum ceremony",
+ {n:"Peter Steinberger",l:[["Blog","https://steipete.me/"],["X","https://x.com/steipete"],["GitHub","https://github.com/steipete"]],k:"steipete",asof:"Dec 2025; role Feb 2026",d:"Maximum throughput, minimum ceremony",
   b:"PSPDFKit founder; the most relentlessly public documenter of high-volume agentic practice through 2025; joined OpenAI in February 2026 to work on agents. Runs 3–8 parallel agents in the same folder with atomic commits, asks for tests in the same context as the implementation, spends ~20% of his time on agent-performed refactoring, and maintains a large agent-updated instructions file.",
   q:"These days I don't read much code anymore. I watch the stream and sometimes look at key parts.",
   c:"His substrate is unusual and largely undisclosed in the headline claims: a codebase he wrote and knows completely, two-minute preview deploys, trivial revert cost, very high token budget, no external review requirement, consumer-product risk. 'I don't read code' is the conclusion of that stack, not a technique you can adopt directly."},
- {n:"Boris Cherny",k:"Boris",asof:"Jun 2026",d:"Delegation, verification, extension",
+ {n:"Boris Cherny",l:[["X","https://x.com/bcherny"],["Blog","https://borischerny.com/"],["GitHub","https://github.com/bcherny"],["Tips compilation (fan-run)","https://howborisusesclaudecode.com/"]],k:"Boris",asof:"Jun 2026",d:"Delegation, verification, extension",
   b:"Creator and head of Claude Code. Verification above all — he attributes a 2–3× quality difference to giving the agent a way to check itself. Worktrees as the single biggest unlock. Full-context briefs. Rules, not corrections. Rewind rather than argue. Heavy, deliberate use of hooks, subagents and skills. Most of his coding done by voice.",
   q:"Give Claude a way to verify its output — this 2-3x's the quality of results.",
   c:"His advice on plan mode inverted across model generations — first always plan first, later skip it because newer models plan implicitly. That drift is the best illustration in the dossier of why technique is model-dependent and must be re-tested rather than believed."},
- {n:"Andrej Karpathy",k:"Karpathy",asof:"Mar 2026",d:"The conceptual frame, and the honest limits",
+ {n:"Andrej Karpathy",l:[["Blog","https://karpathy.bearblog.dev/"],["YouTube","https://www.youtube.com/@AndrejKarpathy"],["X","https://x.com/karpathy"],["GitHub","https://github.com/karpathy"]],k:"Karpathy",asof:"Mar 2026",d:"The conceptual frame, and the honest limits",
   b:"Coined 'vibe coding' in 2025 and has spent since refining it away from the popular reading. The autonomy slider: calibrate delegation to verifiability, per task. AutoResearch found hyperparameter improvements overnight that he had missed over two decades — because the metric was objective and automatable.",
   q:"Remove yourself as the bottleneck… arrange things such that they're completely autonomous.",
   c:"He works on research code with clean objective metrics — the most favourable possible terrain for autonomy. Most software has no equivalent of validation loss. He is explicit that agents remain jagged on nuance, intent, and knowing when to ask."},
- {n:"David Heinemeier Hansson",k:"DHH",asof:"Aug 2026 — revised Sep 17",d:"The documented mind-change, twice",b:"Creator of Rails. Found autocomplete-era assistants genuinely annoying; by January 2026 was writing that agents had crossed a threshold; by April 2026 was reviewing every diff before merge; and by August 2026 reports shipping two months of a real project — Omarchy Quattro — without hand-writing any of the code. He has not stopped reviewing. He has made review risk-tiered: shape everywhere, lines where the risk concentrates, nothing where it does not. Read that against M5 — it is risk-ordered reading, arrived at independently by someone who spent a year resisting the whole idea.",q:"I've reviewed the shape of all of it. I've reviewed the individual lines of anything that critical in the model layer of the system, and I've not looked at a bunch of the UI code.",c:"He works in a mature, conventional, heavily-tested codebase in a framework saturated in training data — close to the best case. Quattro is his own project on his own risk tolerance with no external review requirement. And note the meta-lesson: he has moved twice in eighteen months. A position held firmly can still be wrong, including the current one."},
- {n:"Dex Horthy",k:"Dex",asof:"Sep 2026",d:"Upstream review and intentional compaction",
+ {n:"David Heinemeier Hansson",l:[["Blog","https://world.hey.com/dhh"],["X","https://x.com/dhh"],["YouTube","https://www.youtube.com/@dhh37"],["Podcast (REWORK)","https://37signals.com/podcast/"]],k:"DHH",asof:"Aug 2026 — revised Sep 17",d:"The documented mind-change, twice",b:"Creator of Rails. Found autocomplete-era assistants genuinely annoying; by January 2026 was writing that agents had crossed a threshold; by April 2026 was reviewing every diff before merge; and by August 2026 reports shipping two months of a real project — Omarchy Quattro — without hand-writing any of the code. He has not stopped reviewing. He has made review risk-tiered: shape everywhere, lines where the risk concentrates, nothing where it does not. Read that against M5 — it is risk-ordered reading, arrived at independently by someone who spent a year resisting the whole idea.",q:"I've reviewed the shape of all of it. I've reviewed the individual lines of anything that critical in the model layer of the system, and I've not looked at a bunch of the UI code.",c:"He works in a mature, conventional, heavily-tested codebase in a framework saturated in training data — close to the best case. Quattro is his own project on his own risk tolerance with no external review requirement. And note the meta-lesson: he has moved twice in eighteen months. A position held firmly can still be wrong, including the current one."},
+ {n:"Dex Horthy",l:[["Blog","https://www.humanlayer.dev/blog"],["X","https://x.com/dexhorthy"],["YouTube","https://www.youtube.com/@humanlayerdev"],["GitHub","https://github.com/humanlayer"]],k:"Dex",asof:"Sep 2026",d:"Upstream review and intentional compaction",
   b:"HumanLayer; author of 12-Factor Agents and ACE-FCA — the most rigorous published methodology in the field. Research → Plan → Implement with reviewable file artifacts, frequent intentional compaction at 40–60% utilization, and review leverage moved upstream. Reports a 300k-line Rust bug fixed in one session and ~35k lines shipped in seven hours, passing maintainer review.",
   q:"A bad line of code is a bad line of code. A bad line of a plan could lead to hundreds of bad lines of code. A bad line of research could land you with thousands.",
   c:"Real overhead, genuinely wrong for small or exploratory work. The headline results involve deep human engagement and codebase expertise that the method amplifies rather than replaces. Results are self-reported — though he also publishes his failures, which raises his credibility."},
- {n:"Kent Beck",asof:"Sep 2026",d:"Tests as the binding constraint",
+ {n:"Kent Beck",l:[["Newsletter","https://newsletter.kentbeck.com/"],["X","https://x.com/KentBeck"],["YouTube","https://www.youtube.com/@kentbeck"],["Site","https://kentbeck.com/"]],asof:"Sep 2026",d:"Tests as the binding constraint",
   b:"Creator of extreme programming and modern TDD. 'Augmented coding' distinguishes caring about code, complexity, tests and coverage from vibe coding's indifference to them. TDD becomes the agent's stop condition: find the next unimplemented test, implement it, write only enough to pass, stop. Watches for loops, unrequested functionality, and tests being disabled.",
   q:"The value system in augmented coding is similar to hand coding — tidy code that works. It's just that I don't type much of that code.",
   c:"TDD has real costs and real critics, and agents worsen some of them — they will happily generate large tautological suites. His own framing is exploratory and he revises it publicly."},
- {n:"Armin Ronacher",k:"mitsuhiko",asof:"Feb 2026",d:"Design the environment, not the prompt",
+ {n:"Armin Ronacher",l:[["Blog","https://lucumr.pocoo.org/"],["X","https://x.com/mitsuhiko"],["YouTube","https://www.youtube.com/@ArminRonacher"],["GitHub","https://github.com/mitsuhiko"]],k:"mitsuhiko",asof:"Feb 2026",d:"Design the environment, not the prompt",
   b:"Creator of Flask. Agents reason locally, so codebases and languages that support local reasoning get better results — a more durable investment than any prompting technique. Explicit types, greppability, explicit dependencies, braces over whitespace, result types, boring structure. Against macros, barrel files, aliasing, flaky tests and environment divergence.",
   q:"Agents really like local reasoning… they often work with just a few loaded files in context and don't have much spatial awareness of the codebase.",
   c:"Speculating publicly about languages designed for agents — interesting, too early to act on. His preferences are shaped by systems and infrastructure work. He also publishes what didn't work, which is rarer and more useful than it sounds."},
- {n:"Geoffrey Huntley",k:"ghuntley",asof:"Jan 2026",d:"The loop, in its rawest form",
+ {n:"Geoffrey Huntley",l:[["Blog","https://ghuntley.com/"],["X","https://x.com/GeoffreyHuntley"],["YouTube","https://www.youtube.com/@GeoffreyHuntley"],["GitHub","https://github.com/ghuntley"]],k:"ghuntley",asof:"Jan 2026",d:"The loop, in its rawest form",
   b:"Popularized 'Ralph' in 2025 — an agent loop reduced to essentials, a spec file piped to a fresh context repeatedly — and pushed it to deliberately absurd extremes to find where it breaks, including generating a programming language with it.",
   q:"The bash is trivial; the spec is everything.",
   c:"Presented cheerfully as a dumb technique that works, with serious documented failure modes: bad specs amplified hundreds of times, overbaking, poor merge-conflict behaviour, unsuitability for exploration. Practitioners warn the term has diffused — people now call anything automated 'a Ralph'."},
- {n:"Thorsten Ball",asof:"Sep 2026",d:"Demystification",
+ {n:"Thorsten Ball",l:[["Newsletter","https://registerspill.thorstenball.com/"],["Podcast (Raising an Agent)","https://ampcode.com/podcast"],["X","https://x.com/thorstenball"],["Site","https://thorstenball.com/"]],asof:"Sep 2026",d:"Demystification",
   b:"Author of Writing an Interpreter in Go; worked on Amp. 'How to Build an Agent' is the single most valuable technical artifact in this dossier: an agent is an LLM, a loop, and enough tokens, in under 400 lines.",
   q:"It's an LLM, a loop, and enough tokens.",
   c:"Nothing to read critically — this is a demonstration, not a claim. The failure mode is yours: reading it instead of typing it."},
- {n:"Addy Osmani",asof:"Sep 2026",d:"The 2026 synthesis",
+ {n:"Addy Osmani",l:[["Blog","https://addyosmani.com/blog/"],["Newsletter","https://addyo.substack.com/"],["X","https://x.com/addyosmani"],["YouTube","https://www.youtube.com/@addyosmani"]],asof:"Sep 2026",d:"The 2026 synthesis",
   b:"Engineering leader at Google; the clearest explainer of the shift to loop engineering. Five loop components — automations, isolation, knowledge, connections, separate verification — plus persistent state. Three failure modes: verification risk, comprehension debt, cognitive surrender.",
   q:"Loop engineering is replacing yourself as the person who prompts the agent. You design the system that does it instead.",
   c:"Synthesis rather than primary practice; he is reporting a shift more than originating it. The value is in the decomposition, which is unusually clean."}
@@ -627,19 +693,19 @@ const $ = (s,r)=> (r||document).querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ---------- progress state ---------- */
-let state = {mods:{}, labs:{}};
+let state = {mods:{}, labs:{}, res:{}};
 let saveTo = null, dbDoc = null;
 
 function loadLocal(){
   try{ const r = localStorage.getItem("ase.progress");
-       if(r) state = Object.assign({mods:{},labs:{}}, JSON.parse(r)); }catch(e){}
+       if(r) state = Object.assign({mods:{},labs:{},res:{}}, JSON.parse(r)); }catch(e){}
 }
 function persist(){
   try{ localStorage.setItem("ase.progress", JSON.stringify(state)); }catch(e){}
   if(!dbDoc) return;
   clearTimeout(saveTo);
   saveTo = setTimeout(()=>{
-    dbDoc.set({mods:state.mods, labs:state.labs, at:new Date().toISOString()})
+    dbDoc.set({mods:state.mods, labs:state.labs, res:state.res, at:new Date().toISOString()})
       .then(()=> setSync("saved"))
       .catch(()=> setSync("local only"));
   }, 700);
@@ -656,7 +722,7 @@ async function initStore(){
     const snap = await dbDoc.get();
     if(snap.exists){
       const d = snap.data() || {};
-      state = {mods: d.mods || {}, labs: d.labs || {}};
+      state = {mods: d.mods || {}, labs: d.labs || {}, res: d.res || {}};
       renderAll();
     }
     setSync("synced to your account");
@@ -665,6 +731,8 @@ async function initStore(){
 
 const modDone = id => !!state.mods[id];
 const labDone = id => !!state.labs[id];
+const resStat = id => state.res[id] || "";
+function setRes(id, v){ if(v) state.res[id] = v; else delete state.res[id]; persist(); renderResources(); }
 function toggleMod(id){ state.mods[id] = !state.mods[id]; persist(); renderAll(); }
 function toggleLab(id){ state.labs[id] = !state.labs[id]; persist();
   renderModule(current); renderHeader(); renderOverview(); }
@@ -696,15 +764,15 @@ function go(t, mod){
 
 /* ---------- overview ---------- */
 const LEVELS = [
- {n:1, name:"Prompting", era:"2023\u201324", unit:"The message",
+ {name:"Prompting", era:"2023\u201324", unit:"The message",
   skill:"Phrasing, examples, iteration by hand",
   stuck:"Endless re-prompting, and blaming the model when it doesn\u2019t land",
   taught:"Phase 2 \u2014 Operator"},
- {n:2, name:"Context engineering", era:"2025", unit:"The context window",
+ {name:"Context engineering", era:"2025", unit:"The context window",
   skill:"Curation, compaction, isolation \u2014 budgeting what the model can see",
   stuck:"Context rot; an enormous memory file nobody reads; the agent \u201cforgetting\u201d",
   taught:"Phase 3 \u2014 Engineer"},
- {n:3, name:"Loop engineering", era:"2026", unit:"The loop",
+ {name:"Loop engineering", era:"2026", unit:"The loop",
   skill:"System design, verification, deciding how much autonomy a task can carry",
   stuck:"You are the bottleneck; agents sit idle waiting for your attention",
   taught:"Phase 4 \u2014 Orchestrator"}
@@ -718,75 +786,107 @@ function renderOverview(){
   const total = IDS.length, done = IDS.filter(modDone).length;
   $("#v-overview").innerHTML =
   '<div class="hero"><div class="kicker">Agentic Software Engineering · self-paced · mastery-based</div>'+
-  '<h1>Producing, verifying and owning software you did not type</h1>'+
+  '<h1>Shipping With Agents</h1>'+
+  '<p class="hook"><b>Agents made code cheap to write. They did not make it cheap to ship.</b> <b>Verification is the bottleneck.</b> '+
+  'Every durable technique in this course is a way of closing the gap between <i>code produced</i> and <i>code known-good</i> faster than the '+
+  'agent can widen it.</p>'+
   '<p>A curriculum for an experienced engineer who has used coding agents casually and wants to work the way the '+
-  'best practitioners actually do — built from primary sources, organized around one idea, and designed so it can be '+
+  'best practitioners actually do \u2014 built from primary sources, organized around one idea, and designed so it can be '+
   'kept current as the field moves underneath it.</p></div>'+
 
-  '<div class="thesis"><p>Generation is cheap. <b>Verification is the bottleneck.</b> Every durable technique in '+
-  'agentic engineering is a way of closing the gap between <i>code produced</i> and <i>code known-good</i> — faster '+
-  'than the agent can widen it.</p></div>'+
-
-  '<h2 class="sec">Three levels of practice</h2>'+
-  '<p class="note">These are not parts of the course \u2014 the five phases below are that. These are three levels at '+
-  'which the discipline itself operates, each defined by <b>the unit of work you are manipulating</b>. They emerged '+
-  'roughly in this order, and each rests on the one below it: you never stop needing a good brief just because you '+
-  'have moved up to designing loops. Most people who feel stuck are working one level below where their problem '+
-  'actually lives.</p>'+
-  '<div class="stack">'+ LEVELS.slice().reverse().map(function(l,i){
+  '<h2 class="sec">The building blocks of an agentic workflow</h2>'+
+  '<p class="lead">Every agentic workflow is built from three nested blocks: <b>the message, the context window, '+
+  'and the loop</b>.</p>'+
+  '<figure class="nest">'+
+  '<svg viewBox="0 0 440 200" role="img" aria-label="Nested units of work: a message sits inside a context window, '+
+  'and context windows sit inside a loop that repeats until a stop condition.">'+
+    '<defs><marker id="lv-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">'+
+    '<path class="head" d="M0 0L8 4L0 8z"/></marker></defs>'+
+    '<rect class="unit" x="1" y="1" width="438" height="198" rx="9"/>'+
+    '<text x="16" y="23">LOOP</text>'+
+    '<rect class="unit in" x="20" y="38" width="150" height="114" rx="6"/>'+
+    '<text x="30" y="56">CONTEXT WINDOW</text>'+
+    '<rect class="nb" x="30" y="66" width="130" height="16" rx="3"/>'+
+    '<rect class="unit msg" x="30" y="87" width="130" height="18" rx="3"/>'+
+    '<text x="37" y="99.5">MESSAGE</text>'+
+    '<rect class="nb" x="30" y="110" width="96" height="16" rx="3"/>'+
+    '<rect class="nb" x="30" y="130" width="118" height="16" rx="3"/>'+
+    [[195,[80,58,72,46]],[320,[64,80,40,70]]].map(function(w){
+      return '<rect class="sib" x="'+w[0]+'" y="38" width="100" height="114" rx="6"/>'+
+        w[1].map(function(bw,j){
+          return '<rect class="nb" x="'+(w[0]+10)+'" y="'+(66+j*21)+'" width="'+bw+'" height="15" rx="3"/>';
+        }).join("");
+    }).join("")+
+    '<path class="flow" d="M170 95H193" marker-end="url(#lv-arrow)"/>'+
+    '<path class="flow" d="M295 95H318" marker-end="url(#lv-arrow)"/>'+
+    '<path class="flow" d="M370 152V168H95V154" marker-end="url(#lv-arrow)"/>'+
+    '<text class="quiet" x="232" y="185" text-anchor="middle">repeats until a stop condition</text>'+
+  '</svg>'+
+  '<figcaption><b>Each block contains the one before it.</b> A context window holds many '+
+  'messages; a loop runs many context windows. Moving outward means taking the next box as the thing you '+
+  'design — the boxes inside it do not go away.</figcaption></figure>'+
+  '<p class="lead">This course builds your command of all three, working from the inside out. Prompting comes '+
+  'first, to get the message right; then context engineering, to get right everything the model can see; then loop '+
+  'engineering, to get right the system that runs without you. An outer block never replaces an inner one: you '+
+  'still need a good brief after you have moved on to designing loops.</p>'+
+  '<div class="levels">'+ LEVELS.map(function(l,i){
     return '<div class="lvl">'+
-      '<div class="lvl-n"><span>LEVEL</span><b>'+l.n+'</b></div>'+
-      '<div class="lvl-body">'+
-        '<div class="lvl-hd"><h4>'+l.name+'</h4><span class="era">'+l.era+'</span>'+
-        '<span class="taught">'+l.taught+'</span></div>'+
-        '<div class="lvl-facts">'+
-          '<div><span class="k">Unit of work</span>'+l.unit+'</div>'+
-          '<div><span class="k">The skill</span>'+l.skill+'</div>'+
-          '<div><span class="k">Stuck here looks like</span><i>'+l.stuck+'</i></div>'+
-        '</div>'+
-      '</div></div>'+
-      (i < LEVELS.length-1 ? '<div class="rests">\u2193 rests on</div>' : '');
+      '<div class="lvl-hd">'+
+        '<svg class="lvl-g" viewBox="0 0 34 34" aria-hidden="true">'+
+          '<rect'+(i===2?' class="on"':'')+' x="1" y="1" width="32" height="32" rx="4"/>'+
+          '<rect'+(i===1?' class="on"':'')+' x="7" y="7" width="20" height="20" rx="3"/>'+
+          '<rect'+(i===0?' class="on"':'')+' x="13" y="13" width="8" height="8" rx="2"/>'+
+        '</svg>'+
+        '<div class="lvl-t"><h4>'+l.name+'</h4><span class="era">'+l.era+'</span></div>'+
+      '</div>'+
+      '<div class="lvl-facts">'+
+        '<div><span class="k">Building block</span>'+l.unit+'</div>'+
+        '<div><span class="k">The skill</span>'+l.skill+'</div>'+
+        '<div><span class="k">Stuck here looks like</span><i>'+l.stuck+'</i></div>'+
+      '</div>'+
+      '<span class="taught">'+l.taught+'</span>'+
+    '</div>';
   }).join("") + '</div>'+
-  '<p class="note">Phase 1 sits underneath all three \u2014 it is measurement, so you can tell whether anything you do '+
-  'at any level is actually working. Phase 5 sits on top: building the harnesses, and carrying a team.</p>'+
+  '<p class="lead">Most people who feel stuck are working one block inside where their problem actually lives.</p>'+
 
-  '<h2 class="sec">Five phases, seventeen modules — '+done+' of '+total+' complete</h2>'+
-  '<div class="grid phases">'+ PHASES.map((s,i) => {
+  '<h2 class="sec">Course roadmap</h2>'+
+  '<ol class="road">'+ PHASES.map((s,i) => {
     const [d,t] = phaseStats(i);
-    return '<div class="phase"><div class="hd"><div><div class="sn">'+s.n.toUpperCase()+'</div>'+
+    const prev = i ? phaseStats(i-1) : null;
+    return '<li class="stop'+(d===t?' done':d?' begun':'')+(prev && prev[0]===prev[1]?' prev-done':'')+'">'+
+      '<span class="node"></span>'+
+      '<div class="phase"><div class="hd"><div><div class="sn">'+s.n.toUpperCase()+'</div>'+
       '<h3>'+s.name+'</h3></div><div class="meter-mini"><div class="bar"><i style="width:'+
       (t?Math.round(d/t*100):0)+'%"></i></div><span>'+d+'/'+t+'</span></div></div>'+
       '<div class="goal">'+s.goal+'</div>'+
       '<div class="mods">'+ s.mods.map(m =>
         '<button class="chip '+(modDone(m)?"done":"")+'" data-m="'+m+'" title="'+esc(M[m].t)+'">'+m+'</button>'
       ).join("") + '</div>'+
-      (s.gate ? '<div class="sn" style="color:var(--gate)">▸ '+s.gate+'</div>' : '') +
-    '</div>';
-  }).join("") + '</div>'+
+      (s.gate ? '<div class="sn" style="color:var(--gate)">▸ '+s.gate+'</div>' : '<div class="sn gate-pad">\u00a0</div>')+
+    '</div></li>';
+  }).join("") + '</ol>'+
 
   '<h2 class="sec">How it is assessed</h2>'+
-  '<div class="tbl-wrap"><table><thead><tr><th>Instrument</th><th>Weight</th><th>What it tests</th></tr></thead><tbody>'+
-  [["Module mastery artifacts (17)","40%","Technique acquisition"],
-   ["Gate assessments (3)","15%","Integration across a phase"],
-   ["Capstone A — Ship it","10%","Drive one agent end to end"],
-   ["Capstone B — Land a change in a large unfamiliar codebase","15%","The full Phase 3 toolkit, with an external signal"],
-   ["Capstone C — Operate an autonomous loop for a week","15%","Autonomy, evals, safety — and an incident log"],
-   ["Doctrine document","5%","Judgment that outlives the curriculum"]].map(r =>
-   '<tr><td class="q" style="white-space:normal">'+r[0]+'</td><td class="mono">'+r[1]+'</td><td class="pos">'+r[2]+'</td></tr>').join("")+
+  '<div class="tbl-wrap"><table><thead><tr><th>Instrument</th><th>What it tests</th></tr></thead><tbody>'+
+  [["Module mastery artifacts (17)","Technique acquisition"],
+   ["Gate assessments (3)","Integration across a phase"],
+   ["Capstone A — Ship it","Drive one agent end to end"],
+   ["Capstone B — Land a change in a large unfamiliar codebase","The full Phase 3 toolkit, with an external signal"],
+   ["Capstone C — Operate an autonomous loop for a week","Autonomy, evals, safety — and an incident log"],
+   ["Doctrine document","Judgment that outlives the curriculum"]].map(r =>
+   '<tr><td class="q" style="white-space:normal">'+r[0]+'</td><td class="pos">'+r[1]+'</td></tr>').join("")+
   '</tbody></table></div>'+
-  '<p class="note" style="margin-top:14px">Rubrics run Novice / Working / Proficient / Expert, and weight <b>judgment '+
-  'traces</b> — what you rejected, what your measurement showed, what surprised you — far above output volume. '+
-  'You can have an agent produce every artifact in this course; if you do, the rubrics will show it. '+
-  'A capstone with no failures reported is presumed under-reported and does not pass.</p>'+
+  '<p class="lead" style="margin-top:16px">The course is self-paced and self-assessed. Each module has a rubric '+
+  'with four levels \u2014 Novice, Working, Proficient, Expert \u2014 and Proficient is the bar for moving on.</p>'+
 
   '<h2 class="sec">Time budget</h2>'+
   '<div class="tbl-wrap"><table><thead><tr><th>Phase</th><th>Modules</th><th>Hours</th><th>Cumulative</th></tr></thead><tbody>'+
-  [["0 Calibration","M1","5","5"],["1 Operator","M2–M5 + Capstone A","34","39"],
-   ["2 Engineer","M6–M9 + Capstone B","47","86"],["3 Orchestrator","M10–M13","34","120"],
-   ["4 Architect","M14–M17 + Capstone C","48","168"]].map(r =>
+  [["1 · Calibration","M1","5","5"],["2 · Operator","M2–M5 + Capstone A","34","39"],
+   ["3 · Engineer","M6–M9 + Capstone B","47","86"],["4 · Orchestrator","M10–M13","34","120"],
+   ["5 · Architect","M14–M17 + Capstone C","48","168"]].map(r =>
    '<tr><td class="q">'+r[0]+'</td><td class="mono">'+r[1]+'</td><td class="mono">'+r[2]+'</td><td class="mono">'+r[3]+'</td></tr>').join("")+
   '</tbody></table></div>'+
-  '<p class="note" style="margin-top:14px">About 120–170 hours depending on lab depth and how much you do on real work '+
+  '<p class="lead" style="margin-top:16px">About 120–170 hours depending on lab depth and how much you do on real work '+
   '(which takes longer and teaches more). Ten hours a week is roughly four months; full-time intensive is five to six weeks. '+
   '<b>Start with M1.</b> It is the module people skip and later regret, because without a baseline you spend the rest of '+
   'the course unable to tell whether anything you did helped.</p>';
@@ -882,7 +982,10 @@ function renderPeople(){
   '<div class="grid people">'+ PEOPLE.map(p =>
     '<div class="person"><h3>'+esc(p.n)+(p.k?' <span class="knownas">“'+esc(p.k)+'”</span>':'')+'</h3>'+'<div class="doc">'+esc(p.d)+'</div>'+(p.asof?'<div class="asof">As of '+esc(p.asof)+'</div>':'')+
     '<p>'+esc(p.b)+'</p><p class="quote" style="font-size:14px">“'+esc(p.q)+'”</p>'+
-    '<div class="crit"><b>Read critically</b>'+esc(p.c)+'</div></div>').join("") + '</div>'+
+    '<div class="crit"><b>Read critically</b>'+esc(p.c)+'</div>'+
+    (p.l ? '<div class="follow"><b>Follow</b>'+p.l.map(x =>
+      '<a href="'+x[1]+'" target="_blank" rel="noopener">'+esc(x[0])+'</a>').join("")+'</div>' : '')+
+    '</div>').join("") + '</div>'+
 
   '<h2 class="sec">The disagreement map</h2>'+
   '<p class="note">Where the experts actually conflict. Each row is a decision you must make. The course position is '+
@@ -898,10 +1001,13 @@ function renderPeople(){
 }
 
 /* ---------- resources ---------- */
-let resFilter = "all";
+let resFilter = "all", resStatFilter = "any";
+const RSTAT = [["","Unread"],["p","In progress"],["r","Read"]];
 function renderResources(){
   const cats = ["all","evidence","foundations","method","practitioners","security"];
-  const list = RES.filter(r => resFilter==="all" || r[5]===resFilter);
+  const count = v => RES.filter(r => resStat(r[0])===v).length;
+  const list = RES.filter(r => (resFilter==="all" || r[5]===resFilter) &&
+                               (resStatFilter==="any" || resStat(r[0])===resStatFilter));
   $("#v-resources").innerHTML =
   '<h2 class="sec">Resource index · verified 2026-09-17</h2>'+
   '<p class="note">Tier ① core, ② recommended. Volatility: <b>D</b> durable (2+ yr), <b>M</b> technique (~12 mo), '+
@@ -909,15 +1015,25 @@ function renderResources(){
   'them automatically. Full index, including secondary sources and deliberate exclusions, ships as markdown.</p>'+
   '<div class="filters">'+ cats.map(c =>
     '<button class="chip '+(resFilter===c?"done":"")+'" data-f="'+c+'">'+c+'</button>').join("") +'</div>'+
-  list.map(r =>
-    '<div class="res"><span class="rid">'+r[0]+'</span><span class="body" style="flex:1;min-width:0">'+
+  '<div class="filters">'+ [["any","any status"]].concat(RSTAT).map(o =>
+    '<button class="chip '+(resStatFilter===o[0]?"done":"")+'" data-sf="'+o[0]+'">'+o[1].toLowerCase()+
+    (o[0]==="any" ? '' : ' · '+count(o[0]))+'</button>').join("") +'</div>'+
+  (list.length ? '' : '<p class="note">Nothing matches these filters.</p>')+
+  list.map(r => { const st = resStat(r[0]);
+    return '<div class="res'+(st?' is-'+st:'')+'"><span class="rid">'+r[0]+'</span><span class="body" style="flex:1 1 260px;min-width:0">'+
     '<a class="rt" href="'+r[2]+'" target="_blank" rel="noopener">'+esc(r[1])+'</a>'+
     '<div class="rw">'+esc(r[6])+'</div>'+
     '<div class="tags"><span class="tag t'+r[3]+'">Tier '+(r[3]===1?"①":"②")+'</span>'+
     '<span class="tag v'+r[4]+'">'+({D:"durable",M:"technique",F:"fast — recheck"}[r[4]])+'</span>'+
-    '<span class="tag">'+r[5]+'</span></div></span></div>').join("");
-  $("#v-resources").onclick = e => { const b = e.target.closest("[data-f]");
-    if(b){ resFilter = b.dataset.f; renderResources(); } };
+    '<span class="tag">'+r[5]+'</span></div></span>'+
+    '<span class="rstat" role="group" aria-label="Reading status for '+r[0]+'">'+ RSTAT.map(o =>
+      '<button class="s'+o[0]+'" data-rs="'+r[0]+'" data-v="'+o[0]+'" aria-pressed="'+(st===o[0])+'">'+o[1]+'</button>').join("")+
+    '</span></div>'; }).join("");
+  $("#v-resources").onclick = e => {
+    const f = e.target.closest("[data-f]"), sf = e.target.closest("[data-sf]"), rs = e.target.closest("[data-rs]");
+    if(f){ resFilter = f.dataset.f; renderResources(); }
+    else if(sf){ resStatFilter = sf.dataset.sf; renderResources(); }
+    else if(rs){ setRes(rs.dataset.rs, rs.dataset.v); } };
 }
 
 /* ---------- maintain ---------- */
@@ -930,9 +1046,9 @@ function renderMaintain(){
 
   '<h2 class="sec">Volatility tiers</h2>'+
   '<div class="tbl-wrap"><table><thead><tr><th>Tier</th><th>Content</th><th>Half-life</th><th>Refresh</th></tr></thead><tbody>'+
-  [["0 Durable","The verification gap; context as a budget; loops need fitness functions and stop conditions; the lethal trifecta; measure, don’t assume","2–5 yr","Only when contradicted by evidence"],
-   ["1 Technique","Research→plan→implement; intentional compaction; parallelism strategies; the extension-surface categories; specific ratios","~12 mo","Annually, or when a tracked practitioner changes position"],
-   ["2 Instance","Tool names, model versions, benchmark scores, prices, URLs, feature names","~3 mo","Quarterly"]].map(r =>
+  [["Durable","The verification gap; context as a budget; loops need fitness functions and stop conditions; the lethal trifecta; measure, don’t assume","2–5 yr","Only when contradicted by evidence"],
+   ["Technique","Research→plan→implement; intentional compaction; parallelism strategies; the extension-surface categories; specific ratios","~12 mo","Annually, or when a tracked practitioner changes position"],
+   ["Instance","Tool names, model versions, benchmark scores, prices, URLs, feature names","~3 mo","Quarterly"]].map(r =>
    '<tr><td class="q">'+r[0]+'</td><td class="pos">'+r[1]+'</td><td class="mono">'+r[2]+'</td><td class="pos">'+r[3]+'</td></tr>').join("")+
   '</tbody></table></div>'+
   '<p class="note" style="margin-top:14px">The diagnostic question for any edit: <b>would this still be true if every '+

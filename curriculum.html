@@ -1,0 +1,956 @@
+<title>Shipping With Agents</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+:root{
+  --paper:#eceeed; --surface:#f7f8f7; --sunk:#e2e5e4;
+  --ink:#12181a; --ink-2:#414c50; --ink-3:#6c787c;
+  --line:#cdd3d2; --line-2:#dde1e0;
+  --signal:#0e6b72; --signal-soft:#d7e6e6;
+  --gate:#9a5a06; --gate-soft:#f0e3cf;
+  --ok:#2f6b3d; --warn:#9a3a2c;
+  --shadow:0 1px 0 rgba(18,24,26,.05);
+  --f-disp:'Archivo',system-ui,sans-serif;
+  --f-body:'Source Serif 4',Georgia,serif;
+  --f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0e1214; --surface:#161c1e; --sunk:#1e2527;
+  --ink:#e6eae9; --ink-2:#a8b4b4; --ink-3:#7c8a8b;
+  --line:#2c3639; --line-2:#222b2d;
+  --signal:#4fbfc4; --signal-soft:#16333a;
+  --gate:#d59a4a; --gate-soft:#33270f;
+  --ok:#67b37c; --warn:#e0836f;
+  --shadow:0 1px 0 rgba(0,0,0,.3);
+}}
+:root[data-theme="dark"]{
+  --paper:#0e1214; --surface:#161c1e; --sunk:#1e2527;
+  --ink:#e6eae9; --ink-2:#a8b4b4; --ink-3:#7c8a8b;
+  --line:#2c3639; --line-2:#222b2d;
+  --signal:#4fbfc4; --signal-soft:#16333a;
+  --gate:#d59a4a; --gate-soft:#33270f;
+  --ok:#67b37c; --warn:#e0836f;
+  --shadow:0 1px 0 rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);
+  font-size:15.5px;line-height:1.58;margin:0;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--f-disp);font-weight:600;letter-spacing:-.015em;
+  text-wrap:balance;margin:0;line-height:1.18}
+a{color:var(--signal);text-underline-offset:2px}
+code,.mono{font-family:var(--f-mono);font-size:.86em;font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px;border-radius:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---- chrome ---- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--paper);
+  border-bottom:1px solid var(--line);padding:0 16px}
+.top-in{max-width:1220px;margin:0 auto;display:flex;align-items:center;gap:18px;
+  flex-wrap:wrap;padding-block:9px}
+.brand{display:flex;align-items:baseline;gap:9px;margin-right:auto}
+.brand b{font-family:var(--f-disp);font-weight:700;font-size:15px;letter-spacing:-.02em}
+.brand span{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);
+  text-transform:uppercase;letter-spacing:.11em}
+nav.tabs{display:flex;gap:2px;flex-wrap:wrap}
+nav.tabs button{font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;
+  text-transform:uppercase;background:none;border:0;color:var(--ink-3);cursor:pointer;
+  padding:6px 9px;border-radius:3px}
+nav.tabs button:hover{color:var(--ink);background:var(--sunk)}
+nav.tabs button[aria-current="true"]{color:var(--ink);background:var(--sunk);font-weight:700}
+.meter-mini{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;
+  color:var(--ink-3);white-space:nowrap}
+.bar{height:5px;width:74px;background:var(--sunk);border-radius:0;overflow:hidden;display:flex}
+.bar i{display:block;background:var(--signal);height:100%}
+.theme{background:none;border:1px solid var(--line);color:var(--ink-3);cursor:pointer;
+  border-radius:3px;padding:4px 7px;font-family:var(--f-mono);font-size:11px}
+
+main{max-width:1220px;margin:0 auto;padding:0 16px;padding-block:26px 64px}
+.view[hidden]{display:none!important}
+
+/* ---- overview ---- */
+.hero{border-left:3px solid var(--signal);padding-left:18px;margin-bottom:30px}
+.hero h1{font-size:clamp(27px,4.4vw,42px);font-weight:700;letter-spacing:-.03em}
+.hero .kicker{font-family:var(--f-mono);font-size:11px;text-transform:uppercase;
+  letter-spacing:.13em;color:var(--signal);margin-bottom:9px}
+.hero p{max-width:62ch;color:var(--ink-2);margin:.7em 0 0}
+.thesis{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--signal);
+  padding:16px 18px;margin:26px 0;max-width:72ch}
+.thesis p{margin:0;font-size:17px}
+.thesis b{font-weight:600}
+
+.grid{display:grid;gap:14px}
+.layers{grid-template-columns:repeat(auto-fit,minmax(215px,1fr));margin:22px 0 34px}
+.layer{background:var(--surface);border:1px solid var(--line);padding:14px 15px;box-shadow:var(--shadow)}
+.layer .n{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);letter-spacing:.1em;
+  text-transform:uppercase}
+.layer h4{font-size:16px;margin:5px 0 4px}
+.layer .era{font-family:var(--f-mono);font-size:11px;color:var(--signal)}
+.layer p{margin:7px 0 0;font-size:14px;color:var(--ink-2)}
+.layer .fail{margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);
+  font-size:13px;color:var(--warn)}
+
+h2.sec{font-size:13px;font-family:var(--f-mono);font-weight:700;text-transform:uppercase;
+  letter-spacing:.13em;color:var(--ink-3);border-bottom:1px solid var(--line);
+  padding-bottom:7px;margin:38px 0 16px}
+h2.sec:first-of-type{margin-top:0}
+
+.stages{grid-template-columns:repeat(auto-fit,minmax(245px,1fr))}
+.stage{background:var(--surface);border:1px solid var(--line);padding:15px;
+  display:flex;flex-direction:column;gap:9px;box-shadow:var(--shadow)}
+.stage .hd{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.stage .sn{font-family:var(--f-mono);font-size:10px;letter-spacing:.11em;color:var(--ink-3)}
+.stage h3{font-size:18px}
+.stage .goal{font-size:14px;color:var(--ink-2);flex:1}
+.stage .mods{display:flex;gap:4px;flex-wrap:wrap}
+.chip{font-family:var(--f-mono);font-size:10.5px;padding:2px 6px;border:1px solid var(--line);
+  color:var(--ink-3);cursor:pointer;background:none;border-radius:2px}
+.chip:hover{border-color:var(--signal);color:var(--signal)}
+.chip.done{background:var(--signal-soft);border-color:var(--signal);color:var(--signal);font-weight:700}
+
+/* ---- modules ---- */
+.mod-wrap{display:grid;grid-template-columns:238px 1fr;gap:28px;align-items:start}
+.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);max-height:calc(100vh - 90px);
+  overflow-y:auto;border-right:1px solid var(--line);padding-right:12px}
+.rail .grp{font-family:var(--f-mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-3);margin:16px 0 5px;padding-left:2px}
+.rail .grp:first-child{margin-top:0}
+.rail button.m{display:flex;width:100%;gap:8px;align-items:baseline;text-align:left;
+  background:none;border:0;cursor:pointer;padding:5px 7px;color:var(--ink-2);
+  font-family:var(--f-body);font-size:14px;line-height:1.3;border-radius:3px}
+.rail button.m:hover{background:var(--sunk);color:var(--ink)}
+.rail button.m[aria-current="true"]{background:var(--sunk);color:var(--ink);font-weight:600;
+  box-shadow:inset 2px 0 0 var(--signal)}
+.rail .id{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);min-width:26px}
+.rail button.m[aria-current="true"] .id{color:var(--signal)}
+.rail .tick{margin-left:auto;color:var(--ok);font-size:12px}
+.rail .gate{font-family:var(--f-mono);font-size:10px;color:var(--gate);background:var(--gate-soft);
+  padding:3px 7px;margin:7px 0 2px;letter-spacing:.06em;border-radius:2px}
+
+.mod{max-width:75ch}
+.mod-hd{border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:18px}
+.mod-hd .id{font-family:var(--f-mono);font-size:12px;color:var(--signal);letter-spacing:.08em}
+.mod-hd h2{font-size:clamp(22px,3.4vw,31px);font-weight:700;letter-spacing:-.025em;margin:5px 0 10px}
+.facts{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3)}
+.facts b{color:var(--ink-2);font-weight:500}
+.star{background:var(--signal-soft);border-left:3px solid var(--signal);padding:12px 15px;margin:18px 0}
+.star .slab{font-family:var(--f-mono);font-size:10px;text-transform:uppercase;letter-spacing:.11em;
+  color:var(--signal);display:block;margin-bottom:4px}
+.star p{margin:0;font-weight:600;font-size:16px}
+.mod h3{font-family:var(--f-mono);font-size:11.5px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.12em;color:var(--ink-3);margin:28px 0 10px}
+.mod p{margin:0 0 .85em}
+.mod ul{margin:0 0 1em;padding-left:1.15em}
+.mod li{margin-bottom:.35em}
+.mod .why{color:var(--ink-2)}
+.quote{border-left:2px solid var(--line);padding-left:14px;color:var(--ink-2);font-style:italic;
+  margin:0 0 1em}
+
+.lab{border:1px solid var(--line);background:var(--surface);padding:12px 14px;margin-bottom:9px;
+  display:flex;gap:11px;align-items:flex-start}
+.lab input{margin:4px 0 0;accent-color:var(--signal);width:15px;height:15px;flex:none;cursor:pointer}
+.lab .body{flex:1;min-width:0}
+.lab .t{display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.lab .lid{font-family:var(--f-mono);font-size:11px;color:var(--signal);font-weight:500}
+.lab .ttl{font-weight:600}
+.lab .hrs{font-family:var(--f-mono);font-size:10.5px;color:var(--ink-3);margin-left:auto}
+.lab .d{font-size:14px;color:var(--ink-2);margin:5px 0 0}
+.lab .s{font-size:13px;margin:6px 0 0;padding-top:6px;border-top:1px dashed var(--line-2);color:var(--ink-2)}
+.lab .s b{font-family:var(--f-mono);font-size:10px;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--ok);font-weight:700}
+.lab.on{border-color:var(--signal);background:var(--signal-soft)}
+
+.evidence{border:1px solid var(--signal);padding:12px 15px;background:var(--surface)}
+.evidence .lab2{font-family:var(--f-mono);font-size:10px;text-transform:uppercase;letter-spacing:.11em;
+  color:var(--signal);display:block;margin-bottom:5px}
+.fails{list-style:none;padding:0}
+.fails li{padding-left:1.15em;position:relative;color:var(--ink-2);font-size:14.5px}
+.fails li::before{content:"×";position:absolute;left:0;color:var(--warn);font-weight:700}
+.mod-foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);
+  display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.04em;border:1px solid var(--line);
+  background:var(--surface);color:var(--ink);padding:7px 12px;cursor:pointer;border-radius:3px}
+.btn:hover{border-color:var(--signal);color:var(--signal)}
+.btn.pri{background:var(--signal);border-color:var(--signal);color:var(--paper);font-weight:700}
+.btn.pri.off{background:var(--surface);color:var(--ink);border-color:var(--line);font-weight:400}
+
+/* ---- people ---- */
+.people{grid-template-columns:repeat(auto-fit,minmax(288px,1fr))}
+.person{background:var(--surface);border:1px solid var(--line);padding:15px;box-shadow:var(--shadow)}
+.person h3{font-size:17px}
+.person .doc{font-family:var(--f-mono);font-size:10.5px;color:var(--signal);letter-spacing:.05em;
+  text-transform:uppercase;margin:4px 0 8px}
+.person p{margin:0 0 .6em;font-size:14px;color:var(--ink-2)}
+.person .crit{border-top:1px dashed var(--line);padding-top:8px;margin-top:8px;font-size:13.5px}
+.person .crit b{font-family:var(--f-mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--warn);display:block;margin-bottom:3px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:620px;background:var(--surface)}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line-2);vertical-align:top}
+th{font-family:var(--f-mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--ink-3);background:var(--sunk);font-weight:700}
+tr:last-child td{border-bottom:0}
+td.q{font-weight:600;white-space:nowrap}
+td.pos{color:var(--ink-2)}
+td.crs{border-left:2px solid var(--signal)}
+
+/* ---- resources ---- */
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.res{border:1px solid var(--line);background:var(--surface);padding:11px 13px;margin-bottom:7px;
+  display:flex;gap:11px;align-items:flex-start}
+.res .rid{font-family:var(--f-mono);font-size:11px;color:var(--signal);min-width:42px;flex:none}
+.res .rt{font-weight:600;font-size:14.5px}
+.res .rw{font-size:13.5px;color:var(--ink-2);margin-top:3px}
+.res .tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.tag{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;
+  padding:2px 5px;border:1px solid var(--line);color:var(--ink-3);border-radius:2px}
+.tag.t1{border-color:var(--signal);color:var(--signal)}
+.tag.vF{border-color:var(--warn);color:var(--warn)}
+.note{font-size:13.5px;color:var(--ink-3);max-width:70ch;margin-bottom:18px}
+
+/* ---- maintain ---- */
+.inv{background:var(--surface);border:1px solid var(--line);padding:13px 15px;margin-bottom:8px}
+.inv .k{font-family:var(--f-mono);font-size:11px;color:var(--gate);font-weight:700;letter-spacing:.06em}
+.inv h4{font-size:15.5px;margin:3px 0 5px}
+.inv p{margin:0;font-size:14px;color:var(--ink-2)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:14px}
+.status{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);margin-top:8px}
+footer{max-width:1220px;margin:0 auto;padding:22px 16px 40px;border-top:1px solid var(--line);
+  font-size:13px;color:var(--ink-3)}
+
+@media (max-width:820px){
+  .mod-wrap{grid-template-columns:1fr;gap:16px}
+  .rail{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line);
+    padding-right:0;padding-bottom:12px;display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+  .rail .grp{width:100%;margin:8px 0 2px}
+  .rail button.m{width:auto;padding:5px 9px;border:1px solid var(--line);border-radius:3px}
+  .rail .gate{width:100%}
+  .brand{width:100%;margin-right:0}
+  body{font-size:15px}
+}
+</style>
+
+<div class="top"><div class="top-in">
+  <div class="brand"><b>Shipping With Agents</b><span>Agentic SWE · v1.0 · 2026-09</span></div>
+  <nav class="tabs" id="tabs"></nav>
+  <div class="meter-mini" title="Modules complete">
+    <div class="bar"><i id="mbar" style="width:0%"></i></div><span id="mtxt">0/17</span>
+  </div>
+  <button class="theme" id="theme" aria-label="Toggle theme">◐</button>
+</div></div>
+
+<main>
+  <section class="view" id="v-overview"></section>
+  <section class="view" id="v-modules" hidden></section>
+  <section class="view" id="v-people" hidden></section>
+  <section class="view" id="v-resources" hidden></section>
+  <section class="view" id="v-maintain" hidden></section>
+</main>
+<footer>
+  A self-paced, mastery-based curriculum in agentic software engineering. Sources verified 2026-09-17;
+  every volatile claim is dated and quarantined. Full text, rubrics and tooling ship as markdown alongside this page.
+  <span id="sync" class="status"></span>
+</footer>
+<script>
+"use strict";
+
+const STAGES = [
+ {n:"Stage 0", name:"Calibration", goal:"Take a baseline before you change anything, because your felt sense of speed is actively misleading.", mods:["M0"]},
+ {n:"Stage 1", name:"Operator", goal:"Drive one agent, well, on real work, with a loop that catches your mistakes.", mods:["M1","M2","M3","M4"], gate:"Gate 1 + Capstone A"},
+ {n:"Stage 2", name:"Engineer", goal:"Stop compensating for a hostile environment. Shape the context, the process and the codebase before the agent starts.", mods:["M5","M6","M7","M8"], gate:"Gate 2 + Capstone B"},
+ {n:"Stage 3", name:"Orchestrator", goal:"Stop being the bottleneck — safely. Everything here multiplies output and blast radius together.", mods:["M9","M10","M11","M12"], gate:"Gate 3"},
+ {n:"Stage 4", name:"Architect", goal:"Build the things that keep you improving after the course ends, and carry other people with you.", mods:["M13","M14","M15","M16"], gate:"Capstone C"}
+];
+
+const M = {
+M0:{t:"Baseline & Instrumentation",st:0,pre:"none",hrs:"4–6 h + 2 weeks logging",
+ star:"You cannot improve what you have not baselined, and your felt sense of speed is actively misleading.",
+ why:"METR's 2025 randomized trial found experienced open-source developers were <b>19% slower</b> with AI tooling while estimating they had been <b>20% faster</b>. The 39-point swing is not a fact about 2025 tools — it is a fact about human self-assessment under high subjective fluency. METR's 2026 follow-up narrowed the effect and then announced a redesign, because developers now refuse to work without AI and decline to submit tasks they think AI handles well. The literature is becoming structurally unable to answer the question for you. So you answer it yourself.",
+ out:["A measurement practice that survives the course","Calibrated intuition: predict a task's duration, then check yourself","A dated, falsifiable statement of what you currently believe"],
+ key:["<b>Four numbers, logged by hand</b>, beat twenty collected automatically: wall-clock to <i>merged</i>; rework passes; <b>read ratio</b> (what fraction of the shipped diff you actually read — the comprehension-debt meter); and verification events (how many times something other than you or the model confirmed correctness — zero is a valid and alarming answer).","Predictions go in <i>before</i> the task. Calibration is trainable and this is the training.","Your 'without AI' baseline will be contaminated. Record the contamination and take it anyway."],
+ labs:[
+  {id:"L0.1",t:"The prediction log",h:"30 min + ongoing",d:"One row per task in ase/log.md: predicted minutes and rework passes, then actuals, read ratio, verification events, one-sentence note. Two weeks, agent-assisted or not.",s:"≥20 rows, ≥5 of them non-agent tasks."},
+  {id:"L0.2",t:"The control tasks",h:"3 h",d:"Four comparable tasks in a codebase you know. Two entirely by hand — no completion, no agent. Two with your current setup, without improving it.",s:"Four honest rows plus a paragraph on what surprised you."},
+  {id:"L0.3",t:"The dated beliefs statement",h:"1 h",d:"400–600 words on what you believe agents are good at, bad at, and what you expect to change. Commit it. Do not edit it — you re-read it in M16.",s:"Specific enough to be falsifiable. 'Agents are useful' is not."},
+  {id:"L0.4",t:"Instrument one session",h:"1 h",d:"Record one session. Mark every intervention as steering, correcting, or rescuing.",s:"One annotated transcript with the intervention taxonomy applied."}],
+ ev:"ase/log.md with ≥20 rows including ≥4 controls, ase/beliefs-2026.md, and one annotated session.",
+ fails:["Skipping the module because it is not fun — the most common failure","Automating the logging before you know what to log","Logging only successes","Reading METR as a verdict on agents rather than on self-assessment"],
+ read:"METR 2025 study · METR 2026 design update · DORA 2026 (J-curve section only)"},
+
+M1:{t:"The Agentic Loop: Build an Agent",st:1,pre:"M0",hrs:"6–10 h",
+ star:"An agent is a while-loop around a model with tools. Every 'magic' behaviour and every failure is explicable at that level.",
+ why:"Almost everything mysterious about agents — 'it forgot', 'it hallucinated a file', 'it went in circles' — becomes transparent once you have written the loop. Thorsten Ball's claim is that a coding agent is an LLM, a loop, and enough tokens, demonstrable in under 400 lines. He is right, and the demonstration is the most efficient demystification available. This is agent-system design placed at the <i>front</i> of a practitioner course, because after it you debug agents by reasoning about context instead of rewriting prompts and hoping.",
+ out:["Implement a working coding agent with read/write/search/execute tools","Trace any misbehaviour to context, tool definition, tool result, or stop condition","Read harness features as design choices with tradeoffs"],
+ key:["The model never sees your filesystem. It sees <i>tool results you appended to a list.</i> 'It forgot' means the fact left the list or never entered it. 'It hallucinated a file' means no tool result contradicted it.","<b>A loop that cannot change its own context cannot terminate usefully.</b> This is the seed of M10.","Tool <i>results</i> matter more than tool calls. An 8,000-token build log is a context bomb; silent truncation is a correctness bomb.","Benchmark scores vary by double digits between harnesses running the same base model. The harness is a co-author of that number."],
+ labs:[
+  {id:"L1.1",t:"Build the agent",h:"4–6 h",d:"Follow Ball's tutorial in a language you know — type it, don't copy it. Minimum: chat loop, read_file, list_files, bash, edit_file.",s:"Your agent reads, edits and runs tests in a real repo in one session without you touching files."},
+  {id:"L1.2",t:"Break it deliberately",h:"1–2 h",d:"Four experiments, each with a written prediction first: (a) don't append tool results; (b) make bash return exit codes only; (c) truncate read_file with no marker; (d) remove the stop condition, cap at 20 iterations.",s:"A prediction-vs-observation table for all four, each failure mapped to loop mechanics."},
+  {id:"L1.3",t:"Add one harness feature",h:"2 h",d:"Implement a permission prompt, naive compaction, or a spawn_subagent tool returning only a final message.",s:"It works, plus 200 words on what it cost in latency, tokens, or correctness risk."},
+  {id:"L1.4",t:"Harness teardown",h:"1 h",d:"Map your daily harness onto your loop. Where does plan mode intervene? What does compaction remove? What does a subagent return, and what is lost?",s:"A one-page annotated diagram."}],
+ ev:"A working agent, the four-experiment table, one harness feature with a cost analysis, the teardown diagram.",
+ fails:["Copy-pasting the tutorial instead of typing it","Adding features before the bare loop works","Skipping L1.2 — it is where the learning is"],
+ read:"Ball, How to Build an Agent · your harness's docs"},
+
+M2:{t:"Briefing, Steering, Abandoning",st:1,pre:"M1",hrs:"6–8 h",
+ star:"Steering a bad trajectory is more expensive than restarting. The expensive move is the one that feels cheap.",
+ why:"The highest-leverage minute is the one before you press enter. Cherny's framing — treat the agent as an engineer you delegate to, not a pair programmer you guide — changes what the opening message must carry. Steinberger's is the complementary skill: minimal ceremony, high volume, fast abandonment. These are two halves of one thing: invest in the brief proportionally to blast radius, and abandon fast when the trajectory is wrong.",
+ out:["Write briefs calibrated to blast radius","Recognise a doomed trajectory within ~2 minutes and abandon rather than negotiate","Know why correcting in-context is often worse than restarting clean"],
+ key:["<b>Blast-radius assessment before you start.</b> Estimate files touched and duration; that single estimate sets brief length, whether to plan, whether to isolate, and whether you can walk away.","<b>The four-part brief:</b> goal (in outcomes, not steps) · constraints · acceptance criteria · <b>verification means</b>. The fourth is the one people omit and the one that matters most.","Underspecify implementation, overspecify verification. Models plan implicitly and well; they cannot infer your definition of done.","<b>First correction: steer. Second correction on the same issue: discard the context and rewrite the brief.</b> A failed approach in context is evidence the model keeps referencing.","When the agent gets a <i>convention</i> wrong, the fix belongs in a memory file or skill — once — not in the chat.","Screenshots beat paragraphs for anything visual (~half of Steinberger's prompts include an image). Voice beats typing for long briefs."],
+ labs:[
+  {id:"L2.1",t:"Brief archaeology",h:"2 h",d:"Take five sessions that went badly. Write the brief you should have written. Re-run two in clean sessions.",s:"Five rewritten briefs; ≥1 measurable improvement; a note on the one that didn't improve and why."},
+  {id:"L2.2",t:"Blast-radius calibration",h:"2 h",d:"Predict file count and duration for ten upcoming tasks; record actuals.",s:"A stated personal correction factor, e.g. 'I underestimate file count 2× on anything touching the API layer'."},
+  {id:"L2.3",t:"The abandonment drill",h:"1.5 h",d:"Five tasks with a hard rule: at the second correction on the same issue you must discard and restart. No exceptions, even when it feels close.",s:"Five sessions, with a note on how many felt 'nearly there' and how the restarts actually went."},
+  {id:"L2.4",t:"Modality experiment",h:"1.5 h",d:"Three visual tasks described in text vs three with screenshots. Three briefs dictated vs three typed.",s:"Logged comparison and a personal policy on when to use which."}],
+ ev:"Five rewritten briefs with outcomes, a calibration factor, the abandonment log, and a one-page briefing standard you will follow.",
+ fails:["Enormous briefs for small tasks — ceremony as procrastination","Negotiating with a doomed session because of sunk cost","Corrections in chat instead of memory files","Omitting verification means from every brief"],
+ read:"Cherny tips compilation · Steinberger, Just Talk To It"},
+
+M3:{t:"Verification-First Development",st:1,pre:"M1",hrs:"8–12 h",kw:"keystone",
+ star:"Every task gets a verifier the agent can run itself. No verifier, no autonomy — at any level.",
+ why:"Cherny's most repeated claim is that giving the agent a way to check its own output roughly <b>2–3×'s the quality</b> of results. Kent Beck arrives at the same place from the opposite direction. The reason is structural: an agent in a loop with a working verifier is doing search with a fitness function; without one it is generating plausible text and stopping when it feels done. That is the difference between an optimizer and a random walk.<br><br>This is also what licenses the expert behaviour that looks reckless. Steinberger says he doesn't read much code — but agents write tests in the same context as the implementation, builds watch continuously, preview deploys land in two minutes, commits are atomic and revertible. <b>Not reading the code is a position you earn by building verification, not a shortcut you take instead of it.</b>",
+ out:["Build a verification loop for any task type: backend, frontend, CLI, data, infra","Judge verifier quality — coverage, determinism, speed, falsifiability","Recognise and prevent the agent gaming its own verifier"],
+ key:["<b>The verifier ladder</b>, rung 0 to 8: nothing → compiler → linter → existing tests → new tests → property tests → running the software → preview deploy → domain-expert human review. Cheap rungs are not optional <i>because</i> they are cheap — they are the ones the agent runs every iteration.","<b>Tight loops beat thorough ones.</b> A 5-second test run 40 times finds more than a 20-minute suite run twice. Optimise the suite for agent iteration frequency — a different objective than most suites were built for.","<b>Tests in the same context as the implementation.</b> The model still holds the implementation reasoning; tests written in a fresh session against finished code tend to be tautological restatements.","<b>The tautology trap.</b> An agent told to make tests pass can weaken assertions, delete tests, special-case the input, skip, or mock the thing under test. Beck watches specifically for disabled tests and unrequested functionality.","TDD becomes load-bearing rather than merely good: it gives the agent an unambiguous stop condition and you a reviewable sequence."],
+ labs:[
+  {id:"L3.1",t:"The verifier audit",h:"2 h",d:"Score your last 15 agent-assisted changes on the ladder. Compute the distribution.",s:"A table plus a diagnosis of your weakest rung and the cheapest way to raise it."},
+  {id:"L3.2",t:"Build the fast lane",h:"3–4 h",d:"Create a target running the most informative checks in under 15 seconds. Wire it into the agent's memory file; add a post-edit hook.",s:"Under 15s measured, and the agent runs it unprompted in a fresh session."},
+  {id:"L3.3",t:"Same-context tests",h:"2 h",d:"Three features with tests requested in the same session. A fourth with tests requested in a fresh session. Compare.",s:"Four suites with a written comparison, including ≥1 identified tautological test."},
+  {id:"L3.4",t:"Adversarial verification",h:"2 h",d:"Give an agent a deliberately weak test and instruct it only to make the tests pass. Document every way it games the verifier.",s:"A catalogue of ≥3 gaming behaviours you personally observed, with a guardrail for each."},
+  {id:"L3.5",t:"Close a non-test loop",h:"2 h",d:"Pick a task where tests are a bad fit — a UI change, a CLI's output format. Give the agent a way to observe its own output.",s:"A transcript showing the agent observing, judging and correcting itself without you."}],
+ ev:"The audit with diagnosis, a sub-15-second fast lane, the same-context comparison, the gaming catalogue, one non-test loop transcript.",
+ fails:["Treating 'the tests pass' as sufficient","Slow test suites left slow","Letting the agent write both test and assertion unreviewed","Copying 'I don't read code' without first building rungs 4–7"],
+ read:"Beck, Augmented Coding · Cherny on verification · Steinberger, Shipping at Inference-Speed (read critically)"},
+
+M4:{t:"Reading the Machine: Review Discipline",st:1,pre:"M3",hrs:"6–8 h",
+ star:"Choose where you spend your scarce reading attention — research, plan, or diff — and know what that choice leaves uncovered.",
+ why:"Review is the bottleneck at two scales. Individually, you generate more code per hour than you can read. Organizationally, DORA's 2026 analysis names the verification tax as a major cost driver and finds AI adoption correlating with <i>rising delivery instability</i> even as throughput rises. The experts genuinely diverge: DHH reviews every diff and reads beauty as a correctness signal; Steinberger reads little, backed by heavy automation and trivial reverts; Horthy moves review upstream entirely.",
+ out:["Triage a diff by risk rather than reading linearly","Apply upstream review and know its blind spots","Name and manage comprehension debt as an explicit liability"],
+ key:["<b>Review is for mental alignment</b>, not primarily bug-catching (tests do that better). That reframing is what makes upstream review coherent: aligning on the plan beats aligning on its consequences.","<b>Risk-ordered reading</b>, stop when the budget is spent: deletions and test changes → security and boundary surface → data and migrations → concurrency, money, time zones → public interfaces → new dependencies → everything else.","<b>Comprehension debt</b> is invisible in the codebase and lives only in your head. You discover it during an incident at 3am. Track read ratio; mark low-comprehension modules; budget repayment.","Never let the context that wrote the code review it. A fresh or differently-instructed context is doing real work; the same context is grading its own homework.","Agent output is often <i>superficially</i> beautiful and conceptually wrong — surface style is exactly what a language model is best at. Beauty is evidence for local correctness, weak evidence for architectural correctness.","Not reading is defensible when all five hold: reversible in seconds, contained blast radius, a strong verifier ran, not security/money/data-critical, and you find out fast. Most enterprise contexts satisfy none."],
+ labs:[
+  {id:"L4.1",t:"Risk-ordered review drill",h:"2 h",d:"Five recent agent PRs reviewed twice: 10 minutes linear, 10 minutes risk-ordered.",s:"A finding-count comparison and a note on what linear surfaced that risk-ordered missed."},
+  {id:"L4.2",t:"Comprehension audit",h:"2 h",d:"Rate your comprehension 0–3 of every module you shipped in 90 days without opening files. Then check three low scorers.",s:"Audit table, calibration check, one repaid module."},
+  {id:"L4.3",t:"Dual review",h:"2 h",d:"Build an agent reviewer with an explicit checklist from your risk order and past incidents. Run on ten PRs alongside your own review.",s:"A confusion table (agent-only / human-only / both / false positive) and a revised checklist."},
+  {id:"L4.4",t:"The upstream experiment",h:"2 h",d:"Spend one change's entire review budget on the plan and none on the diff. Spend a comparable change's entirely on the diff.",s:"A written comparison including an honest statement of which you trust and why."}],
+ ev:"Review-method comparison, comprehension audit with one repayment, a tuned reviewer with a confusion table, the upstream experiment.",
+ fails:["Rubber-stamping large diffs","Reading linearly","Same-context self-review","Treating tidy code as correct code","Never measuring read ratio"],
+ read:"Horthy, ACE-FCA (review-the-plan) · Osmani on comprehension debt · DORA 2026 · DHH on code aesthetics"},
+
+M5:{t:"Context Engineering",st:2,pre:"M1",hrs:"8–10 h",
+ star:"Context is a budget, not a bucket. Something must be evicted; decide what, deliberately, rather than letting the harness decide by truncation.",
+ why:"Horthy states the premise as sharply as it can be stated: the contents of your context window are the only lever you have on output quality. As an operating assumption for a practitioner that is almost exactly right, because context is the lever you actually control. Context engineering is not 'write a good CLAUDE.md' — it is treating the window as a budgeted resource with a lifecycle.",
+ out:["Budget a context window and measure its actual composition","Choose correctly between always-on memory, on-demand skills, path-scoped rules and isolated subagents","Diagnose context rot from behaviour and fix it structurally"],
+ key:["<b>Context rot symptoms, in order of appearance:</b> stops following conventions → re-reads files → re-proposes rejected approaches → contradicts earlier decisions → becomes <i>confidently</i> wrong about the codebase. Recognising these as context symptoms rather than model symptoms is the diagnostic skill.","<b>The 40–60% rule.</b> Design the workflow to keep utilization in that band. The band matters less than the principle: never let the harness's emergency compaction be your compaction strategy.","<b>Intentional compaction</b> writes a structured artifact <i>to a file</i>: end goal, approach, steps completed, current blocker, critical paths and dependencies. Compact away search transcripts, code-flow exploration, build logs. Never lose decisions with rationale, rejected approaches <i>with reasons</i>, exact paths, acceptance criteria, and the failure state verbatim.","<b>Priority: correctness > completeness > size.</b> Size is last. A lean context full of subtly stale information is worse than a fat accurate one — and this ordering is regularly inverted by people optimizing token spend.","<b>Placement.</b> Always-on memory taxes every request forever; keep it small (~under 200 lines) and audit by asking 'did this matter in the last ten sessions?'. Note the tension with Steinberger's ~800-line agent file — the principle is not a line count, it is that always-on content must earn its place on every request.","<b>Subagents are context firewalls.</b> The reason to spawn one is a task that burns 50k tokens of searching to produce a 500-token answer. Design the <i>return</i> to look like a compaction artifact.","<b>Context minimalism</b> is the live counter-current, and it is model-dependent — which makes it a thing to re-test on every upgrade (M13), not a thing to believe."],
+ labs:[
+  {id:"L5.1",t:"Context census",h:"1.5 h",d:"Inspect what is actually in your window at startup: memory files, skill descriptions, tool definitions, system prompt.",s:"A token breakdown with a total, plus one item you removed as a result."},
+  {id:"L5.2",t:"The always-on audit",h:"2 h",d:"Section by section, find evidence in your last ten sessions that each part mattered. Delete or relocate anything without evidence.",s:"Before/after line and token counts with a relocation map."},
+  {id:"L5.3",t:"Intentional compaction",h:"2 h",d:"Stop a long task at ~50% utilization, write the structured artifact, start fresh from it. Repeat a comparable task letting auto-compaction handle it.",s:"Both transcripts, the artifact, and a comparison of what each approach lost."},
+  {id:"L5.4",t:"Rot diagnosis",h:"1.5 h",d:"Run a session to near-exhaustion on real work. Log the first appearance of each rot symptom with its utilization percentage.",s:"A symptom timeline and a personal early-warning threshold you will act on."},
+  {id:"L5.5",t:"Firewall a subagent",h:"2 h",d:"Run a high-volume research task in the main context, measure tokens; then via an isolated subagent with a specified return format.",s:"Token comparison plus the return-format spec you converged on."}],
+ ev:"Census with a deletion, before/after audit, a compaction artifact with comparison, a rot threshold, a subagent return spec.",
+ fails:["Treating the memory file as documentation","Optimizing size before correctness","Letting auto-compaction be the strategy","Leaving every MCP server connected permanently","Copying someone else's memory file wholesale"],
+ read:"Anthropic, Effective context engineering · Horthy, ACE-FCA · Ronacher on MCP tool bloat"},
+
+M6:{t:"Research → Plan → Implement",st:2,pre:"M5, M4",hrs:"8–10 h",
+ star:"Front-load the expensive thinking into reviewable artifacts. Review the research and the plan; let the implementation be mechanical.",
+ why:"The most transferable process innovation in the field, with the best-documented outcomes: Horthy's team reports fixing a bug in a 300k-line Rust codebase in one session, and shipping ~35k lines of cancellation and WASM support in about seven hours — roughly three of research and planning, four of implementation — passing expert maintainer review. The leverage argument is the whole argument: a bad line of research becomes a bad plan becomes thousands of bad lines of code.",
+ out:["Run the three-phase workflow on a real change in an unfamiliar codebase","Write research and plan artifacts that are reviewable and durable","Know when spec-driven approaches help and when they are ceremony"],
+ key:["<b>Research (no edits permitted).</b> Output: a written document with exact file paths and line references, information flow, candidate causes, constraints, open questions. Your review question: <i>is this an accurate map of reality?</i> Spot-check three claims. If research is wrong, stop — everything downstream is poisoned.","<b>Plan (still no edits).</b> Which files change, what the edit is, and how each phase is verified. Your review question: <i>if a competent stranger executed this literally, would the result be right?</i> This is where your scarce attention buys the most.","<b>Implement</b> phase by phase, verifying after each, compacting between. A crashed session resumes from the plan document, not from memory.","The artifacts are <i>files</i>, not chat: durable across crashes, reviewable by humans and agents, reusable for the next similar change, and the honest record of intent when the incident review happens in four months.","The 3:4 research-to-implementation ratio is a starting point for substantial work in unfamiliar code and absurd for a two-line fix. Too little planning yields confident wrong direction; too much yields plans nobody reads, which is ceremony that feels like rigour.","The method <i>amplifies</i> insufficient research rather than rescuing it — Horthy publishes a failure where nested dependencies went unmapped. It is also a poor fit for genuinely exploratory work."],
+ labs:[
+  {id:"L6.1",t:"Research a stranger's codebase",h:"2 h",d:"A real open-source project you've never worked in, a real open issue, a research-only phase with no edit permission.",s:"A research doc with ≥2 of 3 spot-checks accurate, and any inaccuracy diagnosed."},
+  {id:"L6.2",t:"Plan review drill",h:"2 h",d:"Generate a plan from that research. Write every objection before implementing. Then check which were real.",s:"An objection list with hit rate and a note on which classes you predict well and badly."},
+  {id:"L6.3",t:"Ratio experiment",h:"3 h",d:"Two comparable tasks: one with ~40% of effort in research and planning, one brief-and-go.",s:"A logged comparison with an honest verdict, including the case where planning lost."},
+  {id:"L6.4",t:"Plan reuse",h:"1.5 h",d:"Use a completed plan as the template for a similar change.",s:"A derived plan, a time comparison, and a statement of what generalizes."},
+  {id:"L6.5",t:"Spec-driven trial",h:"2 h (optional)",d:"Run one feature through a spec-driven toolkit end to end.",s:"A completed feature and a one-page verdict with a rule for when you'd use it again."}],
+ ev:"A verified research document on unfamiliar code, a plan with a scored objection list, the ratio experiment, a reused plan.",
+ fails:["Letting the agent edit during research — it starts justifying its edits","Accepting research without spot-checking","Vague plans","Planning two-line changes","Keeping plans in chat where they die with the session"],
+ read:"Horthy, ACE-FCA · Horthy's context-engineering talk · Spec-driven toolkits · Grove, The New Code"},
+
+M7:{t:"Designing Codebases for Agents",st:2,pre:"M3",hrs:"10–14 h",
+ star:"Agent-legibility is a codebase property you can measure and improve, and it pays off for humans too.",
+ why:"Most advice treats the codebase as fixed and compensates with prompting. That is backwards for anything you maintain. Ronacher's observation: agents like local reasoning and have little spatial awareness of the codebase. Everything agent-hostile is a form of <i>non-local reasoning</i>. DHH arriving at the same conclusion from a different direction is the strongest evidence it is real: Rails is token-efficient for agents because its conventions are already in the model's weights, and its integrated testing lets agents self-validate. Convention over configuration turns out to be a machine-readable interface.",
+ out:["Audit a codebase for agent-legibility and rank fixes by cost/benefit","Execute high-leverage legibility improvements using agents themselves","Argue the tradeoffs where legibility conflicts with other goods"],
+ key:["<b>What agents want:</b> explicit types over inference · greppability (every use site names its origin) · explicit dependencies · braces over significant whitespace · result types over exceptions · boring conventional structure the model has seen a million times.","<b>What agents hate:</b> macros and codegen · barrel files and re-export chains · import aliasing · <b>flaky tests</b> (worse than no suite — they teach the agent that failures are noise) · environment divergence · multi-step tooling with many failure modes.","<b>The ten-check legibility audit:</b> grep finds definitions · one-command build · deterministic suite twice in a row · a &lt;15s feedback command · discoverable module boundaries · no dead code · no drifting duplication · conventions in the code not in someone's head · subsystems understandable from their own directory · error messages that say what to do next.","<b>Refactoring as a standing budget.</b> Steinberger allocates ~20% of time to refactoring performed entirely by agents. It is the most agent-appropriate work there is: mechanical, verifiable, high-volume, low-judgment.","Honest tradeoffs: explicitness costs concision; rewriting a working system for legibility is a bad trade; choosing a language for agent-friendliness is a real strategy and a bet on a fast-moving target.","Legibility work should show up in your M0 numbers. If it doesn't, you improved your aesthetics, not your legibility."],
+ labs:[
+  {id:"L7.1",t:"Legibility audit",h:"2 h",d:"Score your primary repo on all ten checks with evidence per score. Rank fixes by (impact × frequency) ÷ cost.",s:"A scored audit with a ranked, costed remediation list."},
+  {id:"L7.2",t:"Automated hygiene sweep",h:"3 h",d:"Run dead-code and duplicate detection. Have agents remove and consolidate in small verified commits.",s:"Merged cleanup, all tests green, a before/after metric."},
+  {id:"L7.3",t:"Kill the flakes",h:"3 h",d:"Run the suite ten times to identify flakes. Fix or quarantine every one.",s:"Ten consecutive identical runs plus a written quarantine policy."},
+  {id:"L7.4",t:"Greppability repair",h:"2 h",d:"Remove your worst indirection — a barrel file, a re-export chain, string-keyed dispatch. Measure agent file-finding on three tasks before and after.",s:"Before/after with a measured difference — or an honest null result."},
+  {id:"L7.5",t:"Convention extraction",h:"2 h",d:"Have an agent infer your implicit conventions from the code. What it gets right is legible; what it gets wrong is folklore.",s:"An inferred list, corrected, with ≥2 conventions encoded as enforceable checks."}],
+ ev:"Scored audit with remediation, a merged hygiene sweep, a deterministic suite, one greppability repair with measurement, ≥2 enforced conventions.",
+ fails:["Rewriting working code for aesthetics","Treating agent-legibility as the only goal","Putting conventions in the memory file instead of enforcing them in lint","Leaving flaky tests because 'everyone knows which ones are flaky' — the agent doesn't"],
+ read:"Ronacher, A Language For Agents · Ronacher, Agentic Coding Recommendations · DHH on Rails and token efficiency"},
+
+M8:{t:"The Extension Surface",st:2,pre:"M5",hrs:"6–8 h",
+ star:"Match the mechanism to the requirement: guarantees go in hooks, knowledge goes in skills, always-true rules go in memory, volume goes in subagents.",
+ why:"Modern harnesses expose memory files, path-scoped rules, skills, subagents, hooks, MCP servers and plugins. Used well, this converts your repeated corrections into permanent behaviour. Used badly it becomes a pile of half-remembered configuration that bloats context and produces mysterious behaviour. The organizing distinction is short and constantly violated: <b>an instruction is a request; a hook is a guarantee.</b>",
+ out:["Choose the right mechanism for a given need and justify it","Build a personal extension kit that earns its context cost","Evaluate MCP servers on cost/benefit rather than novelty"],
+ key:["<b>Add on trigger, not in advance.</b> Wrong twice → memory file. Same prompt repeatedly → skill. Same playbook a third time → skill. A side task floods your conversation → subagent. Must happen without asking → hook. A second repo needs it → plugin.","<b>Hooks are the under-used mechanism.</b> Format after edit · run the fast lane and feed failures back · block edits to secrets, migrations, vendored dirs · log sessions for telemetry · <b>refuse test-file modification during implementation-only tasks</b> (M3's anti-gaming guardrail as enforcement rather than request).","<b>Subagents: design the return.</b> Their value is the compression ratio between what they read and what they return. Unspecified returns give you either a transcript or a vague summary.","<b>MCP, honestly.</b> Use it when the integration needs live connection, authentication, or actions a CLI cannot provide. Use a CLI when the model already knows the tool. Measure the context cost either way and disconnect what this task doesn't need.","<b>The anti-pattern is the configuration cargo cult.</b> Every item in your kit should trace to a specific failure you personally experienced."],
+ labs:[
+  {id:"L8.1",t:"Correction mining",h:"2 h",d:"List every correction across your last 20 sessions. Cluster them. Choose the right mechanism per cluster; implement the top three.",s:"A correction taxonomy plus three extensions, each traced to specific incidents."},
+  {id:"L8.2",t:"Build a guardrail hook",h:"2 h",d:"A blocking hook for something that must never happen. Verify by trying to make the agent do it.",s:"A demonstrated block, plus a note on what the agent did when blocked — this is informative."},
+  {id:"L8.3",t:"Build a review subagent",h:"2 h",d:"A specialized reviewer with its own instructions and a specified return format. Run on five PRs; tune on misses.",s:"Subagent definition, five reports, one documented tuning iteration."},
+  {id:"L8.4",t:"MCP cost/benefit",h:"1.5 h",d:"Measure the context cost of each connected server. Try replacing the most expensive with CLI calls.",s:"A cost table and one justified connect/disconnect/replace decision."}],
+ ev:"A correction taxonomy with three traced extensions, a working blocking hook, a tuned review subagent, an MCP cost table with a decision.",
+ fails:["Copying someone else's kit","Building extensions before having the triggers","Instructions where enforcement is required","Skills with vague descriptions that never trigger, or trigger wrongly"],
+ read:"Harness extensibility docs · mechanism-selection guidance · Ronacher on MCP"},
+
+M9:{t:"Parallelism",st:3,pre:"M3, M4 (Gate 1)",hrs:"8–10 h",
+ star:"Parallelism moves the bottleneck from generation to your attention. If you cannot review and integrate N streams, running N agents produces a queue, not throughput.",
+ why:"Cherny calls git worktrees the single biggest productivity unlock and runs five or more sessions concurrently. Steinberger runs 3–8 agents in a terminal grid — in the <i>same folder</i>, avoiding worktrees for speed, with atomic commits. Two expert practitioners, one at the tool's origin, with directly contradictory isolation strategies. They are optimizing different things: worktrees optimize isolation and cost setup; same-folder optimizes latency and shared state and costs collision risk.",
+ out:["Choose an isolation strategy per situation and justify it","Run 3+ concurrent agents without becoming the bottleneck or the merge conflict","Recognise when parallelism is negative-value"],
+ key:["<b>The isolation spectrum:</b> same folder (no isolation, zero setup, tight supervision) → branches → worktrees (filesystem isolation, per-tree rebuild cost) → containers (full isolation, slowest feedback) → cloud sessions (off-machine, weakest observability).","<b>Good parallel tasks are independent in the file dimension <i>and</i> the review dimension.</b> Three features in three subsystems parallelize. Three refactors of one module do not.","<b>Most people's ceiling is 3–5 concurrent streams, set by review capacity</b> — not by tooling or quota.","Negative-value cases: exploratory work where each step informs the next; same-file tasks; anything you lack review budget for. <b>A parallel agent with no verifier is just a faster way to generate unreviewed code.</b>","Ergonomics are the difference between 3 agents and 6: named sessions, colour-coded terminals, one-key switching, a control-plane view, completion notifications. Without these you spend your attention <i>finding</i> the agent that needs you.","<b>Redundant parallelism</b> — the same task three times with different framings, then pick or synthesize — is under-used and unusually effective on design problems where you recognise a good answer but cannot specify the criterion."],
+ labs:[
+  {id:"L9.1",t:"Isolation bake-off",h:"3 h",d:"The same three-task batch run three ways: same-folder, worktrees, containers.",s:"A comparison of setup time, collisions, wall-clock to all-merged, and a written per-situation policy."},
+  {id:"L9.2",t:"Find your ceiling",h:"3 h",d:"Run 2, 3, 5, then 7 concurrent agents on independent tasks. Track tasks merged per hour and rework passes.",s:"A throughput curve with your stated ceiling and the constraint that sets it."},
+  {id:"L9.3",t:"Decomposition drill",h:"2 h",d:"Decompose one large feature into ≥4 parallelizable units with explicit file-level independence. Execute.",s:"The decomposition, the merge outcome, and a note on what collided anyway."},
+  {id:"L9.4",t:"Build the control plane",h:"2 h",d:"Session naming, colours, switching, completion notification.",s:"A documented setup you can start in under a minute, plus a before/after switching-time measurement."}],
+ ev:"Isolation comparison with a policy, a throughput curve with a stated ceiling, an executed decomposition, a working control plane.",
+ fails:["Parallelizing coupled work","Running more agents than you can review","No isolation on destructive tasks","Losing the gains to context switching"],
+ read:"Cherny on worktrees · Steinberger on same-folder parallelism · git worktree docs"},
+
+M10:{t:"Loop Engineering",st:3,pre:"M9, M3, M12",hrs:"10–14 h",kw:"frontier",
+ star:"A loop is only as good as its fitness function and its stop condition. Build those first; the loop itself is ten lines.",
+ why:"Karpathy states the objective plainly: remove yourself as the bottleneck, arrange things so they are completely autonomous. His AutoResearch experiments found hyperparameter improvements overnight that he had missed across two decades of manual tuning. Note the precondition hiding in the framing — <i>arrange it so that it can just go forever</i> — which requires an objective, automatable criterion of success. Where that exists, autonomy is available. Where it does not, autonomy produces confident garbage at scale.",
+ out:["Design, run and terminate an autonomous loop on real work","Match loop patterns to task types and recognise anti-fits","Build guardrails, state management and observability for unattended runs"],
+ key:["<b>The canonical minimal loop</b> (Huntley's 'Ralph'): a shell loop feeding a specification file to a fresh agent context, repeatedly. The insight is not the bash — it is that <b>fresh contexts working from a persistent specification beat one long context working from memory.</b>","<b>Five components</b> (Osmani): trigger · isolation · knowledge · connection · <b>verification by a separate agent</b>. Plus persistent state on disk, because the model forgets everything between runs. The loop's memory is the filesystem.","<b>Design the stop condition first.</b> Every loop needs at least two — a success condition and a failure/budget condition — or you are relying on noticing.","<b>Overbaking.</b> Loops run past their useful life invent work: unrequested features, speculative abstractions, in one recorded case unexpected cryptography. An agent with remaining budget and no remaining work will <i>invent</i> work. Budget caps are a correctness measure, not a cost measure.","<b>Patterns and fits:</b> spec loop (greenfield from a strong spec; not exploration) · checklist loop (migrations, sweeps) · triage loop (scheduled scan-and-escalate) · verify-and-fix (flaky tests, lint, type migration) · fan-out/verify (audits, large refactors) · optimizer loop (anything with a real metric — beware proxies you will goodhart).","<b>Spec quality is the whole game.</b> A mediocre spec run 200 times produces 200 iterations of mediocrity, quickly and expensively.","Karpathy's caution kept in view: agents are jagged — strong on verifiable metric-driven tasks, weak on nuance, intent, and knowing when to ask a clarifying question. Loop engineering works in the verifiable half. Applying it to the other half is the central error of the era."],
+ labs:[
+  {id:"L10.1",t:"Minimal loop",h:"2 h",d:"The simplest possible loop in a sandboxed repo: spec file, fresh context each iteration, disk state, hard iteration cap.",s:"A loop that completes a real task and stops on its own condition, with a log."},
+  {id:"L10.2",t:"Stop-condition design",h:"2 h",d:"For three task types, implement a success predicate, a no-progress detector, and a budget cap. Test each by making it fire.",s:"Three loops, each demonstrated stopping for each of the three reasons."},
+  {id:"L10.3",t:"Induce overbaking",h:"1.5 h",d:"Deliberately run a loop past its useful life on an under-specified task.",s:"A written account of what it invented, and the guardrail that would have prevented it."},
+  {id:"L10.4",t:"Verified loop",h:"3 h",d:"Fan-out/verify: worker agents produce, a separate verifier with different instructions checks, failures return to the queue.",s:"A run where the verifier caught ≥1 real defect the worker missed, with the evidence."},
+  {id:"L10.5",t:"Scheduled triage loop",h:"3 h",d:"A loop on a schedule against something real — dependency updates, issue triage, failing-test sweep — with escalation for what it shouldn't decide. Run a week.",s:"Seven days of logs, what it handled vs escalated, and a written correctness assessment."}],
+ ev:"A terminating loop with a log, three demonstrated stop conditions, an overbaking account, a verified fan-out with a caught defect, a week of scheduled-loop logs.",
+ fails:["Running loops before M12","No budget cap","No persistent state, so the loop re-derives everything","Model grading its own work","Looping exploratory work","Spec quality unexamined","No rollback test"],
+ read:"A Brief History of Ralph · Osmani, Loop Engineering · Karpathy on autonomy and AutoResearch"},
+
+M11:{t:"Async, Remote & Cloud Agents",st:3,pre:"M10",hrs:"5–7 h",
+ star:"Async multiplies production and does nothing for review. Design the review path before you turn on the production path.",
+ why:"Once loops run without you, where they run and how you supervise them becomes the practical question. The concepts are inherited from M9 and M10; what is new is a genuine failure mode. Async agents generate work asynchronously; your review capacity does not scale. A dozen agent PRs waiting on Monday morning is not leverage.",
+ out:["Choose local vs cloud vs CI execution per task","Supervise unattended work from low-bandwidth contexts","Design a review path that does not become a queue"],
+ key:["<b>Where to run:</b> local (fastest feedback, full observability, your machine at risk) · cloud session (survives your laptop closing, weaker observability, credentials get serious) · CI-triggered (reproducible, auditable, and <b>the highest-risk surface for prompt injection</b> — see M12's CVE).","<b>The handoff pattern:</b> high-bandwidth interaction to brief, plan and verify approach → async execution → return for review. The expensive human minutes are at the start and end.","<b>Low-bandwidth supervision.</b> From a phone you can approve a plan, answer a blocking question, kill a run, or read a summary. You cannot review a 2,000-line diff. Design agents to <i>ask well</i> — a blocking question with three options beats an open one.","<b>Managing the review queue:</b> rate-limit production to review capacity · require self-review by a separate verifier before queueing · batch review into blocks · auto-merge classified low-risk categories on policy · escalate only what policy cannot classify. <b>Decide what does not need your eyes explicitly, rather than by neglect.</b>","Credentials: scoped short-lived tokens, no production credentials, egress restrictions, separate identities per agent, an audit log."],
+ labs:[
+  {id:"L11.1",t:"Handoff",h:"1.5 h",d:"One task through the full pattern: interactive brief and plan → async execution → return for review. Time each phase.",s:"A phase breakdown with the fraction of wall-clock requiring you."},
+  {id:"L11.2",t:"Phone drill",h:"1.5 h",d:"Supervise one real async run entirely from a phone.",s:"A friction list and ≥2 changes to how the agent reports or asks."},
+  {id:"L11.3",t:"Review-path design",h:"2 h",d:"Write a policy classifying output into auto-merge / fast review / full review. Apply it retrospectively to twenty recent agent changes.",s:"A written policy with its misclassification rate and a revision."},
+  {id:"L11.4",t:"CI agent, safely",h:"2 h",d:"An agent triggered by a repository event with least-privilege credentials, egress restrictions, and no write access to what it evaluates.",s:"A working CI agent plus a threat model naming untrusted inputs and what it could exfiltrate if compromised."}],
+ ev:"A timed handoff breakdown, a phone friction list with fixes, a validated review policy, a CI agent with a written threat model.",
+ fails:["Turning on async production without a review path","Production credentials in cloud agents","Agents that ask open-ended questions you cannot answer from a phone","Treating CI agents as trusted"],
+ read:"Harness docs on remote sessions and scheduling · the CVE-2025-66032 case study"},
+
+M12:{t:"Security & Safety for Agentic Development",st:3,pre:"M8",hrs:"8–10 h",kw:"gate",
+ star:"An agent cannot reliably distinguish data from instructions. Architect on that assumption; do not prompt your way around it.",
+ why:"Willison's <b>lethal trifecta</b> names the condition precisely: an agent with access to private data, exposure to untrusted content, and the ability to communicate externally can be made to exfiltrate. All three together are the vulnerability; any two are safe. Almost every agentic coding setup has all three by default.<br><br>The concrete case is <b>CVE-2025-66032</b>: an authorization check in a widely-used coding-agent GitHub Action trusted any GitHub App actor. An attacker filed a crafted issue on a public repo; injected instructions read the workflow environment, extracted an OIDC token, exchanged it for write access, and committed to the action's own source — poisoning every downstream consumer. <b>Nothing in that chain required a model failure.</b> Every step was the agent doing exactly what it was told by text it had no way to distinguish from your instructions.",
+ out:["Apply the lethal-trifecta test to any agent configuration","Design permission, sandboxing and egress controls proportional to autonomy","Threat-model an agentic workflow and defend the supply chain"],
+ key:["<b>Indirect prompt injection</b> is the dangerous class: instructions arriving in content the agent <i>reads</i> — an issue, a dependency's README, a web page, a code comment, an error message, a log line, a tool result. There is no reliable in-band separation of instructions from data. Mitigation is architectural, never prompt-level.","<b>The trifecta test:</b> private data? untrusted content? external communication? If all three, break one — no credentials in that session, human-sanitized inputs, or a network allowlist with no push and no arbitrary HTTP.","<b>Isolation must rise with autonomy, not with your comfort level.</b> Supervised on host → auto-approved safe commands with a permission policy → bounded unattended in a container with an allowlist → unattended loop in a disposable container with per-agent identity → CI on untrusted input with no repo write and no credentials.","Blanket permission-skipping is the common shortcut and the common cause. Prompt fatigue is a configuration problem: allowlist provably-safe operations and sandbox, so prompts are rare <i>because most actions are provably safe</i>.","<b>Supply chain, both directions.</b> Inbound: agents have been documented skipping package verification. Require lockfiles, pin actions to commit SHAs, make 'new dependency' a mandatory review category. Outbound: an agent with write access is a commit path into your users' systems.","Secrets never enter context, memory files, or an environment an unattended agent can read. Assume anything readable will eventually be read aloud — that is exactly the CVE chain.","An MCP server is code you run <i>and</i> a channel through which attacker-controllable text enters your context. Treat installing one as installing a dependency with your credentials attached.","2026 security research notes these vulnerabilities fall between vendors, platform teams and application teams with no clear owner. <b>If you are introducing agents into a team's CI, you are the owner until you name someone else.</b>"],
+ labs:[
+  {id:"L12.1",t:"Trifecta audit",h:"2 h",d:"Enumerate every agent configuration you run — local, CI, cloud, scheduled. Mark the three conditions for each.",s:"An audit table with a remediation for every all-three case."},
+  {id:"L12.2",t:"Attack your own agent",h:"2.5 h",d:"In a sandbox with a fake credential, plant injection payloads in a README, a code comment, a test fixture, a mock issue body, a tool result.",s:"A results table of which vectors worked, plus a written defence for each success."},
+  {id:"L12.3",t:"Build the sandbox",h:"2 h",d:"A containerized environment for unattended runs: no host credentials, egress allowlist, mounted work directory only, disposable.",s:"A working sandbox with a verified test that egress to a non-allowlisted host fails."},
+  {id:"L12.4",t:"Threat model a workflow",h:"2 h",d:"Your riskiest agentic workflow: trust boundaries, untrusted inputs, what an attacker gains, what would detect it.",s:"A written threat model and one implemented mitigation."},
+  {id:"L12.5",t:"Supply-chain guardrail",h:"1.5 h",d:"Enforcement that flags any agent-added dependency for human review; pin CI actions to SHAs.",s:"A demonstrated flag on a test dependency addition; pinned actions merged."}],
+ ev:"A trifecta audit with remediations, a red-team results table, a verified sandbox, a threat model with a fix, a working supply-chain guardrail.",
+ fails:["Blanket permission-skipping as the default","Treating prompt injection as solvable by instructions","Production credentials in unattended runs","Trusting MCP servers as configuration rather than dependencies","Assuming the vendor handles it"],
+ read:"Willison, The lethal trifecta · CSA research note on CVE-2025-66032 · 2026 agentic security state of practice"},
+
+M13:{t:"Evals for Your Own Work",st:4,pre:"M6, M7 (Gate 2)",hrs:"8–10 h",
+ star:"If you cannot measure whether a change to your setup helped, you are not engineering your workflow — you are decorating it.",
+ why:"You will face this every few weeks for the rest of your career: a new model ships, or you change your prompt, memory file, or workflow. Did it help? Public benchmarks cannot answer this — different task distribution, different codebase, different harness, and harness choice alone moves scores by double digits on the same base model. An eval suite of your own is unglamorous, takes a weekend, and is the highest-leverage thing in Stage 4.",
+ out:["Build a personal eval suite of golden tasks from your own work","Run a controlled comparison of models, prompts or workflows","Read public benchmarks correctly: what they do and do not tell you"],
+ key:["<b>Golden tasks:</b> 10–20 from your own history, each with a starting commit, the brief as you'd write it, an automated check where possible. Span trivial to hard, and include <b>at least two you know models currently fail</b> — those are the most informative entries, because that is where a new model's improvement first shows up.","<b>Control for variance.</b> Agent runs are stochastic. Run each task 3–5 times and compare distributions, not anecdotes. Most excited claims about a new model are within noise.","<b>Eval your own changes, not just models.</b> Memory file edits, context minimalism vs pre-loading, plan-first vs direct, subagent return formats, verifier strength — the knobs you turn weekly and currently turn blind.","Where judgment is needed, use a rubric applied by a <i>different</i> model family than the one under test, and spot-check its judgments — LLM-as-judge is useful and quietly biased toward its own family's style.","Run the suite monthly as an early-warning system for silent degradation. Models change under you, including within a version."],
+ labs:[
+  {id:"L13.1",t:"Build the suite",h:"4 h",d:"10+ golden tasks from your history with starting commits and success criteria, including ≥2 known failures.",s:"A runnable suite, executable with one command, producing a score."},
+  {id:"L13.2",t:"Variance study",h:"2 h",d:"Five tasks, five runs each, one model. Compute the spread.",s:"A variance table and a stated minimum effect size you will believe."},
+  {id:"L13.3",t:"A controlled comparison",h:"2 h",d:"Two models, or two of your own configurations, everything else held constant.",s:"A conclusion that respects your minimum effect size — including 'no detectable difference', a real and common result."},
+  {id:"L13.4",t:"Eval your memory file",h:"2 h",d:"Run the suite with your memory file, without it, and with the trimmed version from L5.2.",s:"Three scores and a decision about what actually earns its context."}],
+ ev:"A runnable suite with ≥10 tasks, a variance table with a minimum effect size, one controlled comparison, a memory-file eval that changed a decision.",
+ fails:["Benchmarks instead of your own tasks","Single runs","Changing two things at once","Building 50 tasks and never running them","No known-failure tasks, so improvements are invisible"],
+ read:"Benchmark landscape and critiques · eval tooling"},
+
+M14:{t:"Building Harnesses & Agent Systems",st:4,pre:"M1, M5",hrs:"10–14 h",
+ star:"Build agents for the workflows only you have. Buy the general harness.",
+ why:"M1 built a toy. This takes it to where you could use it — and, more importantly, where you can reason about any harness's design decisions and build purpose-specific agents for your own workflows. The most valuable agents you run are often the small specific ones nobody will build for you: a release-note writer that knows your conventions, an incident triager wired to your logs, a migration agent for your particular framework version. Keep Steinberger's caution in view: specialized harnesses will likely converge toward model capabilities, so build features to solve today's problem, not as a durable moat.",
+ out:["Extend a hand-built agent with compaction, subagents, permissions and persistence","Design tools and their results for context efficiency","Decide build-vs-extend-vs-buy deliberately"],
+ key:["<b>Tool result design matters more than call design.</b> Return the minimum supporting the next decision · actionable errors, not terminal ones · explicit truncation markers with a way to get more · one flexible tool over twelve narrow ones · side-effecting tools distinguishable from read-only so permissions can be mechanical.","<b>Compaction, implemented.</b> Trigger at a threshold you set. Preserve goal, approach, completed steps, current failure state, critical paths, rejected approaches with reasons. Write it to disk so it survives the process.","<b>Subagent architecture:</b> what context does the child start with, what does it return in what shape, can it spawn children, how do failures propagate. The compression ratio — tokens read ÷ tokens returned — tells you whether it earns its overhead.","<b>Persistence and resumption</b> separate a demo from something you would let run overnight: session state on disk, resume from a state file, idempotent operations so a resumed run doesn't double-apply.","<b>Build vs extend vs buy.</b> Extend when your harness has the seam — right about 80% of the time. Build when you need an agent inside your own product, an unusual loop shape, or full control of context. Buy the general coding harness; you will not out-engineer a funded team on the common path."],
+ labs:[
+  {id:"L14.1",t:"Production-ish agent",h:"5 h",d:"Extend your M1 agent with threshold compaction to disk, a subagent tool with a specified return format, a permission allowlist, and resumable session state.",s:"It completes a multi-hour task across a compaction boundary and survives a restart."},
+  {id:"L14.2",t:"Tool result design",h:"2 h",d:"Log tokens per tool result. Find the worst offender and redesign it.",s:"A before/after token profile with a measured reduction and no loss of capability."},
+  {id:"L14.3",t:"Build a workflow agent",h:"3 h",d:"One small specific agent for a real recurring task of yours. Use it for a week.",s:"The agent, a week of usage notes, and an honest keep/kill decision."},
+  {id:"L14.4",t:"Orchestration comparison",h:"2 h",d:"Implement the same non-trivial task as a sequential pipeline and as fan-out/verify.",s:"A comparison with a stated rule for which to use when."}],
+ ev:"An extended agent surviving compaction and restart, a tool-result token improvement, one workflow agent with a keep/kill decision, an orchestration comparison.",
+ fails:["Rebuilding a commercial harness","Too many narrow tools","Compaction that loses the failure state","Subagents with unspecified returns","No persistence, so nothing can run long"],
+ read:"Ball · agent SDK documentation · Anthropic context engineering · orchestration patterns"},
+
+M15:{t:"Teams, Orgs & Comprehension Debt",st:4,pre:"M12, M13 (Gate 3)",hrs:"6–8 h",
+ star:"The bottleneck moves to review, integration and understanding. Plan for the bottleneck you are creating.",
+ why:"Individual mastery does not survive contact with a team that has none. DORA's 2026 analysis says three things worth internalizing: <b>AI amplifies the existing system</b> (strong organizations get stronger, dysfunctional ones get more dysfunctional, faster); there is a <b>J-curve</b> — an initial dip that is the tuition cost of transformation, during which teams conclude the tools don't work; and there is an <b>instability tax</b> — individual effectiveness rises while delivery stability falls. Gains are also strongly task-dependent: substantial on simple work, markedly smaller on complex legacy code. A rollout promising uniform gains fails publicly in exactly the codebases that matter most.",
+ out:["Diagnose where agent adoption will bind in a specific team","Design review and quality processes for high-volume agent output","Manage comprehension debt as an explicit organizational liability"],
+ key:["<b>Find the new bottleneck</b> and invest there. It is almost always review, then integration, then deployment confidence — not more generation capacity.","<b>Layered review at volume:</b> automated first · human attention on the M4 risk order · policy-based auto-merge for classified low-risk categories · and a hard rule that <b>the author reviews their agent's output before it reaches a colleague</b>. Sending unreviewed agent output to a human reviewer moves your comprehension debt onto someone else's balance sheet, and teams notice.","<b>Comprehension debt at team scale:</b> ownership that means comprehension rather than a CODEOWNERS line · incident-driven repayment · decision records so intent survives when line-level understanding doesn't · plan and research artifacts kept in-repo.","<b>Juniors are the genuine unresolved problem.</b> The traditional apprenticeship ran through exactly the work agents now do. Without deliberately constructed learning paths you will produce engineers who can prompt and cannot debug. State your position explicitly; drifting into a default is how teams get a capability cliff in three years.","<b>Shared assets belong in version control and in review.</b> A team memory file is a living style guide agents actually follow — higher-leverage than a wiki nobody reads. When a reviewer corrects something twice, that correction becomes a rule.","Rollout that survives the J-curve: a willing team, a well-understood codebase, honest measurement <i>including stability</i>, the dip announced in advance, investment in the bottleneck, expansion on evidence."],
+ labs:[
+  {id:"L15.1",t:"Bottleneck analysis",h:"2 h",d:"Map your team's flow from idea to production. Identify where a 3× generation increase binds; quantify current capacity there.",s:"A flow map with a quantified bottleneck and a proposed intervention."},
+  {id:"L15.2",t:"Team memory file",h:"2 h",d:"Create or overhaul a shared, version-controlled memory file derived from real review comments in your repo's history.",s:"A merged file whose every rule traces to ≥2 historical review comments."},
+  {id:"L15.3",t:"Review policy",h:"2 h",d:"Draft a team policy for agent-generated code: what must be human-reviewed, what can auto-merge, what the author must do first. Circulate it.",s:"A written policy plus documented colleague feedback and a revision."},
+  {id:"L15.4",t:"Debt register",h:"1.5 h",d:"Subsystem, owner, comprehension level, last-read date, risk. Schedule repayment for the top item.",s:"A register with ≥10 entries and one repayment completed."}],
+ ev:"A quantified bottleneck analysis, a merged evidence-derived team memory file, a circulated review policy with feedback, a debt register with one repayment.",
+ fails:["Rolling out tools without moving the bottleneck","Promising uniform gains","Ignoring stability metrics","No plan for juniors","Memory files that are opinion rather than evidence"],
+ read:"DORA 2026 ROI report · DORA 2025 · Fowler/Thoughtworks field observations"},
+
+M16:{t:"Capstone C, Doctrine & Continuous Practice",st:4,pre:"M15",hrs:"20–30 h",
+ star:"The deliverable of this course is not a skill set. It is a method for acquiring skill sets faster than they expire.",
+ why:"The half-life of specific technique in this field is short. The half-life of judgment is long. This module converts everything you did into two durable things: a doctrine document stating what <i>you</i> believe and why, and a practice that keeps it current after the course ends.",
+ out:["Operate an autonomous loop on real work for a week, with an incident log","Write a doctrine document that states positions, mind-changes and remaining weaknesses","Establish a practice that keeps all of it current"],
+ key:["<b>The doctrine document</b> (1,500–3,000 words): what I believe now · what I changed my mind about, quoted against your M0 beliefs statement · my verification stack, honestly · my autonomy policy and why · where I disagree with the experts (≥3, argued) · <b>what I am still bad at</b> — the most valuable section and the one people skip · my refresh practice.","<b>Re-run the M0 measurements.</b> Same task types, same log. Report honestly, including regression. Some practitioners get slower at certain task classes while getting much faster overall — a real and useful finding, not a failure.","<b>The continuous practice:</b> monthly eval run · monthly Practitioner Teardown · quarterly context and extension-kit audit · quarterly state-of-play refresh.","<b>Teach it.</b> The strongest evidence of mastery is that someone else got better because of you. If you cannot explain why a technique works in terms of the verification gap, you have not finished learning it."],
+ labs:[
+  {id:"C.1",t:"Capstone C — operate an autonomous loop for a week",h:"15–20 h",d:"Real work with real consequences. All five loop components plus persistent state. A separate verifier. Hard budget caps, a tested rollback, a kill switch. Sandboxed per M12 with a written threat model. An append-only action log.",s:"Seven days of logs, an incident log, a cost accounting, and a 1,000-word net-value judgment. A Capstone C with an empty incident log fails."},
+  {id:"C.2",t:"The doctrine document",h:"4 h",d:"1,500–3,000 words in the seven-section structure. Quote your M0 beliefs statement directly.",s:"≥2 real mind-changes identified, ≥3 argued disagreements with named practitioners, and a specific statement of remaining weaknesses."},
+  {id:"C.3",t:"Re-run the baseline",h:"3 h",d:"Repeat the M0 measurements on comparable task types.",s:"An honest before/after comparison including any regression."},
+  {id:"C.4",t:"Teach one thing",h:"2 h",d:"Pair with a colleague, write up one technique, or run an internal session.",s:"A teaching artifact, plus evidence someone else changed what they do."}],
+ ev:"Capstone C with an incident log, the doctrine document, re-run measurements, a scheduled practice, and one teaching artifact.",
+ fails:["An empty incident log","A doctrine document that agrees with everyone","Skipping the 'still bad at' section","Never scheduling the refresh practice"],
+ read:"Your own ase/log.md and beliefs statement · the Disagreement Map, revisited"}
+};
+
+const PEOPLE = [
+ {n:"Peter Steinberger",d:"Maximum throughput, minimum ceremony",
+  b:"PSPDFKit founder; the most relentlessly public documenter of high-volume agentic practice through 2025; joined OpenAI in February 2026 to work on agents. Runs 3–8 parallel agents in the same folder with atomic commits, asks for tests in the same context as the implementation, spends ~20% of his time on agent-performed refactoring, and maintains a large agent-updated instructions file.",
+  q:"These days I don't read much code anymore. I watch the stream and sometimes look at key parts.",
+  c:"His substrate is unusual and largely undisclosed in the headline claims: a codebase he wrote and knows completely, two-minute preview deploys, trivial revert cost, very high token budget, no external review requirement, consumer-product risk. 'I don't read code' is the conclusion of that stack, not a technique you can adopt directly."},
+ {n:"Boris Cherny",d:"Delegation, verification, extension",
+  b:"Creator and head of Claude Code. Verification above all — he attributes a 2–3× quality difference to giving the agent a way to check itself. Worktrees as the single biggest unlock. Full-context briefs. Rules, not corrections. Rewind rather than argue. Heavy, deliberate use of hooks, subagents and skills. Most of his coding done by voice.",
+  q:"Give Claude a way to verify its output — this 2-3x's the quality of results.",
+  c:"His advice on plan mode inverted across model generations — first always plan first, later skip it because newer models plan implicitly. That drift is the best illustration in the dossier of why technique is model-dependent and must be re-tested rather than believed."},
+ {n:"Andrej Karpathy",d:"The conceptual frame, and the honest limits",
+  b:"Coined 'vibe coding' in 2025 and has spent since refining it away from the popular reading. The autonomy slider: calibrate delegation to verifiability, per task. AutoResearch found hyperparameter improvements overnight that he had missed over two decades — because the metric was objective and automatable.",
+  q:"Remove yourself as the bottleneck… arrange things such that they're completely autonomous.",
+  c:"He works on research code with clean objective metrics — the most favourable possible terrain for autonomy. Most software has no equivalent of validation loss. He is explicit that agents remain jagged on nuance, intent, and knowing when to ask."},
+ {n:"David Heinemeier Hansson",d:"The documented mind-change, and craft",
+  b:"Creator of Rails. Found autocomplete-era assistants genuinely annoying; by January 2026 was writing that agents had crossed a threshold, because models gained tools beyond pure reasoning. Now runs a fast model and a powerful model in parallel terminal splits, reviews every diff before merge, and argues Rails is enjoying a renaissance partly because convention over configuration is token-efficient for agents.",
+  q:"When something is beautiful, it's likely to be correct.",
+  c:"He works in a mature, conventional, heavily-tested codebase in a framework saturated in training data — close to the best case. And his shift was fast: a position held firmly can be wrong, including the current one."},
+ {n:"Dex Horthy",d:"Upstream review and intentional compaction",
+  b:"HumanLayer; author of 12-Factor Agents and ACE-FCA — the most rigorous published methodology in the field. Research → Plan → Implement with reviewable file artifacts, frequent intentional compaction at 40–60% utilization, and review leverage moved upstream. Reports a 300k-line Rust bug fixed in one session and ~35k lines shipped in seven hours, passing maintainer review.",
+  q:"A bad line of code is a bad line of code. A bad line of a plan could lead to hundreds of bad lines of code. A bad line of research could land you with thousands.",
+  c:"Real overhead, genuinely wrong for small or exploratory work. The headline results involve deep human engagement and codebase expertise that the method amplifies rather than replaces. Results are self-reported — though he also publishes his failures, which raises his credibility."},
+ {n:"Kent Beck",d:"Tests as the binding constraint",
+  b:"Creator of extreme programming and modern TDD. 'Augmented coding' distinguishes caring about code, complexity, tests and coverage from vibe coding's indifference to them. TDD becomes the agent's stop condition: find the next unimplemented test, implement it, write only enough to pass, stop. Watches for loops, unrequested functionality, and tests being disabled.",
+  q:"The value system in augmented coding is similar to hand coding — tidy code that works. It's just that I don't type much of that code.",
+  c:"TDD has real costs and real critics, and agents worsen some of them — they will happily generate large tautological suites. His own framing is exploratory and he revises it publicly."},
+ {n:"Armin Ronacher",d:"Design the environment, not the prompt",
+  b:"Creator of Flask. Agents reason locally, so codebases and languages that support local reasoning get better results — a more durable investment than any prompting technique. Explicit types, greppability, explicit dependencies, braces over whitespace, result types, boring structure. Against macros, barrel files, aliasing, flaky tests and environment divergence.",
+  q:"Agents really like local reasoning… they often work with just a few loaded files in context and don't have much spatial awareness of the codebase.",
+  c:"Speculating publicly about languages designed for agents — interesting, too early to act on. His preferences are shaped by systems and infrastructure work. He also publishes what didn't work, which is rarer and more useful than it sounds."},
+ {n:"Geoffrey Huntley",d:"The loop, in its rawest form",
+  b:"Popularized 'Ralph' in 2025 — an agent loop reduced to essentials, a spec file piped to a fresh context repeatedly — and pushed it to deliberately absurd extremes to find where it breaks, including generating a programming language with it.",
+  q:"The bash is trivial; the spec is everything.",
+  c:"Presented cheerfully as a dumb technique that works, with serious documented failure modes: bad specs amplified hundreds of times, overbaking, poor merge-conflict behaviour, unsuitability for exploration. Practitioners warn the term has diffused — people now call anything automated 'a Ralph'."},
+ {n:"Thorsten Ball",d:"Demystification",
+  b:"Author of Writing an Interpreter in Go; worked on Amp. 'How to Build an Agent' is the single most valuable technical artifact in this dossier: an agent is an LLM, a loop, and enough tokens, in under 400 lines.",
+  q:"It's an LLM, a loop, and enough tokens.",
+  c:"Nothing to read critically — this is a demonstration, not a claim. The failure mode is yours: reading it instead of typing it."},
+ {n:"Addy Osmani",d:"The 2026 synthesis",
+  b:"Engineering leader at Google; the clearest explainer of the shift to loop engineering. Five loop components — automations, isolation, knowledge, connections, separate verification — plus persistent state. Three failure modes: verification risk, comprehension debt, cognitive surrender.",
+  q:"Loop engineering is replacing yourself as the person who prompts the agent. You design the system that does it instead.",
+  c:"Synthesis rather than primary practice; he is reporting a shift more than originating it. The value is in the decomposition, which is unusually clean."}
+];
+
+const DISAGREE = [
+ ["Read the generated code?","DHH: review every diff before merge; beauty signals correctness","Steinberger: watch the stream, read key parts, verify elsewhere","Both are right <i>given their verifier stacks</i>. Choose by revert cost, blast radius and criticality — and know your read ratio."],
+ ["Where does review attention go?","Traditional: the diff","Horthy: research and plan; the diff is downstream","Upstream review has better leverage on large changes; diff review stays mandatory on security, money and data. Do not substitute one for the other."],
+ ["How much process?","Horthy: heavy, structured, artifact-producing","Steinberger: minimal, intuition, just talk to it","Scale process to blast radius. Both camps fail when they apply their default to the other's territory."],
+ ["Worktrees or same folder?","Cherny: worktrees, the single biggest unlock","Steinberger: same folder, atomic commits, speed","Situational — test both. Slow builds and coupled work push you to worktrees; fast small edits tolerate same folder."],
+ ["Is TDD necessary?","Beck: tests are the constraint that makes agents safe","Steinberger: tests yes, TDD ceremony no","A verifier is mandatory; TDD is one strong implementation. Never accept zero verification."],
+ ["MCP: infrastructure or bloat?","Vendors: the standard for tool connection","Ronacher, Steinberger: underperforms; prefer CLIs","Use it for live connection, auth and actions. Measure its context cost. Prefer CLIs the model already knows."],
+ ["Big memory file or minimal context?","Steinberger: ~800 lines, agent-maintained","Cherny (recent): context minimalism, let the model fetch","Model- and codebase-dependent. This is exactly what an eval suite is for."],
+ ["Can agents work unattended?","Karpathy: yes, where the metric is objective","Sceptics: verification risk makes it irresponsible","Both. Autonomy is licensed by verifiability, per task, not per tool."],
+ ["Are we faster?","Practitioners: dramatically","METR 2025: 19% <i>slower</i>, while feeling 20% faster","Measure your own. The literature is now structurally unable to answer this for you."],
+ ["What happens to juniors?","Yegge: revenge of the junior developer","Others: the apprenticeship path is being destroyed","Unresolved. Teams must construct learning paths deliberately or produce engineers who can prompt and cannot debug."]
+];
+
+const RES = [
+ ["R-01","METR, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity","https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/",1,"D","evidence","The 19%-slower / 20%-faster-feeling result. Read the methodology and caveats, not the headline."],
+ ["R-02","METR, We are Changing our Developer Productivity Experiment Design","https://metr.org/blog/2026-02-24-uplift-update/",1,"M","evidence","The 2026 update: the effect narrowed and the study design is breaking because developers refuse to work without AI. The reason M0 exists."],
+ ["R-03","DORA, ROI of AI-Assisted Software Development (2026)","https://www.infoq.com/news/2026/05/dora-roi-ai-assisted-dev-report/",1,"M","evidence","The J-curve, the verification tax, the instability tax, AI-amplifies-the-system."],
+ ["R-10","Thorsten Ball, How to Build an Agent","https://ampcode.com/notes/how-to-build-an-agent",1,"D","foundations","Build the loop in under 400 lines. The single highest-value technical artifact here."],
+ ["R-50","Anthropic, Effective context engineering for AI agents","https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",1,"M","foundations","The canonical treatment of context as a budgeted resource."],
+ ["R-11","Your harness's own documentation","https://code.claude.com/docs/en/features-overview",1,"F","foundations","The extension surface, authoritative and current. Re-read after every major release."],
+ ["R-40","Horthy, Advanced Context Engineering for Coding Agents (ACE-FCA)","https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/ace-fca.md",1,"M","method","Research→Plan→Implement, intentional compaction, the 40–60% band, review leverage."],
+ ["R-30","Kent Beck, Augmented Coding: Beyond the Vibes","https://newsletter.kentbeck.com/p/augmented-coding-beyond-the-vibes",1,"D","method","The value distinction between augmented and vibe coding; TDD as the agent's stop condition."],
+ ["R-101","Addy Osmani, Loop Engineering","https://addyosmani.com/blog/loop-engineering/",1,"M","method","The clearest definition of the 2026 shift; five components, three failure modes."],
+ ["R-100","HumanLayer, A Brief History of Ralph","https://www.humanlayer.dev/blog/brief-history-of-ralph",2,"M","method","Origin, mechanics and documented failures — bad specs, overbaking, merge behaviour."],
+ ["R-21","Peter Steinberger, Just Talk To It","https://steipete.me/posts/just-talk-to-it",1,"M","practitioners","The fullest statement of his workflow: parallel agents, blast radius, same-session tests, MCP scepticism."],
+ ["R-32","Steinberger, Shipping at Inference-Speed","https://steipete.me/posts/2025/shipping-at-inference-speed",1,"M","practitioners","'I don't read much code anymore.' Read it looking for what substitutes for reading."],
+ ["R-20","How Boris Uses Claude Code (fan-compiled)","https://howborisusesclaudecode.com/",1,"F","practitioners","The most complete collection of Cherny's tips, dated and thematic. Secondary source — verify anything load-bearing."],
+ ["R-42","DHH, Promoting AI agents","https://world.hey.com/dhh/promoting-ai-agents-3ee04945",1,"D","practitioners","The public position change in his own words, and the 'supervised collaboration' framing."],
+ ["R-43","DHH's new way of writing code (Pragmatic Engineer)","https://newsletter.pragmaticengineer.com/p/dhhs-new-way-of-writing-code",1,"M","practitioners","His actual current workflow: multi-model terminal splits, diff review, Rails as token-efficient."],
+ ["R-104","Karpathy on No Priors: code agents, AutoResearch, the loopy era","https://podscripts.co/podcasts/no-priors-artificial-intelligence-technology-startups/andrej-karpathy-on-code-agents-autoresearch-and-the-loopy-era-of-ai",1,"M","practitioners","'Remove yourself as the bottleneck.' The AutoResearch result and the jaggedness caveat."],
+ ["R-70","Armin Ronacher, A Language For Agents","https://lucumr.pocoo.org/2026/2/9/a-language-for-agents/",1,"D","practitioners","What agents want from code. The intellectual core of M7."],
+ ["R-71","Ronacher, Agentic Coding Recommendations","https://lucumr.pocoo.org/2025/6/12/agentic-coding/",1,"M","practitioners","The practical baseline: tooling, sandboxing, what to automate."],
+ ["R-73","Ronacher, Agentic Coding Things That Didn't Work","https://lucumr.pocoo.org/2025/7/30/things-that-didnt-work/",2,"M","practitioners","Negative results, published. Rare and valuable."],
+ ["R-120","Simon Willison, The lethal trifecta for AI agents","https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/",1,"D","security","Private data + untrusted content + external communication. The clearest security frame in the field."],
+ ["R-121","CSA research note: coding-agent GitHub Action prompt injection (CVE-2025-66032)","https://labs.cloudsecurityalliance.org/research/csa-research-note-claude-code-github-action-prompt-injection/",1,"D","security","The full attack chain: crafted issue → permission bypass → env exfiltration → OIDC token → supply-chain commit."],
+ ["R-122","Prompt injection still drives most agentic AI security failures in production","https://www.helpnetsecurity.com/2026/06/11/owasp-prompt-injection-ai-security-failures/",2,"M","security","2026 state of practice. Confirms this is not theoretical."],
+ ["R-130","Benchmark landscape and critiques","https://www.codesota.com/code-generation",2,"F","evidence","Read for the caveats, not the scores. Harness choice moves the same base model by double digits."],
+ ["R-151","Fowler / Thoughtworks, Exploring Generative AI","https://martinfowler.com/articles/exploring-gen-ai.html",2,"M","evidence","Field observations across many client codebases — the best corrective to single-practitioner survivorship bias."]
+];
+
+const INVARIANTS = [
+ ["I1","The verification gap is the spine","Every technique is taught as an answer to: what does this do to the gap between code produced and code known-good? If you add content, connect it to the spine or leave it out."],
+ ["I2","Mastery-based, not time-based","No weeks, no cohorts. Artifacts and rubrics gate advancement. The field moves too fast for schedules."],
+ ["I3","Practice over vocabulary","Every module ends in something built, measured or run. A module that ends in 'understand X' is a blog post."],
+ ["I4","Volatile facts are quarantined","Products, versions, prices and scores live in STATE-OF-PLAY and nowhere else. This is what makes the course maintainable in an afternoon — and it erodes one convenient product reference at a time."],
+ ["I5","Experts are hypotheses, not authority","Never resolve a disagreement by picking the most famous person. Every added practitioner needs their context dependencies and their critics."],
+ ["I6","Security precedes autonomy","M12 gates the unattended parts of M10 and M11. Do not reorder for narrative flow — the ordering is the safety argument."],
+ ["I7","Honest about uncertainty","Sources are dated and marked verified or not. Never launder a plausible guess into an authoritative statement."],
+ ["I8","Judgment traces are the assessment","Rubrics weight reasoning over output because output is cheap. No auto-graders for reflection."]
+];
+</script>
+<script>
+"use strict";
+const IDS = Object.keys(M);
+const $ = (s,r)=> (r||document).querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- progress state ---------- */
+let state = {mods:{}, labs:{}};
+let saveTo = null, dbDoc = null;
+
+function loadLocal(){
+  try{ const r = localStorage.getItem("ase.progress");
+       if(r) state = Object.assign({mods:{},labs:{}}, JSON.parse(r)); }catch(e){}
+}
+function persist(){
+  try{ localStorage.setItem("ase.progress", JSON.stringify(state)); }catch(e){}
+  if(!dbDoc) return;
+  clearTimeout(saveTo);
+  saveTo = setTimeout(()=>{
+    dbDoc.set({mods:state.mods, labs:state.labs, at:new Date().toISOString()})
+      .then(()=> setSync("saved"))
+      .catch(()=> setSync("local only"));
+  }, 700);
+}
+function setSync(t){ const e=$("#sync"); if(e) e.textContent = " · progress " + t; }
+
+async function initStore(){
+  try{
+    const [db, user] = await Promise.all([claude.use("db"), claude.use("user")]);
+    if(!db || !user) return setSync("saved in this browser");
+    const uid = await user.id();
+    if(!uid) return setSync("saved in this browser");
+    dbDoc = db.doc("data/users/" + uid + "/progress");
+    const snap = await dbDoc.get();
+    if(snap.exists){
+      const d = snap.data() || {};
+      state = {mods: d.mods || {}, labs: d.labs || {}};
+      renderAll();
+    }
+    setSync("synced to your account");
+  }catch(e){ setSync("saved in this browser"); }
+}
+
+const modDone = id => !!state.mods[id];
+const labDone = id => !!state.labs[id];
+function toggleMod(id){ state.mods[id] = !state.mods[id]; persist(); renderAll(); }
+function toggleLab(id){ state.labs[id] = !state.labs[id]; persist();
+  renderModule(current); renderHeader(); renderOverview(); }
+
+/* ---------- header ---------- */
+function renderHeader(){
+  const n = IDS.filter(modDone).length;
+  $("#mbar").style.width = Math.round(n/IDS.length*100) + "%";
+  $("#mtxt").textContent = n + "/" + IDS.length;
+}
+
+/* ---------- tabs ---------- */
+const TABS = [["overview","Overview"],["modules","Modules"],["people","Practitioners"],
+              ["resources","Resources"],["maintain","Maintain"]];
+let tab = "overview", current = "M0";
+
+function renderTabs(){
+  $("#tabs").innerHTML = TABS.map(([k,l]) =>
+    '<button data-tab="'+k+'" aria-current="'+(tab===k)+'">'+l+'</button>').join("");
+  $("#tabs").onclick = e => { const b = e.target.closest("button"); if(b) go(b.dataset.tab); };
+}
+function go(t, mod){
+  tab = t; if(mod){ current = mod; }
+  TABS.forEach(([k]) => { $("#v-"+k).hidden = (k !== t); });
+  renderTabs();
+  if(t==="modules") renderModules();
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+/* ---------- overview ---------- */
+const LAYERS = [
+ ["Layer 1","Prompting","2023–24","The message. Phrasing and examples.","Endless re-prompting; blaming the model"],
+ ["Layer 2","Context engineering","2025","The context window. Curation, compaction, isolation.","Context rot; a huge memory file nobody reads"],
+ ["Layer 3","Loop engineering","2026","The loop. System design, verification, autonomy budgeting.","You are the bottleneck; agents idle waiting on you"]
+];
+function stageStats(si){
+  const ms = STAGES[si].mods;
+  return [ms.filter(modDone).length, ms.length];
+}
+function renderOverview(){
+  const total = IDS.length, done = IDS.filter(modDone).length;
+  $("#v-overview").innerHTML =
+  '<div class="hero"><div class="kicker">Agentic Software Engineering · self-paced · mastery-based</div>'+
+  '<h1>Producing, verifying and owning software you did not type</h1>'+
+  '<p>A curriculum for an experienced engineer who has used coding agents casually and wants to work the way the '+
+  'best practitioners actually do — built from primary sources, organized around one idea, and designed so it can be '+
+  'kept current as the field moves underneath it.</p></div>'+
+
+  '<div class="thesis"><p>Generation is cheap. <b>Verification is the bottleneck.</b> Every durable technique in '+
+  'agentic engineering is a way of closing the gap between <i>code produced</i> and <i>code known-good</i> — faster '+
+  'than the agent can widen it.</p></div>'+
+
+  '<h2 class="sec">Three layers, and why this is the order</h2>'+
+  '<div class="grid layers">'+ LAYERS.map(l =>
+    '<div class="layer"><div class="n">'+l[0]+'</div><h4>'+l[1]+'</h4>'+
+    '<div class="era">'+l[2]+'</div><p>'+l[3]+'</p>'+
+    '<div class="fail">Stuck here: '+l[4]+'</div></div>').join("") + '</div>'+
+  '<p class="note">Each layer subsumes the one below — you still need good briefs at layer 3 — so the course proceeds '+
+  'in that order, then adds the thing that is not a layer but a permanent obligation: security, comprehension debt, '+
+  'and what happens when a team does this at scale.</p>'+
+
+  '<h2 class="sec">Five stages, seventeen modules — '+done+' of '+total+' complete</h2>'+
+  '<div class="grid stages">'+ STAGES.map((s,i) => {
+    const [d,t] = stageStats(i);
+    return '<div class="stage"><div class="hd"><div><div class="sn">'+s.n.toUpperCase()+'</div>'+
+      '<h3>'+s.name+'</h3></div><div class="meter-mini"><div class="bar"><i style="width:'+
+      (t?Math.round(d/t*100):0)+'%"></i></div><span>'+d+'/'+t+'</span></div></div>'+
+      '<div class="goal">'+s.goal+'</div>'+
+      '<div class="mods">'+ s.mods.map(m =>
+        '<button class="chip '+(modDone(m)?"done":"")+'" data-m="'+m+'" title="'+esc(M[m].t)+'">'+m+'</button>'
+      ).join("") + '</div>'+
+      (s.gate ? '<div class="sn" style="color:var(--gate)">▸ '+s.gate+'</div>' : '') +
+    '</div>';
+  }).join("") + '</div>'+
+
+  '<h2 class="sec">How it is assessed</h2>'+
+  '<div class="tbl-wrap"><table><thead><tr><th>Instrument</th><th>Weight</th><th>What it tests</th></tr></thead><tbody>'+
+  [["Module mastery artifacts (17)","40%","Technique acquisition"],
+   ["Gate assessments (3)","15%","Integration across a stage"],
+   ["Capstone A — Ship it","10%","Drive one agent end to end"],
+   ["Capstone B — Land a change in a large unfamiliar codebase","15%","The full Stage 2 toolkit, with an external signal"],
+   ["Capstone C — Operate an autonomous loop for a week","15%","Autonomy, evals, safety — and an incident log"],
+   ["Doctrine document","5%","Judgment that outlives the curriculum"]].map(r =>
+   '<tr><td class="q" style="white-space:normal">'+r[0]+'</td><td class="mono">'+r[1]+'</td><td class="pos">'+r[2]+'</td></tr>').join("")+
+  '</tbody></table></div>'+
+  '<p class="note" style="margin-top:14px">Rubrics run Novice / Working / Proficient / Expert, and weight <b>judgment '+
+  'traces</b> — what you rejected, what your measurement showed, what surprised you — far above output volume. '+
+  'You can have an agent produce every artifact in this course; if you do, the rubrics will show it. '+
+  'A capstone with no failures reported is presumed under-reported and does not pass.</p>'+
+
+  '<h2 class="sec">Time budget</h2>'+
+  '<div class="tbl-wrap"><table><thead><tr><th>Stage</th><th>Modules</th><th>Hours</th><th>Cumulative</th></tr></thead><tbody>'+
+  [["0 Calibration","M0","5","5"],["1 Operator","M1–M4 + Capstone A","34","39"],
+   ["2 Engineer","M5–M8 + Capstone B","47","86"],["3 Orchestrator","M9–M12","34","120"],
+   ["4 Architect","M13–M16 + Capstone C","48","168"]].map(r =>
+   '<tr><td class="q">'+r[0]+'</td><td class="mono">'+r[1]+'</td><td class="mono">'+r[2]+'</td><td class="mono">'+r[3]+'</td></tr>').join("")+
+  '</tbody></table></div>'+
+  '<p class="note" style="margin-top:14px">About 120–170 hours depending on lab depth and how much you do on real work '+
+  '(which takes longer and teaches more). Ten hours a week is roughly four months; full-time intensive is five to six weeks. '+
+  '<b>Start with M0.</b> It is the module people skip and later regret, because without a baseline you spend the rest of '+
+  'the course unable to tell whether anything you did helped.</p>';
+
+  $("#v-overview").onclick = e => { const b = e.target.closest("[data-m]");
+    if(b) go("modules", b.dataset.m); };
+}
+
+/* ---------- modules ---------- */
+function renderModules(){
+  const rail = STAGES.map((s,i) =>
+    '<div class="grp">'+s.n+' · '+s.name+'</div>'+
+    s.mods.map(id => '<button class="m" data-m="'+id+'" aria-current="'+(current===id)+'">'+
+      '<span class="id">'+id+'</span><span>'+esc(M[id].t)+'</span>'+
+      (modDone(id)?'<span class="tick">✓</span>':'')+'</button>').join("")+
+    (s.gate ? '<div class="gate">▸ '+s.gate+'</div>' : '')
+  ).join("");
+  $("#v-modules").innerHTML = '<div class="mod-wrap"><aside class="rail" id="rail">'+rail+
+    '</aside><article class="mod" id="modpane"></article></div>';
+  $("#rail").onclick = e => { const b = e.target.closest("[data-m]");
+    if(b){ current = b.dataset.m; renderModules(); } };
+  renderModule(current);
+}
+
+function renderModule(id){
+  const m = M[id], pane = $("#modpane"); if(!pane) return;
+  const st = STAGES[m.st];
+  const nLabs = m.labs.length, nDone = m.labs.filter(l => labDone(id+"/"+l.id)).length;
+  pane.innerHTML =
+  '<div class="mod-hd"><div class="id">'+id+' · '+st.n.toUpperCase()+' '+st.name.toUpperCase()+
+    (m.kw ? ' · <span style="color:var(--gate)">'+m.kw.toUpperCase()+'</span>' : '')+'</div>'+
+  '<h2>'+esc(m.t)+'</h2>'+
+  '<div class="facts"><span>PREREQ <b>'+m.pre+'</b></span><span>EFFORT <b>'+m.hrs+'</b></span>'+
+  '<span>LABS <b>'+nDone+'/'+nLabs+'</b></span></div></div>'+
+
+  '<div class="star"><span class="slab">The one thing</span><p>'+m.star+'</p></div>'+
+
+  '<h3>Why this module exists</h3><p class="why">'+m.why+'</p>'+
+
+  '<h3>Outcomes</h3><ul>'+ m.out.map(o=>'<li>'+o+'</li>').join("") +'</ul>'+
+
+  '<h3>Core content</h3><ul>'+ m.key.map(k=>'<li>'+k+'</li>').join("") +'</ul>'+
+
+  '<h3>Labs</h3>'+ m.labs.map(l => {
+    const key = id+"/"+l.id, on = labDone(key);
+    return '<label class="lab '+(on?"on":"")+'"><input type="checkbox" id="cb-'+key.replace(/[^\w]/g,"-")+
+      '" data-lab="'+key+'"'+(on?" checked":"")+'>'+
+      '<span class="body"><span class="t"><span class="lid">'+l.id+'</span>'+
+      '<span class="ttl">'+esc(l.t)+'</span><span class="hrs">'+l.h+'</span></span>'+
+      '<span class="d">'+esc(l.d)+'</span>'+
+      '<span class="s"><b>Success</b> — '+esc(l.s)+'</span></span></label>';
+  }).join("") +
+
+  '<h3>Evidence of mastery</h3><div class="evidence"><span class="lab2">Submit</span>'+esc(m.ev)+'</div>'+
+
+  '<h3>Common failure modes</h3><ul class="fails">'+ m.fails.map(f=>'<li>'+esc(f)+'</li>').join("") +'</ul>'+
+
+  '<h3>Reading</h3><p class="why">'+esc(m.read)+'</p>'+
+
+  '<div class="mod-foot">'+
+   '<button class="btn pri '+(modDone(id)?"":"off")+'" id="donebtn">'+
+     (modDone(id)?"✓ Module complete":"Mark module complete")+'</button>'+
+   (prevOf(id)?'<button class="btn" data-goto="'+prevOf(id)+'">← '+prevOf(id)+'</button>':'')+
+   (nextOf(id)?'<button class="btn" data-goto="'+nextOf(id)+'">'+nextOf(id)+' →</button>':'')+
+  '</div>';
+
+  pane.onclick = e => {
+    const cb = e.target.closest("[data-lab]");
+    if(cb){ toggleLab(cb.dataset.lab); return; }
+    const d = e.target.closest("[data-goto]");
+    if(d){ current = d.dataset.goto; renderModules(); window.scrollTo({top:0,behavior:"instant"}); return; }
+    if(e.target.closest("#donebtn")) toggleMod(id);
+  };
+}
+const prevOf = id => IDS[IDS.indexOf(id)-1];
+const nextOf = id => IDS[IDS.indexOf(id)+1];
+
+/* ---------- people ---------- */
+function renderPeople(){
+  $("#v-people").innerHTML =
+  '<h2 class="sec">The practitioner teardown protocol</h2>'+
+  '<p class="note">Do this at least six times during the course, and monthly afterwards. '+
+  'Find a <b>primary source</b> — their words, not a summary; the summaries drop the caveats, and the caveats are where '+
+  'transferability lives. Extract <b>one falsifiable claim</b>. Locate the <b>verification mechanism</b>: if a practice '+
+  'looks reckless, the verifier is usually somewhere you have not looked. Write down the <b>context dependencies</b>, '+
+  'then check which you have. Design the <b>cheapest experiment</b> that could falsify it. Run it. Then <b>keep, adapt '+
+  'or discard, in writing</b> — adaptations are the real output; unmodified adoption usually means you did not test it.</p>'+
+  '<div class="grid people">'+ PEOPLE.map(p =>
+    '<div class="person"><h3>'+esc(p.n)+'</h3><div class="doc">'+esc(p.d)+'</div>'+
+    '<p>'+esc(p.b)+'</p><p class="quote" style="font-size:14px">“'+esc(p.q)+'”</p>'+
+    '<div class="crit"><b>Read critically</b>'+esc(p.c)+'</div></div>').join("") + '</div>'+
+
+  '<h2 class="sec">The disagreement map</h2>'+
+  '<p class="note">Where the experts actually conflict. Each row is a decision you must make. The course position is '+
+  'stated so you can disagree with it deliberately — and so you resolve these by measurement rather than by preference.</p>'+
+  '<div class="tbl-wrap"><table><thead><tr><th>Question</th><th>Position A</th><th>Position B</th>'+
+  '<th>Course position</th></tr></thead><tbody>'+
+  DISAGREE.map(r => '<tr><td class="q" style="white-space:normal">'+r[0]+'</td><td class="pos">'+r[1]+
+    '</td><td class="pos">'+r[2]+'</td><td class="crs">'+r[3]+'</td></tr>').join("")+
+  '</tbody></table></div>'+
+  '<p class="note" style="margin-top:14px"><b>A warning that matters.</b> Every practitioner here operates in a specific '+
+  'context — their codebase, language, risk tolerance, revert cost, token budget. The most common failure in this field '+
+  'is copying an expert’s <i>behaviour</i> without their <i>substrate</i>.</p>';
+}
+
+/* ---------- resources ---------- */
+let resFilter = "all";
+function renderResources(){
+  const cats = ["all","evidence","foundations","method","practitioners","security"];
+  const list = RES.filter(r => resFilter==="all" || r[5]===resFilter);
+  $("#v-resources").innerHTML =
+  '<h2 class="sec">Resource index · verified 2026-09-17</h2>'+
+  '<p class="note">Tier ① core, ② recommended. Volatility: <b>D</b> durable (2+ yr), <b>M</b> technique (~12 mo), '+
+  '<b>F</b> fast (tools and numbers, ~3 mo). Fast-volatility entries are the first to rot — the shipped linter flags '+
+  'them automatically. Full index, including secondary sources and deliberate exclusions, ships as markdown.</p>'+
+  '<div class="filters">'+ cats.map(c =>
+    '<button class="chip '+(resFilter===c?"done":"")+'" data-f="'+c+'">'+c+'</button>').join("") +'</div>'+
+  list.map(r =>
+    '<div class="res"><span class="rid">'+r[0]+'</span><span class="body" style="flex:1;min-width:0">'+
+    '<a class="rt" href="'+r[2]+'" target="_blank" rel="noopener">'+esc(r[1])+'</a>'+
+    '<div class="rw">'+esc(r[6])+'</div>'+
+    '<div class="tags"><span class="tag t'+r[3]+'">Tier '+(r[3]===1?"①":"②")+'</span>'+
+    '<span class="tag v'+r[4]+'">'+({D:"durable",M:"technique",F:"fast — recheck"}[r[4]])+'</span>'+
+    '<span class="tag">'+r[5]+'</span></div></span></div>').join("");
+  $("#v-resources").onclick = e => { const b = e.target.closest("[data-f]");
+    if(b){ resFilter = b.dataset.f; renderResources(); } };
+}
+
+/* ---------- maintain ---------- */
+function renderMaintain(){
+  $("#v-maintain").innerHTML =
+  '<h2 class="sec">For the next maintainer — human or model</h2>'+
+  '<p class="note">The half-life of technique here is short; the half-life of judgment is long. This course is built to '+
+  'be refreshed in an afternoon rather than rewritten in a month. These invariants are what make that possible.</p>'+
+  INVARIANTS.map(i => '<div class="inv"><div class="k">'+i[0]+'</div><h4>'+esc(i[1])+'</h4><p>'+i[2]+'</p></div>').join("")+
+
+  '<h2 class="sec">Volatility tiers</h2>'+
+  '<div class="tbl-wrap"><table><thead><tr><th>Tier</th><th>Content</th><th>Half-life</th><th>Refresh</th></tr></thead><tbody>'+
+  [["0 Durable","The verification gap; context as a budget; loops need fitness functions and stop conditions; the lethal trifecta; measure, don’t assume","2–5 yr","Only when contradicted by evidence"],
+   ["1 Technique","Research→plan→implement; intentional compaction; parallelism strategies; the extension-surface categories; specific ratios","~12 mo","Annually, or when a tracked practitioner changes position"],
+   ["2 Instance","Tool names, model versions, benchmark scores, prices, URLs, feature names","~3 mo","Quarterly"]].map(r =>
+   '<tr><td class="q">'+r[0]+'</td><td class="pos">'+r[1]+'</td><td class="mono">'+r[2]+'</td><td class="pos">'+r[3]+'</td></tr>').join("")+
+  '</tbody></table></div>'+
+  '<p class="note" style="margin-top:14px">The diagnostic question for any edit: <b>would this still be true if every '+
+  'product in the field were renamed tomorrow?</b> Yes → the body. No → the quarantined state-of-play file.</p>'+
+
+  '<div class="cols" style="margin-top:34px">'+
+  '<div><h2 class="sec" style="margin-top:0">The quarterly refresh</h2><ol style="padding-left:1.2em;color:var(--ink-2)">'+
+  ['Run <code>curriculum_lint.py all --ci</code>. Fix every error. <code>proxy-blocked</code> means your network, not link rot.',
+   'Run <code>feedwatch.py fetch</code> and triage the inbox. <b>Handle position-change findings first</b> — a dossier that misrepresents a living practitioner is the worst defect this curriculum can have.',
+   'Refresh the state-of-play file from its own checklist; archive the old one. The diff between two is the most useful artifact for seeing what actually changed, as opposed to what was announced.',
+   'Ask the category question: a new <i>product</i>, or a new <i>capability category</i>? Roughly one genuine category appears every four months. Three in a quarter means you found three products.',
+   'Re-verify the evidence base. A single new RCT is worth more than a year of product launches.',
+   'Record it in the change log: date, who, what changed and why, which invariants were touched.'
+  ].map(s=>'<li style="margin-bottom:.5em">'+s+'</li>').join("")+'</ol></div>'+
+
+  '<div><h2 class="sec" style="margin-top:0">Signs it has rotted</h2><ul class="fails">'+
+  ['The linter reports staleness errors — the state-of-play file is over six months old',
+   'A tracked practitioner has publicly reversed a position the course still attributes to them — highest severity',
+   'A lab’s tooling assumptions no longer hold in any current harness',
+   'A module’s core technique has become automatic — rewrite it from "how to do it" to "how to verify your harness does it"',
+   'The disagreement map has gone quiet — more likely you stopped tracking dissent than that the field matured',
+   'Nobody has failed a capstone — the rubrics have drifted toward participation'
+  ].map(s=>'<li>'+s+'</li>').join("")+'</ul></div></div>'+
+
+  '<h2 class="sec">What a model maintainer may change alone</h2>'+
+  '<p class="note"><b>Freely:</b> the state-of-play file, URLs and verification marks, sharpening a lab, fixing anything the '+
+  'linter flags. <b>With a human decision:</b> module content and ordering, rubrics and gates, the dossier’s '+
+  'characterization of a practitioner, the disagreement map, and anything in the invariants above.</p>'+
+  '<p class="note">The reason is structural, not procedural: a model refreshing a curriculum from recent feeds drifts '+
+  'toward whatever was loudest this quarter, and in this field the loudest claims are systematically the least verified. '+
+  'The pipeline is <b>feeds generate proposals → a maintainer decides → the linter verifies</b>. Keep the human in the middle step.</p>'+
+
+  '<h2 class="sec">Known gaps in v1.0</h2><ul class="fails">'+
+  ['Thin on non-code agentic work — infrastructure, data engineering, ML workflows. Principles transfer; labs largely do not.',
+   'Single-practitioner bias in the evidence; much of the dossier is self-reported by people with an incentive to report success.',
+   'The junior-developer question is named and not answered. Nobody has answered it; the course should say so rather than invent one.',
+   'No cost modelling. The course says Stage 3 is expensive without helping you budget.',
+   'No treatment of regulated or safety-critical environments. M12 is necessary and nowhere near sufficient there.',
+   'Four of the six specified tools ship as specs, not code.',
+   'The eval module deserves to be larger — it is the most durable content in the course.'
+  ].map(s=>'<li>'+s+'</li>').join("")+'</ul>';
+}
+
+/* ---------- theme ---------- */
+function initTheme(){
+  let t = null; try{ t = localStorage.getItem("ase.theme"); }catch(e){}
+  if(t) document.documentElement.setAttribute("data-theme", t);
+  $("#theme").onclick = () => {
+    const cur = document.documentElement.getAttribute("data-theme");
+    const dark = cur ? cur === "dark"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const next = dark ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try{ localStorage.setItem("ase.theme", next); }catch(e){}
+  };
+}
+
+/* ---------- boot ---------- */
+function renderAll(){
+  renderHeader(); renderOverview(); renderPeople(); renderResources(); renderMaintain();
+  if(tab === "modules") renderModules();
+}
+loadLocal();
+initTheme();
+renderTabs();
+renderAll();
+go("overview");
+setSync("saved in this browser");
+initStore();
+</script>

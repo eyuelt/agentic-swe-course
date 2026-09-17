@@ -1,0 +1,119 @@
+# feedwatch source list — every practitioner in PRACTITIONER-DOSSIER.md
+# Feed URLs marked `unverified: true` were inferred from the site's platform
+# convention and have NOT been confirmed live. Confirm before trusting silence
+# from them: a feed that 404s looks exactly like a person who stopped writing.
+#
+# kind: rss    — an RSS/Atom feed; parsed for new entries
+#       index  — an HTML page; the link set is diffed against the last fetch
+#       github — a GitHub user or repo; watched for new repos and releases
+#       manual — no automatable source; prompts the maintainer to check by hand
+
+defaults:
+  watch_for: [agent, agentic, coding, context, loop, harness, subagent, eval,
+              prompt injection, worktree, spec, MCP, skill, verification]
+
+people:
+
+  - person: Peter Steinberger
+    dossier_id: steinberger
+    sources:
+      - {kind: index,  url: "https://steipete.me/posts"}
+      - {kind: rss,    url: "https://steipete.me/rss.xml", unverified: true}
+      - {kind: github, url: "https://github.com/steipete"}
+
+  - person: Boris Cherny
+    dossier_id: cherny
+    note: >
+      No personal blog feed. Primary channels are X threads and official
+      Anthropic engineering posts; the fan-maintained compilation is a
+      convenient but secondary index.
+    sources:
+      - {kind: index, url: "https://howborisusesclaudecode.com/"}
+      - {kind: index, url: "https://www.anthropic.com/engineering"}
+      - {kind: manual, url: "https://x.com/bcherny", cadence: monthly}
+
+  - person: Andrej Karpathy
+    dossier_id: karpathy
+    sources:
+      - {kind: index,  url: "https://karpathy.bearblog.dev/"}
+      - {kind: github, url: "https://github.com/karpathy"}
+      - {kind: manual, url: "podcast appearances", cadence: monthly}
+
+  - person: David Heinemeier Hansson
+    dossier_id: dhh
+    sources:
+      - {kind: index, url: "https://world.hey.com/dhh"}
+      - {kind: rss,   url: "https://world.hey.com/dhh/feed.atom", unverified: true}
+
+  - person: Dex Horthy
+    dossier_id: horthy
+    sources:
+      - {kind: index,  url: "https://www.humanlayer.dev/blog"}
+      - {kind: github, url: "https://github.com/humanlayer"}
+
+  - person: Kent Beck
+    dossier_id: beck
+    sources:
+      - {kind: index, url: "https://newsletter.kentbeck.com/archive"}
+      - {kind: rss,   url: "https://newsletter.kentbeck.com/feed", unverified: true}
+
+  - person: Armin Ronacher
+    dossier_id: ronacher
+    sources:
+      - {kind: index, url: "https://lucumr.pocoo.org/tags/ai/"}
+      - {kind: rss,   url: "https://lucumr.pocoo.org/feed.atom", unverified: true}
+      - {kind: github, url: "https://github.com/mitsuhiko"}
+
+  - person: Geoffrey Huntley
+    dossier_id: huntley
+    sources:
+      - {kind: index, url: "https://ghuntley.com/"}
+      - {kind: rss,   url: "https://ghuntley.com/rss/", unverified: true}
+
+  - person: Thorsten Ball
+    dossier_id: ball
+    sources:
+      - {kind: index, url: "https://registerspill.thorstenball.com/archive", unverified: true}
+      - {kind: index, url: "https://ampcode.com/notes"}
+
+  - person: Addy Osmani
+    dossier_id: osmani
+    sources:
+      - {kind: index, url: "https://addyosmani.com/blog/"}
+      - {kind: rss,   url: "https://addyosmani.com/rss.xml", unverified: true}
+
+  - person: Simon Willison
+    dossier_id: willison
+    sources:
+      - {kind: rss,   url: "https://simonwillison.net/atom/everything/", unverified: true}
+      - {kind: index, url: "https://simonwillison.net/tags/coding-agents/", unverified: true}
+
+  - person: Mitchell Hashimoto
+    dossier_id: hashimoto
+    sources:
+      - {kind: index,  url: "https://mitchellh.com/writing"}
+      - {kind: github, url: "https://github.com/mitchellh"}
+
+  - person: Steve Yegge
+    dossier_id: yegge
+    sources:
+      - {kind: manual, url: "Substack / conference talks", cadence: quarterly}
+
+  - person: Birgitta Böckeler / Thoughtworks
+    dossier_id: bockeler
+    sources:
+      - {kind: index, url: "https://martinfowler.com/articles/exploring-gen-ai.html"}
+      - {kind: index, url: "https://www.thoughtworks.com/radar"}
+
+# Non-person sources: evidence and standards. Same pipeline, different triage.
+institutions:
+  - name: METR
+    sources: [{kind: index, url: "https://metr.org/blog"}]
+    classify_as_default: evidence
+  - name: DORA
+    sources: [{kind: index, url: "https://dora.dev/research/publications/"}]
+    classify_as_default: evidence
+  - name: Your primary harness
+    sources: [{kind: index, url: "https://code.claude.com/docs/llms.txt"}]
+    classify_as_default: tool-change
+    note: "llms.txt is a machine-readable doc index; diffing it surfaces new features cheaply."

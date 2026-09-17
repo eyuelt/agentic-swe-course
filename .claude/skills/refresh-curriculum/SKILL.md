@@ -116,6 +116,6 @@ decision** (drafts awaiting approval, position-changes first), and **noticed but
 `curriculum.html` is an offline copy of the artifact at `claude.ai/artifact/UrtxDpYCvHk8Ep7yJC77UH`. Editing the
 file does not republish it. Keep them in step: after a content change, tell the owner the page needs republishing.
 
-The same file is also served by GitHub Pages at `eyuelt.github.io/agentic-swe-course/`. That copy *does*
+The same file is also served by GitHub Pages at `eyuel.com/agentic-swe-course/` (`eyuelt.github.io/agentic-swe-course/` redirects there). That copy *does*
 redeploy by itself: `.github/workflows/pages.yml` publishes `curriculum.html` as the site index on every push to
 `main` that touches it. So after a push the Pages site is current and only the artifact needs republishing.

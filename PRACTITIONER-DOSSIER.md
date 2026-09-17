@@ -42,7 +42,7 @@ Do this at least six times during the course, and monthly afterwards (M17).
 
 **Follow:** [Blog](https://steipete.me/) · [X](https://x.com/steipete) · [GitHub](https://github.com/steipete)
 
-**Who:** Founder of PSPDFKit; became one of the most visible high-volume agentic practitioners in 2025 through relentless public documentation of his workflow; creator of open-source agent tooling; joined OpenAI in February 2026 to work on agents, stating his mission as *"build an agent that even my mum can use."*
+**Who:** Creator of **OpenClaw**, the open-source personal AI agent — in his own words "GitHub's most-starred software project" (≈390k stars on 2026-09-17, behind only list-and-curriculum repositories), now stewarded by the independent OpenClaw Foundation. At OpenAI since February 2026 to work on agents, stating his mission as *"an agent even my mum can use."* Before that he bootstrapped PSPDFKit (now Nutrient), and became one of the most visible high-volume agentic practitioners in 2025 through relentless public documentation of his workflow. *(Source: his own About page, `steipete.me/about`, read 2026-09-17.)*
 
 **Doctrine.** Ceremony is waste. Model intuition beats process. Run many agents, commit atomically, refactor continuously, and let verification live in the loop rather than in your eyeballs.
 
@@ -99,7 +99,7 @@ Do this at least six times during the course, and monthly afterwards (M17).
 
 **Follow:** [Blog](https://karpathy.bearblog.dev/) · [YouTube](https://www.youtube.com/@AndrejKarpathy) · [X](https://x.com/karpathy) · [GitHub](https://github.com/karpathy)
 
-**Who:** Co-founder of OpenAI, former director of AI at Tesla, founder of Eureka Labs. Coined "vibe coding" (February 2025) and has spent the time since refining and partly disowning the popular reading of it. Author of the *Software 2.0* essay and the *Software Is Changing Again* / Software 3.0 framing. His teaching repos — micrograd, nanoGPT, llm.c, nanochat — are the best available route to understanding what is under the agent.
+**Who:** Founding member of OpenAI, former director of AI at Tesla, founder of Eureka Labs. Coined "vibe coding" (February 2025) and has spent the time since refining and partly disowning the popular reading of it — a year later, on 2026-02-04, he proposed **"agentic engineering"** as the name for the professional version: *agentic* because you mostly are not writing the code yourself, *engineering* because doing it well is a learnable skill with its own depth. *(Career from `karpathy.ai`; the post is `x.com/karpathy/status/2019137879310836075`, date confirmed 2026-09-17, wording as widely quoted in secondary coverage.)* Author of the *Software 2.0* essay and the *Software Is Changing Again* / Software 3.0 framing. His teaching repos — micrograd, nanoGPT, llm.c, nanochat — are the best available route to understanding what is under the agent.
 
 **Doctrine.** Autonomy is a slider, not a switch. Set it by how well the task can be verified. Remove yourself as the bottleneck where verification is objective; stay in the loop where it is not.
 
@@ -164,7 +164,7 @@ including the current one.
 
 **Follow:** [Blog](https://www.humanlayer.dev/blog) · [X](https://x.com/dexhorthy) · [YouTube](https://www.youtube.com/@humanlayerdev) · [GitHub](https://github.com/humanlayer)
 
-**Who:** Founder of HumanLayer; author of the 12-Factor Agents framework and *Advanced Context Engineering for Coding Agents* (ACE-FCA). The most rigorous published methodology in the field, with the most specific outcome claims.
+**Who:** Co-founder and CEO of HumanLayer; author of the 12-Factor Agents framework and *Advanced Context Engineering for Coding Agents* (ACE-FCA). 12-Factor Agents (repository created 2025-03-30) argued that "everything is context engineering" about two months before the term became popular — by his own account in factor 3 of that repository; others were using the phrase too, so treat "coined" claims with care. The most rigorous published methodology in the field, with the most specific outcome claims.
 
 **Doctrine.** The context window is the only lever. Design the entire workflow around it. Review research and plans, not code.
 
@@ -258,7 +258,7 @@ including the current one.
 
 **Follow:** [Newsletter](https://registerspill.thorstenball.com/) · [Podcast (Raising an Agent)](https://ampcode.com/podcast) · [X](https://x.com/thorstenball) · [Site](https://thorstenball.com/)
 
-**Who:** Author of *Writing an Interpreter in Go*; worked on Amp at Sourcegraph. His *How to Build an Agent* is the single most valuable technical artifact in this dossier for a practitioner.
+**Who:** Co-founder and co-creator of Amp (previously at Sourcegraph and Zed); author of *Writing an Interpreter in Go*. *(Source: `thorstenball.com`, read 2026-09-17.)* His *How to Build an Agent* is the single most valuable technical artifact in this dossier for a practitioner.
 
 **Doctrine.** An agent is an LLM, a loop, and enough tokens. Under 400 lines. The mystique is the main obstacle to using them well.
 

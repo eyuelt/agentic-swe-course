@@ -20,9 +20,12 @@ A self-paced curriculum in agentic software engineering. This file tells you how
 
 ## Hard rules
 
-1. **Never put a product name, model version, price or benchmark score anywhere but `STATE-OF-PLAY-*.md`.**
-   The curriculum body names *capabilities* ("a harness with a plan mode"), not products. This single rule is what
-   makes the course refreshable in an afternoon, and it erodes one convenient reference at a time.
+1. **Products are examples only; every claim about one lives in `STATE-OF-PLAY-*.md`.** The curriculum body
+   teaches *capabilities* ("a harness with a plan mode"). It may name a product as an example gloss — "an agent
+   harness (e.g. Claude Code or OpenCode)" — but only a name listed in the registry in `STATE-OF-PLAY` §9.1, and
+   never a model version, price, benchmark score, feature claim or comparison. No lab may depend on a product. The
+   dossier and resource index are exempt. The linter's `products` check enforces this; it is what keeps the course
+   refreshable in an afternoon.
 2. **Run the linter before you finish.** `python3 tools/curriculum_lint.py all --ci` — zero errors, always.
 3. **Every factual claim carries a date and a source.** If you cannot verify something, mark it `?` in the
    verification column rather than asserting it. Never launder a plausible guess into an authoritative statement.

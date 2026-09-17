@@ -75,12 +75,15 @@ Python. `feedparser` for RSS/Atom; GitHub REST for repo releases and new repos; 
 curriculum-lint links      # verify every URL; report dead and redirected
 curriculum-lint staleness  # flag claims older than their volatility tier
 curriculum-lint graph      # validate prerequisites and cross-references
+curriculum-lint products   # product names in the body are registered examples only
 curriculum-lint all --ci   # non-zero exit on any error-level finding
 ```
 
 ### Checks
 
 **Links.** Extract every URL from all markdown. `HEAD`, falling back to `GET`. Report: `dead` (4xx/5xx), `moved` (3xx with a new location — propose the update inline), `slow`, `unverified` (marked `?` in `RESOURCES.md`). Update the `✓` column in place with `--fix`.
+
+**Products.** Read the example registry table (Name | Kind | Status) from the newest `STATE-OF-PLAY-*.md`. In the body files (`SYLLABUS.md`, `CURRICULUM.md`, `ASSESSMENT.md`, `README.md`), error on: a registered product named outside an `(e.g. …)` gloss; any name whose status is not `current`; and anything inside a gloss that looks like a proper name but is not registered. Conventions (file names, open standards) may appear anywhere. The dossier and resource index are exempt.
 
 **Staleness.** Parse volatility tags from `RESOURCES.md`. Thresholds: **F** → warn at 90 days, error at 180. **M** → warn at 365. **D** → never. Separately, error if `STATE-OF-PLAY-*.md`'s compile date is more than 180 days old, and warn at 90.
 
@@ -229,7 +232,7 @@ Findings go into the inbox at highest priority. A `contradicts` finding makes th
 
 | File | Tool | Status |
 |---|---|---|
-| `tools/curriculum_lint.py` | T2 | Working: links, staleness, graph, citations |
+| `tools/curriculum_lint.py` | T2 | Working: links, staleness, graph, citations, products |
 | `tools/feedwatch.py` | T1 | Working: fetch + diff + report. Classification is stubbed with a documented prompt |
 | `tools/feeds.yaml` | T1 | Source list for every dossier practitioner |
 

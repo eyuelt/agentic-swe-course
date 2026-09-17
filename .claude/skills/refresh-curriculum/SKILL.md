@@ -73,7 +73,8 @@ actually changed, as opposed to what was announced. Do not overwrite the old one
 
 For everything new since the last refresh: **a new product, or a new capability category?**
 
-- **New product** → `STATE-OF-PLAY` only. Almost everything is this.
+- **New product** → `STATE-OF-PLAY` only. Almost everything is this. If a product died or was renamed, mark it
+  `retired` in the example registry (§9.1) and fix every body line `curriculum_lint.py products` then flags.
 - **New category** → a capability that did not exist before and changes what a practitioner must know. This needs
   curriculum surgery, which means the owner decides. Genuine new categories have appeared roughly every four
   months (context isolation via subagents, deterministic hooks, autonomous loops, agent-driven CI, scheduled

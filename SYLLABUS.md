@@ -97,8 +97,8 @@ The course uses a repeatable **Practitioner Teardown** protocol (`PRACTITIONER-D
 ### 4.5 Build one agent, early
 Module 2 has you build a working coding agent from scratch. This is not a detour into agent-system design for its own sake — it is the fastest known cure for magical thinking. Once you have written the loop, "the agent forgot" and "the agent hallucinated a file" stop being mysteries and become debuggable context problems.
 
-### 4.6 Tools are quarantined
-Specific tools, models, prices and version numbers live in exactly one file: `STATE-OF-PLAY-2026-09.md`. The curriculum body refers to *capabilities* ("an agent harness with a plan mode", "a context-isolated subagent") rather than product names wherever possible. This is deliberate: it is what lets a successor maintainer refresh the course in an afternoon instead of a month.
+### 4.6 Products are examples, never foundations
+The course teaches *capabilities* ("an agent harness with a plan mode", "a context-isolated subagent"), and names products only as examples so you know what is meant — "an agent harness (e.g. Claude Code or OpenCode)". Nothing in a module or lab depends on a particular product. Every *claim* about a product — what it can do, which version, what it costs, how it scores — lives in exactly one file, `STATE-OF-PLAY-2026-09.md`, which also lists every product the course is allowed to name. This is deliberate: it is what lets a successor maintainer refresh the course in an afternoon instead of a month.
 
 ## 5. Structure
 
@@ -159,7 +159,7 @@ Rubrics use four levels — **Novice / Working / Proficient / Expert** — with 
 
 Required: professional software engineering experience (3+ years or equivalent); comfort in a terminal; git, including worktrees or willingness to learn them; one language you know well enough to review code in fluently; a real codebase you own or maintain.
 
-Required access: at least one agentic coding harness with a paid tier (parallelism labs need enough quota to run 3+ concurrent agents); a machine or container you are willing to let an agent modify; a GitHub account.
+Required access: at least one agentic coding harness (e.g. Claude Code, Codex CLI or Cursor) with a paid tier (parallelism labs need enough quota to run 3+ concurrent agents); a machine or container you are willing to let an agent modify; a GitHub account.
 
 Not required: ML background, prior agent use, prior prompt-engineering study.
 

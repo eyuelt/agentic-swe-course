@@ -2,7 +2,7 @@
 
 **Compiled 2026-09-17 · THIS IS THE VOLATILE FILE · Refresh quarterly**
 
-> **Purpose.** Every fact in this course that has a short half-life lives here and nowhere else. The rest of the curriculum refers to *capabilities* ("a harness with a plan mode", "a context-isolated subagent") rather than product names, so that refreshing this one file refreshes the whole course.
+> **Purpose.** Every fact in this course that has a short half-life lives here and nowhere else. The rest of the curriculum teaches *capabilities* ("a harness with a plan mode", "a context-isolated subagent") and names products only as examples drawn from the registry in §9.1, so that refreshing this one file — plus whatever the linter then flags — refreshes the whole course.
 >
 > **If you are reading this after ~2027-03, treat every specific claim below as unreliable.** The principles in `CURRICULUM.md` are designed to survive; the contents of this file are not. `MAINTENANCE.md` §4 has the refresh procedure.
 
@@ -96,7 +96,41 @@ Each claim is stamped with a confidence level:
 
 ## 9. Named tools mentioned in the course
 
-Listed here so the body of the curriculum stays tool-agnostic. Presence is not endorsement; absence is not judgment.
+Listed here so that product knowledge stays in one place. Presence is not endorsement; absence is not judgment.
+
+### 9.1 Example registry — read by the linter
+
+The body of the course (`SYLLABUS.md`, `CURRICULUM.md`, `ASSESSMENT.md`, `README.md`) may name a product **only as an
+example**, written as a gloss — *"an agent harness (e.g. Claude Code or OpenCode)"* — and only if the name is in this
+table. `curriculum_lint.py products` enforces it. When a product dies or is renamed, change its status to
+`retired`: the linter then reports every place the body still mentions it, which is what keeps a refresh to this one
+file plus a list of flagged lines. *Conventions* (file names and open standards) may appear anywhere in the body.
+
+| Name | Kind | Status |
+|---|---|---|
+| Claude Code | product | current |
+| Codex CLI | product | current |
+| Gemini CLI | product | current |
+| OpenCode | product | current |
+| Amp | product | current |
+| Aider | product | current |
+| Cursor | product | current |
+| Windsurf | product | current |
+| GitHub Copilot | product | current |
+| Devin | product | current |
+| Jules | product | current |
+| OpenClaw | product | current |
+| GitHub Spec Kit | product | current |
+| Kiro | product | current |
+| LangSmith | product | current |
+| Braintrust | product | current |
+| Langfuse | product | current |
+| CLAUDE.md | convention | current |
+| AGENTS.md | convention | current |
+| MCP | convention | current |
+
+### 9.2 The wider landscape
+
 
 - **Terminal agents:** Claude Code, Codex CLI, Gemini CLI, Amp, OpenCode, Aider, Goose, and others
 - **IDE-integrated:** Cursor, Windsurf, Zed, GitHub Copilot agent mode, JetBrains Junie
@@ -119,4 +153,5 @@ When refreshing this file (quarterly, per `MAINTENANCE.md`):
 - [ ] Search for new CVEs and incidents in agentic coding; update §8 with at least one current example
 - [ ] Check whether the AGENTS.md / CLAUDE.md / skills convergence has changed; update §4
 - [ ] Ask: has a new *category* appeared, or only new products? A new category means `CURRICULUM.md` needs editing. New products mean only this file does.
+- [ ] Update the example registry in §9.1: mark dead or renamed products `retired`, add new ones, then run `curriculum_lint.py products` and fix every line it flags
 - [ ] Update the compile date and the title of this file

@@ -155,7 +155,7 @@ Everything else is refinement. Note what this exposes:
 
 **Tool design is the agent's API to reality.** Tools you will implement: `read_file`, `list_files`, `edit_file` (string replacement — note why replacement beats "rewrite the file"), `bash`, `grep`. Design questions that matter more than they look: what does the tool return on error? How verbose is success? A tool whose output is 8,000 tokens of build log is a context bomb; a tool that silently truncates is a correctness bomb.
 
-**The harness is everything the loop is not.** Permission systems, context compaction, subagent spawning, memory files, hooks, planning modes, session persistence. Once you have the bare loop, every commercial harness reads as a set of answers to: *what do we put in context, when do we stop, what are we allowed to do, and who checks?*
+**The harness is everything the loop is not.** Permission systems, context compaction, subagent spawning, memory files, hooks, planning modes, session persistence. Once you have the bare loop, every commercial harness (e.g. Claude Code, Codex CLI, OpenCode or Cursor) reads as a set of answers to: *what do we put in context, when do we stop, what are we allowed to do, and who checks?*
 
 **Why scaffolding can beat models.** Public benchmark results vary by double digits between harnesses running the *same* base model. When you read "model X scores Y on SWE-bench Verified", the harness is a co-author of that number. This is the first of several reasons benchmarks will not tell you what you need (M14).
 
@@ -261,7 +261,7 @@ These are not in conflict. They are the two halves of one skill: **invest in the
 
 > **First correction: steer. Second correction on the same issue: stop, discard the context, rewrite the brief.**
 
-**Write rules, not corrections.** When the agent gets a *convention* wrong, the fix does not belong in the chat. It belongs in the memory file or a skill, once, so it never recurs (M6, M9).
+**Write rules, not corrections.** When the agent gets a *convention* wrong, the fix does not belong in the chat. It belongs in the memory file (e.g. CLAUDE.md or AGENTS.md) or a skill, once, so it never recurs (M6, M9).
 
 **The model is not the enemy.** Steinberger: *"Fighting the model is often a waste of time and tokens."* If three attempts fail, the brief, the context, or the codebase is the problem — not the model's willingness.
 
@@ -719,7 +719,7 @@ The leverage argument is the whole argument: errors compound downstream. A bad l
 
 **When it fails, and why.** Horthy documents a failure — removing a Hadoop dependency — where research did not adequately map nested dependencies. The method does not rescue insufficient research; it *amplifies* it. And it is a poor fit for genuinely exploratory work, where you do not yet know what you want and the point is to find out by building.
 
-**Spec-driven development.** The adjacent 2026 movement treats the specification as the durable source of truth and the code as a generated artifact, with toolkits that scaffold a spec → plan → tasks → implementation pipeline. Sean Grove's framing is that the spec, not the code, becomes the primary artifact. Evaluate it with a clear eye: it genuinely helps on well-understood, repeatable work with stable requirements, and it becomes expensive ceremony on exploratory work. The *durable* insight is the same one as above — write intent down in a reviewable place before generating — and that insight survives whichever toolkit wins.
+**Spec-driven development.** The adjacent 2026 movement treats the specification as the durable source of truth and the code as a generated artifact, with toolkits (e.g. GitHub Spec Kit or Kiro) that scaffold a spec → plan → tasks → implementation pipeline. Sean Grove's framing is that the spec, not the code, becomes the primary artifact. Evaluate it with a clear eye: it genuinely helps on well-understood, repeatable work with stable requirements, and it becomes expensive ceremony on exploratory work. The *durable* insight is the same one as above — write intent down in a reviewable place before generating — and that insight survives whichever toolkit wins.
 
 **Plans as repository assets.** Keep plan and research documents in the repo (`docs/plans/`, or alongside the change). They are the highest-value context for the *next* agent touching that subsystem, and they are the answer to "why did we do it this way" long after everyone has forgotten.
 
@@ -1262,7 +1262,7 @@ The verifiable, metric-driven half. They remain weak on nuance, on what you actu
 
 ### Why this module exists
 
-Once loops run without you, *where* they run and *how you supervise them* becomes the practical question. The practice has moved to agents in the cloud, agents in CI, agents opening PRs, and supervision from a phone. Cherny describes starting sessions on mobile and continuing on desktop, moving sessions between surfaces, and running scheduled cloud jobs that survive closing the laptop.
+Once loops run without you, *where* they run and *how you supervise them* becomes the practical question. The practice has moved to agents in the cloud (e.g. Devin, Jules, or the cloud sessions of the major harnesses), agents in CI, agents opening PRs, and supervision from a phone. Cherny describes starting sessions on mobile and continuing on desktop, moving sessions between surfaces, and running scheduled cloud jobs that survive closing the laptop.
 
 This module is short because the concepts are inherited from M10 and M11. What is new is a genuine failure mode: **the review queue.** Async agents generate work asynchronously; your review capacity does not scale. A dozen agent PRs waiting on Monday morning is not leverage.
 

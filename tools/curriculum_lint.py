@@ -7,6 +7,7 @@ Checks that the curriculum has not rotted:
   links      every URL is reachable; reports dead and moved
   staleness  volatile claims are past their half-life
   graph      module prerequisites, citations and cross-references resolve
+  products   product names in the course body are registered examples only
   all        run everything
 
 Usage:
@@ -38,6 +39,11 @@ STATE_OF_PLAY_WARN, STATE_OF_PLAY_ERROR = 90, 180
 # Hard ordering constraints from CURRICULUM.md Appendix A.
 # (earlier, later) — `earlier` must be a prerequisite of `later`, directly or transitively.
 HARD_ORDER = [("M13", "M11"), ("M4", "M5"), ("M4", "M10"), ("M2", "M15")]
+
+# Files that make up "the body of the course" for the product-name rule (MAINTENANCE.md I4).
+# The dossier, resource index, state-of-play and maintainer docs are exempt: they describe
+# people, sources and tools, so they have to name things.
+BODY_FILES = ["SYLLABUS.md", "CURRICULUM.md", "ASSESSMENT.md", "README.md"]
 
 USER_AGENT = "curriculum-lint/1.0 (+curriculum maintenance; contact repo owner)"
 
@@ -304,12 +310,83 @@ def check_graph(root: Path) -> list[Finding]:
     return findings
 
 
+# ------------------------------------------------------------- products
+
+GLOSS = re.compile(r"\(e\.g\.[^()]*\)")
+
+
+def load_registry(root: Path) -> tuple[dict[str, tuple[str, str]], str]:
+    """Parse the example registry table out of the newest STATE-OF-PLAY file.
+    Returns {name: (kind, status)} and the file's name."""
+    files = sorted(root.glob("STATE-OF-PLAY-*.md"))
+    if not files:
+        return {}, ""
+    registry: dict[str, tuple[str, str]] = {}
+    in_table = False
+    for line in files[-1].read_text(encoding="utf-8").splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if [c.lower() for c in cells] == ["name", "kind", "status"]:
+            in_table = True
+            continue
+        if in_table:
+            if not line.startswith("|"):
+                in_table = False
+            elif len(cells) == 3 and not set(cells[0]) <= {"-", ":"}:
+                registry[cells[0]] = (cells[1].lower(), cells[2].lower())
+    return registry, files[-1].name
+
+
+def check_products(root: Path) -> list[Finding]:
+    """I4: the body names products only as registered examples inside an `(e.g. …)` gloss."""
+    registry, sop = load_registry(root)
+    if not registry:
+        return [Finding("error", "products", sop or "STATE-OF-PLAY-*.md",
+                        "no example registry table (Name | Kind | Status) found")]
+    findings: list[Finding] = []
+    # Longest first, so "GitHub Copilot" is matched before a shorter name inside it.
+    names = sorted(registry, key=len, reverse=True)
+    pattern = re.compile(r"(?<![\w.-])(" + "|".join(re.escape(n) for n in names) + r")(?![\w-])")
+    used: set[str] = set()
+
+    for fname in BODY_FILES:
+        path = root / fname
+        if not path.exists():
+            continue
+        for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            where = f"{fname}:{lineno}"
+            glosses = [m.span() for m in GLOSS.finditer(line)]
+            for m in pattern.finditer(line):
+                name = m.group(1)
+                kind, status = registry[name]
+                used.add(name)
+                if status != "current":
+                    findings.append(Finding("error", "products", where,
+                                            f"'{name}' is marked {status} in {sop} — replace or remove it"))
+                elif kind == "product" and not any(a <= m.start() < b for a, b in glosses):
+                    findings.append(Finding("error", "products", where,
+                                            f"'{name}' is named outside an (e.g. …) gloss — the body may use "
+                                            f"products as examples only; claims about them belong in {sop}"))
+            # Anything inside a gloss that looks like a proper name must be registered.
+            for a, b in glosses:
+                inner = pattern.sub(" ", line[a + 5:b - 1])
+                for item in re.split(r",|\bor\b|\band\b|/", inner):
+                    item = item.strip(" .;:*`_")
+                    if item and (item[0].isupper() or re.search(r"[a-z][A-Z]|\.\w", item)):
+                        findings.append(Finding("error", "products", where,
+                                                f"'{item}' appears in an example gloss but is not in the "
+                                                f"registry in {sop} — register it or reword"))
+
+    findings.append(Finding("info", "products", sop,
+                            f"{len(registry)} registered names, {len(used)} used as examples in the body"))
+    return findings
+
+
 # ----------------------------------------------------------------- main
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("check", choices=["links", "staleness", "graph", "all"])
+    ap.add_argument("check", choices=["links", "staleness", "graph", "products", "all"])
     ap.add_argument("--dir", default=str(Path(__file__).resolve().parent.parent))
     ap.add_argument("--ci", action="store_true", help="exit non-zero on any error")
     ap.add_argument("--timeout", type=int, default=15)
@@ -323,6 +400,9 @@ def main() -> int:
     if args.check in ("graph", "all"):
         print("· graph", file=sys.stderr)
         findings += check_graph(root)
+    if args.check in ("products", "all"):
+        print("· products", file=sys.stderr)
+        findings += check_products(root)
     if args.check in ("staleness", "all"):
         print("· staleness", file=sys.stderr)
         findings += check_staleness(root, today)

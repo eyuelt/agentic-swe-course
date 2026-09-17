@@ -41,12 +41,12 @@ Agents made code cheap to write. They did not make it cheap to ship. Verificatio
 - **It starts with measurement.** M1 exists because METR found experienced developers were 19% slower with AI while feeling 20% faster — and because the follow-up research is now structurally unable to answer the question for you.
 - **You build an agent in Module 2.** Not as theory. As the fastest available cure for magical thinking about everything downstream.
 - **Every module ends in retrieval practice.** 89 ungraded self-checks across the 17 modules — answer from memory, then reveal. Nothing is recorded anywhere; the point is the effort of recalling.
-- **It is maintainable.** Volatile facts are quarantined in one file, the module graph is machine-checkable, and `MAINTENANCE.md` tells a successor exactly what may and may not be changed.
+- **It is maintainable.** Volatile facts are quarantined in one file, products appear in the course only as registered examples, the module graph is machine-checkable, and `MAINTENANCE.md` tells a successor exactly what may and may not be changed.
 
 ## Verify this course before trusting it
 
 ```bash
-python3 tools/curriculum_lint.py all          # links, staleness, dependency graph, citations
+python3 tools/curriculum_lint.py all          # links, staleness, dependency graph, citations, product names
 python3 tools/feedwatch.py fetch              # poll every practitioner source
 python3 tools/feedwatch.py report --since 90d # draft a triage inbox
 ```

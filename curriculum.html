@@ -1162,14 +1162,28 @@ function setTheme(v){
    app's private folder in the reader's own Drive, so it follows them across devices.
    Setup (once, by the site owner): create an OAuth 2.0 "Web application" client in Google Cloud, add
    this site's origin under "Authorized JavaScript origins", and paste the client ID below. The ID is
-   public by design. With no ID the option stays hidden. The access token lives in memory only. */
+   public by design. With no ID the option stays hidden.
+   The access token is kept in localStorage until it expires (about an hour) so a reload does not drop
+   the connection. It is scoped to drive.appdata, so it can open this site's own progress file and
+   nothing else in the reader's Drive. */
 const GOOGLE_CLIENT_ID = "573833575191-501c7pk90kgcpjbv4c2rg5m5tva7aqlv.apps.googleusercontent.com";
 const DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.appdata";
 const DRIVE_FILE = "shipping-with-agents-progress.json";
 const DRIVE_API = "https://www.googleapis.com/drive/v3/files", DRIVE_UP = "https://www.googleapis.com/upload/drive/v3/files";
-const drive = {status:"off", token:null, fileId:null, at:null, err:"", timer:null, client:null};
+const drive = {status:"off", token:null, fileId:null, at:null, err:"", timer:null, client:null, expired:false};
 
 const driveLinked = () => { try{ return localStorage.getItem("ase.drive") === "1"; }catch(e){ return false; } };
+function driveToken(tok, ttl){   // remember (or, with no arguments, forget) the sign-in for its lifetime
+  drive.token = tok || null;
+  try{ if(tok) localStorage.setItem("ase.driveTok", JSON.stringify({t:tok, exp:Date.now() + (ttl - 60) * 1000}));
+       else localStorage.removeItem("ase.driveTok"); }catch(e){}
+}
+function driveRestore(){   // returns "ok", "expired" or "none"
+  try{ const v = JSON.parse(localStorage.getItem("ase.driveTok") || "null");
+       if(!v) return "none";
+       if(v.exp > Date.now()){ drive.token = v.t; return "ok"; }
+       localStorage.removeItem("ase.driveTok"); return "expired"; }catch(e){ return "none"; }
+}
 function setDrive(status, err){
   drive.status = status; drive.err = err || "";
   syncDrive = status === "on" ? "Google Drive synced " + drive.at.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"})
@@ -1192,7 +1206,8 @@ async function driveConnect(){
   if(!drive.client) drive.client = google.accounts.oauth2.initTokenClient({
     client_id: GOOGLE_CLIENT_ID, scope: DRIVE_SCOPE,
     callback: r => { if(r.error) return setDrive("error", r.error);
-      drive.token = r.access_token; try{ localStorage.setItem("ase.drive", "1"); }catch(e){} driveSync(); },
+      driveToken(r.access_token, r.expires_in || 3600); drive.expired = false;
+      try{ localStorage.setItem("ase.drive", "1"); }catch(e){} driveSync(); },
     error_callback: e => setDrive(driveLinked() ? "paused" : "off",
       e && e.type === "popup_failed_to_open" ? "The sign-in window was blocked. Allow pop-ups and try again." : "")
   });
@@ -1201,7 +1216,7 @@ async function driveConnect(){
 async function gfetch(url, opts){
   opts = opts || {};
   const r = await fetch(url, Object.assign({}, opts, {headers: Object.assign({Authorization:"Bearer " + drive.token}, opts.headers)}));
-  if(r.status === 401){ drive.token = null; setDrive("paused"); throw new Error("expired"); }
+  if(r.status === 401){ driveToken(); drive.expired = true; setDrive("paused"); throw new Error("expired"); }
   if(!r.ok) throw new Error("Drive returned " + r.status);
   return r;
 }
@@ -1248,7 +1263,7 @@ function driveQueue(){   // called on every progress change
 function driveDisconnect(){
   try{ if(drive.token && window.google) google.accounts.oauth2.revoke(drive.token, () => {}); }catch(e){}
   try{ localStorage.removeItem("ase.drive"); }catch(e){}
-  drive.token = null; drive.fileId = null; setDrive("off");
+  driveToken(); drive.fileId = null; setDrive("off");
 }
 
 /* ---------- settings ---------- */
@@ -1260,8 +1275,10 @@ function renderSettings(){
         '<div class="acts"><button class="btn" data-drive="sync">Sync now</button>'+
         '<button class="btn" data-drive="disconnect">Disconnect</button></div>'
     : st === "connecting" ? '<p><span class="dot"></span>Waiting for Google sign-in…</p>'
-    : st === "paused" ? '<p><span class="dot warn"></span>Google Drive sync is paused — sign-in lasts about an hour. '+
-        'Your progress is still saved in this browser.</p>'+
+    : st === "paused" ? '<p><span class="dot warn"></span>Google Drive sync is paused. '+
+        (drive.expired ? 'Your Google sign-in lasts about an hour and has run out.'
+                       : 'It needs one click to reconnect.')+
+        ' Your progress is still saved in this browser, and reconnecting merges it with the copy in Drive.</p>'+
         '<div class="acts"><button class="btn pri" data-drive="connect">Reconnect</button>'+
         '<button class="btn" data-drive="disconnect">Disconnect</button></div>'
     : st === "unavailable" ? '<p><span class="dot warn"></span>Google sign-in could not load here. Progress stays in this browser.</p>'
@@ -1297,7 +1314,11 @@ function initSettings(){
     if(!e.target.closest(".settings")) close();
   });
   document.addEventListener("keydown", e => { if(e.key === "Escape" && !panel.hidden){ close(); btn.focus(); } });
-  if(GOOGLE_CLIENT_ID && driveLinked()) setDrive("paused");
+  if(GOOGLE_CLIENT_ID && driveLinked()){
+    const had = driveRestore();
+    if(had === "ok") driveSync();   // still signed in from earlier: carry on without asking
+    else { drive.expired = had === "expired"; setDrive("paused"); }
+  }
 }
 
 /* ---------- boot ---------- */

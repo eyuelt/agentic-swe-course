@@ -734,12 +734,12 @@ const $ = (s,r)=> (r||document).querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* ---------- progress state ---------- */
-let state = {mods:{}, labs:{}, res:{}};
+let state = {mods:{}, labs:{}, res:{}, ts:{}};   // ts: last-changed time per item, keyed "mods:M1", "res:R-01"…
 let saveTo = null, dbDoc = null;
 
 function loadLocal(){
   try{ const r = localStorage.getItem("ase.progress");
-       if(r) state = Object.assign({mods:{},labs:{},res:{}}, JSON.parse(r)); }catch(e){}
+       if(r) state = Object.assign({mods:{},labs:{},res:{},ts:{}}, JSON.parse(r)); }catch(e){}
 }
 function persist(){
   try{ localStorage.setItem("ase.progress", JSON.stringify(state)); }catch(e){}
@@ -747,7 +747,7 @@ function persist(){
   if(!dbDoc) return;
   clearTimeout(saveTo);
   saveTo = setTimeout(()=>{
-    dbDoc.set({mods:state.mods, labs:state.labs, res:state.res, at:new Date().toISOString()})
+    dbDoc.set({mods:state.mods, labs:state.labs, res:state.res, ts:state.ts, at:new Date().toISOString()})
       .then(()=> setSync("saved"))
       .catch(()=> setSync("local only"));
   }, 700);
@@ -767,7 +767,7 @@ async function initStore(){
     const snap = await dbDoc.get();
     if(snap.exists){
       const d = snap.data() || {};
-      state = {mods: d.mods || {}, labs: d.labs || {}, res: d.res || {}};
+      state = {mods: d.mods || {}, labs: d.labs || {}, res: d.res || {}, ts: d.ts || {}};
       renderAll();
     }
     setSync("synced to your account");
@@ -777,9 +777,10 @@ async function initStore(){
 const modDone = id => !!state.mods[id];
 const labDone = id => !!state.labs[id];
 const resStat = id => state.res[id] || "";
-function setRes(id, v){ if(v) state.res[id] = v; else delete state.res[id]; persist(); renderResources(); }
-function toggleMod(id){ state.mods[id] = !state.mods[id]; persist(); renderAll(); }
-function toggleLab(id){ state.labs[id] = !state.labs[id]; persist();
+const touch = (kind, id) => { state.ts[kind + ":" + id] = Date.now(); };   // un-marking counts as a change too
+function setRes(id, v){ if(v) state.res[id] = v; else delete state.res[id]; touch("res", id); persist(); renderResources(); }
+function toggleMod(id){ state.mods[id] = !state.mods[id]; touch("mods", id); persist(); renderAll(); }
+function toggleLab(id){ state.labs[id] = !state.labs[id]; touch("labs", id); persist();
   renderModule(current); renderHeader(); renderOverview(); }
 
 /* ---------- header ---------- */
@@ -1185,12 +1186,17 @@ function driveRestore(){   // returns "ok", "expired" or "none"
        localStorage.removeItem("ase.driveTok"); return "expired"; }catch(e){ return "none"; }
 }
 function setDrive(status, err){
+  const same = status === "on" && drive.status === "on";
   drive.status = status; drive.err = err || "";
-  syncDrive = status === "on" ? "Google Drive synced " + drive.at.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"})
+  syncDrive = status === "on" ? "Google Drive synced " + driveTime()
     : status === "paused" ? 'Google Drive paused — <button data-drive="connect">reconnect</button>'
     : status === "error" ? "Google Drive sync failed" : "";
-  paintSync(); if(!$("#settingsPanel").hidden) renderSettings();
+  paintSync();
+  if($("#settingsPanel").hidden) return;
+  const at = $("#driveAt");
+  if(same && at) at.textContent = driveTime(); else renderSettings();
 }
+const driveTime = () => drive.at.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit", second:"2-digit"});
 function loadGis(){
   return new Promise((ok, no) => {
     if(window.google && google.accounts && google.accounts.oauth2) return ok();
@@ -1220,16 +1226,45 @@ async function gfetch(url, opts){
   if(!r.ok) throw new Error("Drive returned " + r.status);
   return r;
 }
-function mergeState(remote){   // on connect, never lose a tick from either side
-  for(const k of ["mods","labs"]) for(const id in (remote[k] || {})) if(remote[k][id]) state[k][id] = true;
-  const rank = {p:1, r:2};
-  for(const id in (remote.res || {})) if((rank[remote.res[id]] || 0) > (rank[state.res[id]] || 0)) state.res[id] = remote.res[id];
+/* Two devices, one file. Every item carries the time it was last changed, and the newest change wins —
+   including un-marking. Items with no recorded time (progress from before this existed) fall back to
+   "keep whichever side is further along", so nothing is lost the first time two copies meet. */
+const itemVal = (st, kind, id) => kind === "res" ? ((st.res || {})[id] || "") : !!(st[kind] || {})[id];
+function itemKeys(st){
+  const keys = new Set(Object.keys(st.ts || {}));
+  for(const kind of ["mods","labs","res"]) for(const id in (st[kind] || {})) keys.add(kind + ":" + id);
+  return keys;
+}
+function mergeState(remote){   // folds `remote` into `state`; returns true if `state` changed
+  const further = {"":0, p:1, r:2, "false":0, "true":1};
+  let changed = false;
+  for(const key of new Set([...itemKeys(state), ...itemKeys(remote)])){
+    const i = key.indexOf(":"), kind = key.slice(0, i), id = key.slice(i + 1);
+    if(!state[kind]) continue;
+    const lt = state.ts[key] || 0, rt = (remote.ts || {})[key] || 0;
+    const lv = itemVal(state, kind, id), rv = itemVal(remote, kind, id);
+    const takeRemote = rt > lt || (rt === lt && further[String(rv)] > further[String(lv)]);
+    if(!takeRemote) continue;
+    if(rt) state.ts[key] = rt;
+    if(lv === rv) continue;
+    if(kind === "res"){ if(rv) state.res[id] = rv; else delete state.res[id]; } else state[kind][id] = rv;
+    changed = true;
+  }
+  return changed;
+}
+function sameAsRemote(remote){
+  for(const key of new Set([...itemKeys(state), ...itemKeys(remote)])){
+    const i = key.indexOf(":"), kind = key.slice(0, i), id = key.slice(i + 1);
+    if(itemVal(state, kind, id) !== itemVal(remote, kind, id)) return false;
+    if((state.ts[key] || 0) !== ((remote.ts || {})[key] || 0)) return false;
+  }
+  return true;
 }
 async function drivePush(){
-  const body = JSON.stringify({mods:state.mods, labs:state.labs, res:state.res, at:new Date().toISOString()});
+  const body = JSON.stringify({mods:state.mods, labs:state.labs, res:state.res, ts:state.ts, at:new Date().toISOString()});
   if(drive.fileId){
     await gfetch(DRIVE_UP + "/" + drive.fileId + "?uploadType=media",
-      {method:"PATCH", headers:{"Content-Type":"application/json"}, body});
+      {method:"PATCH", headers:{"Content-Type":"application/json"}, body, keepalive:true});
   }else{
     const sep = "swa" + Date.now(), meta = JSON.stringify({name:DRIVE_FILE, parents:["appDataFolder"]});
     const r = await gfetch(DRIVE_UP + "?uploadType=multipart&fields=id", {method:"POST",
@@ -1237,29 +1272,37 @@ async function drivePush(){
       body:"--"+sep+"\r\nContent-Type: application/json\r\n\r\n"+meta+"\r\n--"+sep+"\r\nContent-Type: application/json\r\n\r\n"+body+"\r\n--"+sep+"--"});
     drive.fileId = (await r.json()).id;
   }
-  drive.at = new Date();
 }
-async function driveSync(){   // pull, merge, push back
+async function driveSync(){   // always pull and merge before writing, so one device never overwrites another
+  if(!drive.token) return;
+  if(drive.busy){ drive.again = true; return; }
+  drive.busy = true; clearTimeout(drive.timer); drive.timer = null;
   try{
     if(!drive.fileId){
       const r = await gfetch(DRIVE_API + "?spaces=appDataFolder&fields=files(id)&q=" + encodeURIComponent("name='" + DRIVE_FILE + "'"));
       const f = (await r.json()).files || []; if(f.length) drive.fileId = f[0].id;
     }
-    if(drive.fileId){
-      const remote = await (await gfetch(DRIVE_API + "/" + drive.fileId + "?alt=media")).json().catch(() => null);
-      if(remote) mergeState(remote);
-    }
-    await drivePush();
-    try{ localStorage.setItem("ase.progress", JSON.stringify(state)); }catch(e){}
-    renderAll(); setDrive("on");
+    let remote = null, changed = false;
+    if(drive.fileId) remote = await (await gfetch(DRIVE_API + "/" + drive.fileId + "?alt=media")).json().catch(() => null);
+    if(remote) changed = mergeState(remote);
+    if(!remote || !sameAsRemote(remote)) await drivePush();
+    if(changed){ try{ localStorage.setItem("ase.progress", JSON.stringify(state)); }catch(e){} renderAll(); }
+    drive.at = new Date(); setDrive("on");
   }catch(e){ if(drive.status !== "paused") setDrive("error", e.message); }
+  drive.busy = false;
+  if(drive.again){ drive.again = false; driveSync(); }
 }
 function driveQueue(){   // called on every progress change
   if(!drive.token) return;
   clearTimeout(drive.timer);
-  drive.timer = setTimeout(() => drivePush().then(() => setDrive("on"))
-    .catch(e => { if(drive.status !== "paused") setDrive("error", e.message); }), 1200);
+  drive.timer = setTimeout(driveSync, 1200);
 }
+// Pick up the other device's changes without a reload: check every 20 seconds while this tab is visible
+// and whenever it comes back into view; send anything still waiting when it is hidden.
+setInterval(() => { if(document.visibilityState === "visible") driveSync(); }, 20000);
+document.addEventListener("visibilitychange", () => {
+  if(document.visibilityState === "visible" || drive.timer) driveSync();
+});
 function driveDisconnect(){
   try{ if(drive.token && window.google) google.accounts.oauth2.revoke(drive.token, () => {}); }catch(e){}
   try{ localStorage.removeItem("ase.drive"); }catch(e){}
@@ -1270,8 +1313,8 @@ function driveDisconnect(){
 function renderSettings(){
   const pref = themePref(), st = drive.status;
   const driveUi = !GOOGLE_CLIENT_ID ? '' :
-    st === "on" ? '<p><span class="dot on"></span>Syncing to your Google Drive. Last synced '+
-        drive.at.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"})+'.</p>'+
+    st === "on" ? '<p><span class="dot on"></span>Syncing to your Google Drive. Last synced <span id="driveAt">'+
+        driveTime()+'</span>.</p>'+
         '<div class="acts"><button class="btn" data-drive="sync">Sync now</button>'+
         '<button class="btn" data-drive="disconnect">Disconnect</button></div>'
     : st === "connecting" ? '<p><span class="dot"></span>Waiting for Google sign-in…</p>'

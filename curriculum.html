@@ -66,7 +66,29 @@ nav.tabs button[aria-current="true"]{color:var(--ink);background:var(--sunk);fon
 .bar{height:5px;width:74px;background:var(--sunk);border-radius:0;overflow:hidden;display:flex}
 .bar i{display:block;background:var(--signal);height:100%}
 .theme{background:none;border:1px solid var(--line);color:var(--ink-3);cursor:pointer;
-  border-radius:3px;padding:4px 7px;font-family:var(--f-mono);font-size:11px}
+  border-radius:3px;padding:5px 6px;font-family:var(--f-mono);font-size:11px;display:flex;align-items:center}
+.theme:hover,.theme[aria-expanded="true"]{color:var(--ink);border-color:var(--ink-3)}
+.settings{position:relative;flex:none}
+.panel{position:absolute;right:0;top:calc(100% + 8px);z-index:30;width:min(330px,calc(100vw - 32px));
+  background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:14px;
+  box-shadow:0 10px 28px rgba(0,0,0,.2)}
+.panel h3{font-family:var(--f-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.11em;
+  color:var(--ink-3);margin:0 0 8px}
+.panel h3:not(:first-child){margin-top:15px;padding-top:14px;border-top:1px solid var(--line-2)}
+.panel p{font-size:13.5px;line-height:1.45;color:var(--ink-2);margin:0 0 10px}
+.panel .fine{font-size:12px;color:var(--ink-3);margin:10px 0 0}
+.panel .acts{display:flex;gap:8px;flex-wrap:wrap}
+.panel .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--ink-3);margin-right:6px;
+  vertical-align:1px}
+.panel .dot.on{background:var(--ok)}
+.panel .dot.warn{background:var(--gate)}
+.seg{display:flex;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.seg button{flex:1;font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;padding:6px 8px;border:0;
+  border-left:1px solid var(--line);background:none;color:var(--ink-3);cursor:pointer}
+.seg button:first-child{border-left:0}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--sunk);color:var(--ink);font-weight:700}
+.status button{font:inherit;color:var(--signal);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
 
 main{max-width:1220px;margin:0 auto;padding:0 16px;padding-block:26px 64px}
 .view[hidden]{display:none!important}
@@ -318,7 +340,7 @@ footer{max-width:1220px;margin:0 auto;padding:22px 16px 40px;border-top:1px soli
   .top-in{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px 12px;
     grid-template-areas:"brand brand theme" "tabs meter meter"}
   .brand{grid-area:brand;margin-right:0;flex-wrap:wrap}
-  .theme{grid-area:theme;justify-self:end}
+  .settings{grid-area:theme;justify-self:end}
   nav.tabs{grid-area:tabs;margin-left:-9px}
   .top .meter-mini{grid-area:meter;justify-self:end}
   body{font-size:15px}
@@ -331,7 +353,13 @@ footer{max-width:1220px;margin:0 auto;padding:22px 16px 40px;border-top:1px soli
   <div class="meter-mini" title="Modules complete">
     <div class="bar"><i id="mbar" style="width:0%"></i></div><span id="mtxt">0/17</span>
   </div>
-  <button class="theme" id="theme" aria-label="Toggle theme">◐</button>
+  <div class="settings">
+    <button class="theme" id="settingsBtn" aria-label="Settings" aria-haspopup="dialog" aria-expanded="false" aria-controls="settingsPanel">
+      <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <path d="M2 4h5M11 4h3M2 8h2M8 8h6M2 12h7M13 12h1"/><circle cx="9" cy="4" r="1.6"/><circle cx="6" cy="8" r="1.6"/><circle cx="11" cy="12" r="1.6"/></svg>
+    </button>
+    <div class="panel" id="settingsPanel" role="dialog" aria-label="Settings" hidden></div>
+  </div>
 </div></div>
 
 <main>
@@ -712,6 +740,7 @@ function loadLocal(){
 }
 function persist(){
   try{ localStorage.setItem("ase.progress", JSON.stringify(state)); }catch(e){}
+  driveQueue();
   if(!dbDoc) return;
   clearTimeout(saveTo);
   saveTo = setTimeout(()=>{
@@ -720,7 +749,10 @@ function persist(){
       .catch(()=> setSync("local only"));
   }, 700);
 }
-function setSync(t){ const e=$("#sync"); if(e) e.textContent = " · progress " + t; }
+let syncBase = "", syncDrive = "";
+function setSync(t){ syncBase = t; paintSync(); }
+function paintSync(){ const e=$("#sync"); if(!e) return;
+  e.innerHTML = " · progress " + esc(syncBase) + (syncDrive ? " · " + syncDrive : ""); }
 
 async function initStore(){
   try{
@@ -1115,17 +1147,154 @@ function renderMaintain(){
 }
 
 /* ---------- theme ---------- */
-function initTheme(){
-  let t = null; try{ t = localStorage.getItem("ase.theme"); }catch(e){}
-  if(t) document.documentElement.setAttribute("data-theme", t);
-  $("#theme").onclick = () => {
-    const cur = document.documentElement.getAttribute("data-theme");
-    const dark = cur ? cur === "dark"
-      : window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const next = dark ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", next);
-    try{ localStorage.setItem("ase.theme", next); }catch(e){}
+function themePref(){ try{ return localStorage.getItem("ase.theme") || "system"; }catch(e){ return "system"; } }
+function setTheme(v){
+  const root = document.documentElement;
+  if(v === "light" || v === "dark") root.setAttribute("data-theme", v); else root.removeAttribute("data-theme");
+  try{ if(v === "system") localStorage.removeItem("ase.theme"); else localStorage.setItem("ase.theme", v); }catch(e){}
+}
+
+/* ---------- google drive sync ----------
+   Optional. Progress always saves in this browser; connecting Google Drive also keeps a copy in the
+   app's private folder in the reader's own Drive, so it follows them across devices.
+   Setup (once, by the site owner): create an OAuth 2.0 "Web application" client in Google Cloud, add
+   this site's origin under "Authorized JavaScript origins", and paste the client ID below. The ID is
+   public by design. With no ID the option stays hidden. The access token lives in memory only. */
+const GOOGLE_CLIENT_ID = "";
+const DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.appdata";
+const DRIVE_FILE = "shipping-with-agents-progress.json";
+const DRIVE_API = "https://www.googleapis.com/drive/v3/files", DRIVE_UP = "https://www.googleapis.com/upload/drive/v3/files";
+const drive = {status:"off", token:null, fileId:null, at:null, err:"", timer:null, client:null};
+
+const driveLinked = () => { try{ return localStorage.getItem("ase.drive") === "1"; }catch(e){ return false; } };
+function setDrive(status, err){
+  drive.status = status; drive.err = err || "";
+  syncDrive = status === "on" ? "Google Drive synced " + drive.at.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"})
+    : status === "paused" ? 'Google Drive paused — <button data-drive="connect">reconnect</button>'
+    : status === "error" ? "Google Drive sync failed" : "";
+  paintSync(); if(!$("#settingsPanel").hidden) renderSettings();
+}
+function loadGis(){
+  return new Promise((ok, no) => {
+    if(window.google && google.accounts && google.accounts.oauth2) return ok();
+    const el = document.createElement("script");
+    el.src = "https://accounts.google.com/gsi/client"; el.async = true;
+    el.onload = () => ok(); el.onerror = () => no(new Error("blocked"));
+    document.head.appendChild(el);
+  });
+}
+async function driveConnect(){
+  setDrive("connecting");
+  try{ await loadGis(); }catch(e){ return setDrive("unavailable"); }
+  if(!drive.client) drive.client = google.accounts.oauth2.initTokenClient({
+    client_id: GOOGLE_CLIENT_ID, scope: DRIVE_SCOPE,
+    callback: r => { if(r.error) return setDrive("error", r.error);
+      drive.token = r.access_token; try{ localStorage.setItem("ase.drive", "1"); }catch(e){} driveSync(); },
+    error_callback: e => setDrive(driveLinked() ? "paused" : "off",
+      e && e.type === "popup_failed_to_open" ? "The sign-in window was blocked. Allow pop-ups and try again." : "")
+  });
+  drive.client.requestAccessToken(driveLinked() ? {prompt:""} : {});
+}
+async function gfetch(url, opts){
+  opts = opts || {};
+  const r = await fetch(url, Object.assign({}, opts, {headers: Object.assign({Authorization:"Bearer " + drive.token}, opts.headers)}));
+  if(r.status === 401){ drive.token = null; setDrive("paused"); throw new Error("expired"); }
+  if(!r.ok) throw new Error("Drive returned " + r.status);
+  return r;
+}
+function mergeState(remote){   // on connect, never lose a tick from either side
+  for(const k of ["mods","labs"]) for(const id in (remote[k] || {})) if(remote[k][id]) state[k][id] = true;
+  const rank = {p:1, r:2};
+  for(const id in (remote.res || {})) if((rank[remote.res[id]] || 0) > (rank[state.res[id]] || 0)) state.res[id] = remote.res[id];
+}
+async function drivePush(){
+  const body = JSON.stringify({mods:state.mods, labs:state.labs, res:state.res, at:new Date().toISOString()});
+  if(drive.fileId){
+    await gfetch(DRIVE_UP + "/" + drive.fileId + "?uploadType=media",
+      {method:"PATCH", headers:{"Content-Type":"application/json"}, body});
+  }else{
+    const sep = "swa" + Date.now(), meta = JSON.stringify({name:DRIVE_FILE, parents:["appDataFolder"]});
+    const r = await gfetch(DRIVE_UP + "?uploadType=multipart&fields=id", {method:"POST",
+      headers:{"Content-Type":"multipart/related; boundary=" + sep},
+      body:"--"+sep+"\r\nContent-Type: application/json\r\n\r\n"+meta+"\r\n--"+sep+"\r\nContent-Type: application/json\r\n\r\n"+body+"\r\n--"+sep+"--"});
+    drive.fileId = (await r.json()).id;
+  }
+  drive.at = new Date();
+}
+async function driveSync(){   // pull, merge, push back
+  try{
+    if(!drive.fileId){
+      const r = await gfetch(DRIVE_API + "?spaces=appDataFolder&fields=files(id)&q=" + encodeURIComponent("name='" + DRIVE_FILE + "'"));
+      const f = (await r.json()).files || []; if(f.length) drive.fileId = f[0].id;
+    }
+    if(drive.fileId){
+      const remote = await (await gfetch(DRIVE_API + "/" + drive.fileId + "?alt=media")).json().catch(() => null);
+      if(remote) mergeState(remote);
+    }
+    await drivePush();
+    try{ localStorage.setItem("ase.progress", JSON.stringify(state)); }catch(e){}
+    renderAll(); setDrive("on");
+  }catch(e){ if(drive.status !== "paused") setDrive("error", e.message); }
+}
+function driveQueue(){   // called on every progress change
+  if(!drive.token) return;
+  clearTimeout(drive.timer);
+  drive.timer = setTimeout(() => drivePush().then(() => setDrive("on"))
+    .catch(e => { if(drive.status !== "paused") setDrive("error", e.message); }), 1200);
+}
+function driveDisconnect(){
+  try{ if(drive.token && window.google) google.accounts.oauth2.revoke(drive.token, () => {}); }catch(e){}
+  try{ localStorage.removeItem("ase.drive"); }catch(e){}
+  drive.token = null; drive.fileId = null; setDrive("off");
+}
+
+/* ---------- settings ---------- */
+function renderSettings(){
+  const pref = themePref(), st = drive.status;
+  const driveUi = !GOOGLE_CLIENT_ID ? '' :
+    st === "on" ? '<p><span class="dot on"></span>Syncing to your Google Drive. Last synced '+
+        drive.at.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"})+'.</p>'+
+        '<div class="acts"><button class="btn" data-drive="sync">Sync now</button>'+
+        '<button class="btn" data-drive="disconnect">Disconnect</button></div>'
+    : st === "connecting" ? '<p><span class="dot"></span>Waiting for Google sign-in…</p>'
+    : st === "paused" ? '<p><span class="dot warn"></span>Google Drive sync is paused — sign-in lasts about an hour. '+
+        'Your progress is still saved in this browser.</p>'+
+        '<div class="acts"><button class="btn pri" data-drive="connect">Reconnect</button>'+
+        '<button class="btn" data-drive="disconnect">Disconnect</button></div>'
+    : st === "unavailable" ? '<p><span class="dot warn"></span>Google sign-in could not load here. Progress stays in this browser.</p>'
+    : (st === "error" ? '<p><span class="dot warn"></span>Google Drive sync failed'+(drive.err ? ' ('+esc(drive.err)+')' : '')+
+        '. Your progress is still saved in this browser.</p>' : '')+
+      '<div class="acts"><button class="btn pri" data-drive="connect">'+(st === "error" ? 'Try again' : 'Sign in with Google')+'</button></div>';
+  $("#settingsPanel").innerHTML =
+    '<h3>Appearance</h3>'+
+    '<div class="seg" role="group" aria-label="Theme">'+ [["system","System"],["light","Light"],["dark","Dark"]].map(o =>
+      '<button data-theme-set="'+o[0]+'" aria-pressed="'+(pref===o[0])+'">'+o[1]+'</button>').join("")+'</div>'+
+    '<h3>Progress</h3>'+
+    '<p>Saved in this browser'+(dbDoc ? ' and synced to your account' : '')+'.'+
+      (GOOGLE_CLIENT_ID && st === "off" ? ' Sign in with Google to keep a copy in your Google Drive and pick up where you left off on another device.' : '')+'</p>'+
+    driveUi+
+    (GOOGLE_CLIENT_ID ? '<p class="fine">Stored in this site’s private app folder in your Drive. The site cannot see any of your other files.</p>' : '')+
+    (!GOOGLE_CLIENT_ID && drive.err ? '<p class="fine">'+esc(drive.err)+'</p>' : '');
+}
+function initSettings(){
+  setTheme(themePref());
+  const btn = $("#settingsBtn"), panel = $("#settingsPanel");
+  const close = () => { if(panel.hidden) return; panel.hidden = true; btn.setAttribute("aria-expanded", "false"); };
+  btn.onclick = () => {
+    if(!panel.hidden){ close(); return; }
+    renderSettings(); panel.hidden = false; btn.setAttribute("aria-expanded", "true");
+    if(GOOGLE_CLIENT_ID) loadGis().catch(() => {});   // so the sign-in click can open its window straight away
+    const first = $("button", panel); if(first) first.focus();
   };
+  document.addEventListener("click", e => {
+    const d = e.target.closest("[data-drive]");
+    if(d){ ({connect:driveConnect, sync:driveSync, disconnect:driveDisconnect})[d.dataset.drive](); return; }
+    const t = e.target.closest("[data-theme-set]");
+    if(t){ setTheme(t.dataset.themeSet); renderSettings(); $('[data-theme-set="'+t.dataset.themeSet+'"]').focus(); return; }
+    if(!e.target.closest(".settings")) close();
+  });
+  document.addEventListener("keydown", e => { if(e.key === "Escape" && !panel.hidden){ close(); btn.focus(); } });
+  if(GOOGLE_CLIENT_ID && driveLinked()) setDrive("paused");
 }
 
 /* ---------- boot ---------- */
@@ -1134,7 +1303,7 @@ function renderAll(){
   if(tab === "modules") renderModules();
 }
 loadLocal();
-initTheme();
+initSettings();
 renderTabs();
 renderAll();
 go("overview");

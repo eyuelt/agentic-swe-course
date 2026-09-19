@@ -13,23 +13,23 @@ Each module below specifies: why it exists, outcomes, core content, labs, and th
 
 ---
 
-## M1 — Baseline & Instrumentation
+## M1 — Instrumentation
 
-⊢ none · ⏱ 4–6 h, then 2 weeks of passive logging
+⊢ none · ⏱ 2–3 h; after that the log fills itself from the labs you do anyway
 
 ### Why this module exists
 
 In 2025 METR ran a randomized controlled trial on experienced open-source developers working in repositories they knew well. Developers using early-2025 AI tooling were **19% slower**. Those same developers estimated afterward that they had been **20% faster**. The 39-point swing between perception and measurement is the single most important empirical fact in this field, and it is not a fact about 2025 tools — it is a fact about human self-assessment under conditions of high subjective fluency. Watching an agent produce 400 lines in ninety seconds *feels* like enormous progress regardless of whether the change lands.
 
-METR's 2026 follow-up sharpens rather than dissolves the point. The slowdown narrowed (roughly −18% for returning participants, roughly −4% for newly recruited ones, both with confidence intervals crossing zero) and METR announced it was **redesigning the experiment** because it could no longer recruit: developers now refuse to work half their tasks without AI, and they decline to submit tasks they believe AI will handle well. The literature is becoming structurally unable to answer the question for you.
+METR's 2026 follow-up sharpens rather than dissolves the point. The slowdown narrowed (roughly −18% for returning participants, roughly −4% for newly recruited ones, both with confidence intervals crossing zero) and METR announced it was **redesigning the experiment** because it could no longer recruit: developers now refuse to work half their tasks without AI, and they decline to submit tasks they believe AI will handle well.
 
-So you answer it for yourself. This module is the control group for the rest of the course.
+This course does not ask you to settle whether agents make you faster than working by hand. That is the course's own position, and the reasoning is simple: you are here because the work is moving to agents, and a personal stopwatch result would not change that, so an experiment that cannot change your decision is not worth your hours. The question worth your hours is narrower: *is my agentic practice getting better, and which techniques are doing it?* The METR finding matters because felt fluency cannot answer that one either. Developers who misjudged the sign of their own speed will not feel the difference between a good brief and a bad one, or notice their read ratio sliding from most of the diff to none of it. So you carry instruments. They compare one way of working with agents against another — never agents against no agents.
 
-★ **You cannot improve what you have not baselined, and your felt sense of speed is actively misleading.**
+★ **Your felt sense of how a session went is unreliable. Steer your practice by instruments, not by feel.**
 
 ### Outcomes
 
-- A personal measurement practice that survives the course
+- A lightweight log that the rest of the course's labs write into
 - Calibrated intuition: you can predict a task's duration and later check yourself
 - A written statement of what you currently believe about agentic coding, dated, so you can be wrong on the record
 
@@ -46,31 +46,27 @@ So you answer it for yourself. This module is the control group for the rest of 
 
 **Why not DORA metrics yet.** Team-level delivery metrics (lead time, change failure rate) matter in M16 but are too coarse and too laggy to steer individual practice. Use them later, at the level they describe.
 
-**The honest-baseline problem.** Your "without AI" baseline will be contaminated — you cannot unlearn agentic habits, and you will resent the control tasks. Accept the contamination and record it. A contaminated baseline you took is worth more than a clean one you didn't.
+**No control group.** You are not asked to do tasks by hand to establish a no-agent baseline. The log compares you with you: early rows against late rows, and one technique against another — which is what the dossier's teardown protocol runs on. That comparison costs a minute per task, because the rows are work you were doing anyway.
 
 ### Labs
 
-**L1.1 — The prediction log (⏱ 30 min setup, ongoing).**
-Create `ase/log.md` in a repo you own. One row per task: date, one-line description, predicted minutes, predicted rework passes, actual minutes, actual passes, read ratio, verification events, one-sentence note. Log every non-trivial task for two weeks, agent-assisted or not.
-*Success:* ≥20 rows, ≥5 of them non-agent tasks.
+**L1.1 — The prediction log (⏱ 30 min setup, then a minute per task).**
+Create `ase/log.md` in a repo you own. One row per agent task: date, one-line description, predicted minutes, predicted rework passes, actual minutes, actual passes, read ratio, verification events, one-sentence note. Start with the next three tasks you do, then move on to M2 — there is no row quota and no waiting period. Later labs and Gate 1 add rows as you go.
+*Success:* the file exists with its columns and three rows, each with a prediction written before the task.
 
-**L1.2 — The control tasks (⏱ 3 h).**
-Pick four tasks of comparable size in a codebase you know well. Do two entirely by hand, no completion, no agent. Do two with your current agent setup, whatever it is, without trying to improve it. Log all four.
-*Success:* four rows with honest actuals, plus a paragraph on what surprised you.
-
-**L1.3 — The dated beliefs statement (⏱ 1 h).**
+**L1.2 — The dated beliefs statement (⏱ 1 h).**
 Write 400–600 words: what do you currently believe agents are good at, bad at, and what do you expect this course to change? Commit it. Do not edit it later — you will re-read it in M17.
 *Success:* committed, dated, specific enough to be falsifiable. "Agents are useful" is not falsifiable. "Agents will not be able to do our payments refactor without me writing the plan" is.
 
-**L1.4 — Instrument one session (⏱ 1 h).**
+**L1.3 — Instrument one session (⏱ 1 h).**
 Pick one agent session and record it — screen recording, or just an append-only scratch file where you paste every prompt and note every intervention. Afterward, mark each intervention as: *steering* (redirecting a fine approach), *correcting* (fixing a wrong output), or *rescuing* (aborting). The ratio is diagnostic and you will re-run this in M5 and M17.
 *Success:* one annotated session transcript with intervention taxonomy applied.
 
 ### Evidence of mastery
-`ase/log.md` with ≥20 rows including ≥4 control tasks, `ase/beliefs-2026.md`, and one annotated session with intervention taxonomy.
+`ase/log.md` with its first three rows, predictions written first; `ase/beliefs-2026.md`; and one annotated session with intervention taxonomy.
 
 ### Common failure modes
-Skipping the module because it is not fun (most common). Automating the logging before you know what to log. Logging only successes. Treating the METR number as a verdict on agents rather than a verdict on self-assessment.
+Writing the prediction after the task. Automating the logging before you know what to log. Logging only successes. Turning the log into a study of whether agents beat working by hand — it measures your agentic practice against itself. Treating the METR number as a verdict on agents rather than a verdict on self-assessment.
 
 ### Self-check
 
@@ -78,7 +74,7 @@ Skipping the module because it is not fun (most common). Automating the logging 
 
 <details><summary>METR found experienced developers were 19% slower with AI tooling. What did those same developers believe about their own speed, and why does that gap matter more than the 19%?</summary>
 
-They estimated they had been 20% faster. The 39-point swing is a fact about self-assessment under high subjective fluency, not about 2025 tooling — which is why you cannot substitute the literature for your own baseline.
+They estimated they had been 20% faster. The 39-point swing is a fact about self-assessment under high subjective fluency, not about 2025 tooling — which is why this course has you steer by a log rather than by how a session felt.
 
 </details>
 
@@ -96,7 +92,7 @@ A prediction written afterward is not a prediction. It silently destroys every c
 
 <details><summary>Why is METR redesigning the experiment, and what does that imply for you?</summary>
 
-They can no longer recruit cleanly — developers refuse to work half their tasks without AI, and 30–50% decline to submit tasks they think AI handles well. Clean control groups are disappearing, so the literature is becoming structurally unable to answer the question for an individual practitioner.
+They can no longer recruit cleanly — developers refuse to work half their tasks without AI, and 30–50% decline to submit tasks they think AI handles well. Clean control groups are disappearing. The course does not ask you to build your own: your log compares one way of working with agents against another, not agents against working by hand.
 
 </details>
 
@@ -904,7 +900,7 @@ It's mechanical, verifiable, high-volume and low-judgment — dead code removal,
 
 <details><summary>How do you tell whether legibility work actually worked?</summary>
 
-It shows up in your baseline numbers — fewer rework passes, fewer 'the agent couldn't find it' sessions, higher first-pass success. If it doesn't, you improved your aesthetics, not your legibility.
+It shows up in your log — fewer rework passes, fewer 'the agent couldn't find it' sessions, higher first-pass success. If it doesn't, you improved your aesthetics, not your legibility.
 
 </details>
 
@@ -1766,7 +1762,7 @@ The half-life of specific technique in this field is short. The half-life of jud
 6. **What I am still bad at** — the most valuable section, and the one people skip
 7. **My refresh practice** — how this document stays alive
 
-**Re-run the M1 measurements.** Same task types, same log. Compare. Report honestly, including any regression. Some practitioners get *slower* at certain task classes while getting much faster overall — that is a real and useful finding, not a failure.
+**Read your log end to end.** Compare the first twenty rows with the last twenty: prediction error, rework passes, read ratio, verification events. Re-run the annotated session from M1 and compare the intervention mix. Report honestly, including any regression — getting worse at one task class while improving overall is a real and useful finding, not a failure.
 
 **The continuous practice.** Adopt all four:
 - **Monthly:** run the eval suite (M14). Watch for silent regressions.
@@ -1777,7 +1773,7 @@ The half-life of specific technique in this field is short. The half-life of jud
 **Teach it.** The strongest evidence of mastery is that someone else got better because of you. Pair with a colleague, write up one technique, or run an internal session. If you cannot explain why a technique works in terms of the verification gap, you have not finished learning it.
 
 ### Evidence of mastery
-Capstone C complete with an incident log; the doctrine document; re-run M1 measurements with an honest comparison; a scheduled continuous practice; and one teaching artifact.
+Capstone C complete with an incident log; the doctrine document; an honest early-versus-late comparison from your log; a scheduled continuous practice; and one teaching artifact.
 
 ### Self-check
 
@@ -1789,9 +1785,9 @@ The same one: 'what I am still bad at.' Everything else is easier to write and w
 
 </details>
 
-<details><summary>Why re-run the baseline measurements at the end?</summary>
+<details><summary>Why compare the early and late rows of your log at the end?</summary>
 
-Because felt improvement is unreliable — the same reason M1 exists. Some practitioners get slower at certain task classes while getting much faster overall, which is a real finding rather than a failure.
+Because felt improvement is unreliable — the same reason M1 exists. Getting worse at one task class while improving overall is a real finding rather than a failure.
 
 </details>
 
@@ -1839,16 +1835,16 @@ Hard ordering constraints (do not reorder):
 - **M13 before unattended work in M11/M12.** Autonomy after safety.
 - **M4 before M5.** You cannot review well without knowing what verification already covered.
 - **M4 before M10.** Parallel unverified agents are a volume problem, not a leverage gain.
-- **M1 before everything.** No baseline, no evidence.
+- **M1 before everything.** No log, no evidence.
 
 ## Appendix B — Time budget
 
 | Phase | Modules | Hours | Cumulative |
 |---|---|---|---|
-| 1 · Calibration | M1 | 5 | 5 |
-| 2 · Operator | M2–M5 + Capstone A | 34 | 39 |
-| 3 · Engineer | M6–M9 + Capstone B | 47 | 86 |
-| 4 · Orchestrator | M10–M13 | 34 | 120 |
-| 5 · Architect | M14–M17 + Capstone C | 48 | 168 |
+| 1 · Calibration | M1 | 3 | 3 |
+| 2 · Operator | M2–M5 + Capstone A | 34 | 37 |
+| 3 · Engineer | M6–M9 + Capstone B | 47 | 84 |
+| 4 · Orchestrator | M10–M13 | 34 | 118 |
+| 5 · Architect | M14–M17 + Capstone C | 48 | 166 |
 
 Total ≈ 120–170 hours depending on lab depth and how much you do on real work (which takes longer and teaches more). Working 10 h/week: about four months. Full-time intensive: five to six weeks.

@@ -12,7 +12,7 @@ A complete curriculum for an experienced software engineer learning to produce, 
 
 1. **`SYLLABUS.md`** — what the course is, the thesis, outcomes, structure, policies. Read first.
 2. **`CURRICULUM.md`** — 17 modules across 5 phases. Outcomes, teaching content, 70+ labs, mastery artifacts.
-3. **Do M1 before anything else.** It is the module people skip and later regret.
+3. **Do M1 before anything else.** It takes an afternoon and sets up the log every later lab writes into.
 
 ## The files
 
@@ -38,7 +38,7 @@ Agents made code cheap to write. They did not make it cheap to ship. Verificatio
 
 - **It is organized around one idea**, not around tools, so it survives the tools changing.
 - **It teaches the disagreements.** Steinberger barely reads code; DHH reviews every diff; Horthy reviews the plan instead of the code; Beck makes tests the binding constraint. They are all shipping. The course teaches you to work out which is right *for you*, with measurements.
-- **It starts with measurement.** M1 exists because METR found experienced developers were 19% slower with AI while feeling 20% faster — and because the follow-up research is now structurally unable to answer the question for you.
+- **It starts with instruments.** M1 exists because METR found experienced developers were 19% slower with AI while feeling 20% faster. The course does not ask you to re-run that experiment on yourself; it takes the lesson that felt fluency is unreliable and has you steer your agentic practice by a light log instead.
 - **You build an agent in Module 2.** Not as theory. As the fastest available cure for magical thinking about everything downstream.
 - **Every module ends in retrieval practice.** 89 ungraded self-checks across the 17 modules — answer from memory, then reveal. Nothing is recorded anywhere; the point is the effort of recalling.
 - **It is maintainable.** Volatile facts are quarantined in one file, products appear in the course only as registered examples, the module graph is machine-checkable, and `MAINTENANCE.md` tells a successor exactly what may and may not be changed.

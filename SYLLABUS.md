@@ -86,8 +86,8 @@ There are no weeks. Each module has an **evidence-of-mastery artifact** and a **
 ### 4.2 Everything runs against your real work
 Toy repositories teach toy lessons. The single biggest predictor of whether this transfers is whether you do the labs on code you actually care about and will still be maintaining in six months. Where a lab needs an unfamiliar large codebase, we use real open-source projects, not fixtures.
 
-### 4.3 Measure before you believe
-Module 1 exists because of one of the most important findings in the field: METR's randomized trial found experienced open-source developers were **19% slower** with early-2025 AI tools while believing they had been **20% faster**. The gap between felt and actual productivity is the default condition, not an anomaly. METR's own 2026 follow-up shows the picture shifting (a smaller, noisier slowdown, and the study design breaking down because developers now refuse to work without AI) — which is itself the lesson: **you cannot outsource this measurement to the literature. You have to take your own baseline.**
+### 4.3 Steer by instruments, not by feel
+Module 1 exists because of one of the most important findings in the field: METR's randomized trial found experienced open-source developers were **19% slower** with early-2025 AI tools while believing they had been **20% faster**. The gap between felt and actual productivity is the default condition, not an anomaly. METR's own 2026 follow-up shows the picture shifting (a smaller, noisier slowdown, and the study design breaking down because developers now refuse to work without AI) — and this course does not ask you to re-run that experiment on yourself. You are adopting agents regardless, so a by-hand control group could not change your decision. What the finding does mean is that your felt sense of a session is unreliable, and that applies just as much to telling a good technique from a bad one. **So you keep a light log and compare your agentic practice with itself — early against late, one technique against another — never agents against no agents.**
 
 ### 4.4 Study experts as sources of hypotheses, not authority
 Experts disagree sharply and publicly, and the disagreements are where the learning is. Steinberger says he barely reads code any more; DHH reviews every diff before merge; Kent Beck makes tests the binding constraint; Dex Horthy says review the *plan*, because a bad line of research becomes thousands of bad lines of code. They are all shipping. They are not all right about your situation.
@@ -106,7 +106,7 @@ Five phases, seventeen modules. Prerequisites form a DAG, not a line — Phase 3
 
 ```
 PHASE 1 — CALIBRATION
-  M1  Baseline & Instrumentation
+  M1  Instrumentation
 
 PHASE 2 — OPERATOR  (drive one agent well)
   M2  The Agentic Loop: build an agent
@@ -178,7 +178,7 @@ Budget note: Phase 4 is the expensive phase. Expect meaningful token spend durin
 ## 9. How to start
 
 1. Read this syllabus and `MAINTENANCE.md` §1 (design invariants) — 30 minutes.
-2. Do **M1** before touching anything else. It is boring and it is the module people skip and later regret, because without a baseline you will spend the rest of the course unable to tell whether anything you did helped.
+2. Do **M1** before touching anything else. It takes an afternoon and sets up the log every later lab writes into; without it you will spend the rest of the course judging techniques by how they felt.
 3. Work Phase 2 in order. After that, follow the DAG and your interests.
 4. Keep a single running `doctrine.md` from day one. It becomes your final deliverable.
 

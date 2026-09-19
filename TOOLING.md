@@ -111,7 +111,7 @@ lab-check status                      # progress across all checkable labs
 
 | Lab | Check |
 |---|---|
-| L1.1 | `ase/log.md` exists, ≥20 rows, ≥4 rows flagged as control tasks, predictions non-empty |
+| L1.1 | `ase/log.md` exists, ≥3 rows, predictions non-empty |
 | L4.2 | Named command exists and completes in <15s over 3 runs; is referenced in the repo's agent memory file |
 | L6.2 | Memory file line count decreased; relocation map file exists |
 | L8.1 | Audit file present with all 10 checks scored and evidence per score |
@@ -153,7 +153,7 @@ Calibration curve (predicted vs actual, over time). Intervention mix trend (stee
 **Implementation sketch.** A small CLI writing JSONL, plus a harness hook (`PostToolUse` matching the test/build command) that appends verification events. Render to the markdown log M1 requires so the two are the same artifact.
 
 **Effort:** ~1 day CLI + ~2 hours of hooks.
-**Caution:** this tool is itself a M1 hazard. Do not spend a week building telemetry instead of taking a baseline. Build it *after* twenty hand-written rows have proved what is worth capturing.
+**Caution:** this tool is itself a M1 hazard. Do not spend a week building telemetry instead of logging by hand. Build it *after* twenty hand-written rows have proved what is worth capturing.
 
 ---
 

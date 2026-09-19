@@ -51,7 +51,7 @@ Applied to every module artifact unless the module specifies otherwise.
 
 | Module | Artifact | The one thing assessors look for |
 |---|---|---|
-| M1 | Log (≥20 rows, ≥4 controls), beliefs statement, annotated session | Control tasks actually done; predictions recorded *before* |
+| M1 | Log (first three rows), beliefs statement, annotated session | Predictions recorded *before*; beliefs specific enough to be falsifiable |
 | M2 | Working agent, four-experiment table, one harness feature, teardown | Predictions written before running the break experiments |
 | M3 | 5 rewritten briefs, calibration factor, abandonment log, briefing standard | Evidence of abandoning something that felt nearly done |
 | M4 | Verifier audit, <15s fast lane, same-context test comparison, gaming catalogue, non-test loop | A measured sub-15-second command that the agent runs unprompted |
@@ -67,7 +67,7 @@ Applied to every module artifact unless the module specifies otherwise.
 | M14 | Eval suite (≥10 tasks), variance table, controlled comparison, memory-file eval | A minimum effect size stated before comparing |
 | M15 | Extended agent, token profile improvement, workflow agent, orchestration comparison | Survives compaction and restart on a multi-hour task |
 | M16 | Bottleneck analysis, team memory file, review policy, debt register | Memory file rules traced to ≥2 historical review comments |
-| M17 | Capstone C, doctrine document, re-run measurements, practice schedule, teaching artifact | The "what I changed my mind about" section, quoted against M1 |
+| M17 | Capstone C, doctrine document, early-versus-late log comparison, practice schedule, teaching artifact | The "what I changed my mind about" section, quoted against M1 |
 
 ---
 

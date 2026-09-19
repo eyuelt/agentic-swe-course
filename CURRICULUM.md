@@ -1334,7 +1334,7 @@ It processes untrusted input — issue bodies, PR titles, comments — while hol
 </details>
 
 ### Reading
-[R-11] harness docs on remote/cloud sessions and scheduling · [R-120] CVE-2025-66032 case study (also M13) · [R-20] Cherny on mobile and session teleport
+[R-11] harness docs on remote/cloud sessions and scheduling · [R-121] CVE-2025-66032 case study (also M13) · [R-20] Cherny on mobile and session teleport
 
 ---
 

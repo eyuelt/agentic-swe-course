@@ -227,6 +227,16 @@ h2.sec:first-of-type{margin-top:0}
 .mod ul{margin:0 0 1em;padding-left:1.15em}
 .mod li{margin-bottom:.35em}
 .mod .why{color:var(--ink-2)}
+.mod ul.reading{list-style:none;padding-left:0}
+.reading li{display:flex;gap:9px;align-items:baseline;color:var(--ink-2)}
+.reading li>a,.reading li>span:not(.rs){min-width:0}
+.reading .rs{flex:none}
+.reading .rid{font:inherit;font-family:var(--f-mono);font-size:11px;color:var(--signal);background:none;
+  border:1px solid var(--line);border-radius:2px;padding:1px 5px;min-width:46px;cursor:pointer;flex:none}
+.reading .rid:hover{border-color:var(--signal)}
+.reading .rs{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--signal)}
+.reading li.is-x .rs{color:var(--warn)}
+.reading li.is-x a,.reading li.is-x>span:not(.rs){text-decoration:line-through;text-decoration-color:var(--warn);color:var(--ink-3)}
 .quote{border-left:2px solid var(--line);padding-left:14px;color:var(--ink-2);font-style:italic;
   margin:0 0 1em}
 
@@ -304,6 +314,11 @@ td.crs{border-left:2px solid var(--signal)}
 .res{flex-wrap:wrap}
 .res.is-p{box-shadow:inset 3px 0 0 color-mix(in srgb,var(--signal) 40%,transparent)}
 .res.is-r{box-shadow:inset 3px 0 0 var(--signal)}
+.res.is-x{box-shadow:inset 3px 0 0 var(--warn)}
+.res.is-x .rt{text-decoration:line-through;text-decoration-color:var(--warn)}
+.res.is-x .rt,.res.is-x .rw{color:var(--ink-3)}
+.res{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 70px)}
+.res.flash{outline:2px solid var(--signal);outline-offset:2px}
 .rstat{display:flex;flex:none;margin-left:auto;border:1px solid var(--line);border-radius:3px;overflow:hidden}
 .rstat button{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;
   padding:5px 8px;border:0;border-left:1px solid var(--line);background:none;color:var(--ink-3);cursor:pointer}
@@ -312,6 +327,9 @@ td.crs{border-left:2px solid var(--signal)}
 .rstat button[aria-pressed="true"]{background:var(--sunk);color:var(--ink);font-weight:700}
 .rstat button.sp[aria-pressed="true"]{background:var(--signal-soft);color:var(--signal)}
 .rstat button.sr[aria-pressed="true"]{background:var(--signal);color:var(--paper)}
+.rstat button.sx[aria-pressed="true"]{background:var(--warn);color:var(--paper)}
+.rstat button.sx:hover{color:var(--warn)}
+.rstat button.sx[aria-pressed="true"]:hover{color:var(--paper)}
 .res .rid{font-family:var(--f-mono);font-size:11px;color:var(--signal);min-width:42px;flex:none}
 .res .rt{font-weight:600;font-size:14.5px}
 .res .rw{font-size:13.5px;color:var(--ink-2);margin-top:3px}
@@ -401,7 +419,7 @@ M1:{t:"Baseline & Instrumentation",st:0,pre:"none",hrs:"4–6 h + 2 weeks loggin
   {id:"L1.4",t:"Instrument one session",h:"1 h",d:"Record one session. Mark every intervention as steering, correcting, or rescuing.",s:"One annotated transcript with the intervention taxonomy applied."}],
  ev:"ase/log.md with ≥20 rows including ≥4 controls, ase/beliefs-2026.md, and one annotated session.",
  fails:["Skipping the module because it is not fun — the most common failure","Automating the logging before you know what to log","Logging only successes","Reading METR as a verdict on agents rather than on self-assessment"],
- read:"METR 2025 study · METR 2026 design update · DORA 2026 (J-curve section only)"},
+ read:[["R-01","METR early-2025 study"],["R-02","METR 2026 design update"],["R-03","DORA 2026 ROI report (skim the J-curve section only)"]]},
 
 M2:{t:"The Agentic Loop: Build an Agent",st:1,pre:"M1",hrs:"6–10 h",
  star:"An agent is a while-loop around a model with tools. Every 'magic' behaviour and every failure is explicable at that level.",
@@ -415,7 +433,7 @@ M2:{t:"The Agentic Loop: Build an Agent",st:1,pre:"M1",hrs:"6–10 h",
   {id:"L2.4",t:"Harness teardown",h:"1 h",d:"Map your daily harness onto your loop. Where does plan mode intervene? What does compaction remove? What does a subagent return, and what is lost?",s:"A one-page annotated diagram."}],
  ev:"A working agent, the four-experiment table, one harness feature with a cost analysis, the teardown diagram.",
  fails:["Copy-pasting the tutorial instead of typing it","Adding features before the bare loop works","Skipping L2.2 — it is where the learning is"],
- read:"Ball, How to Build an Agent · your harness's docs"},
+ read:[["R-10","Ball, How to Build an Agent"],["R-11","Harness docs for your daily tool"],["R-12","Agent loop / ReAct background (optional)"]]},
 
 M3:{t:"Briefing, Steering, Abandoning",st:1,pre:"M2",hrs:"6–8 h",
  star:"Steering a bad trajectory is more expensive than restarting. The expensive move is the one that feels cheap.",
@@ -429,7 +447,7 @@ M3:{t:"Briefing, Steering, Abandoning",st:1,pre:"M2",hrs:"6–8 h",
   {id:"L3.4",t:"Modality experiment",h:"1.5 h",d:"Three visual tasks described in text vs three with screenshots. Three briefs dictated vs three typed.",s:"Logged comparison and a personal policy on when to use which."}],
  ev:"Five rewritten briefs with outcomes, a calibration factor, the abandonment log, and a one-page briefing standard you will follow.",
  fails:["Enormous briefs for small tasks — ceremony as procrastination","Negotiating with a doomed session because of sunk cost","Corrections in chat instead of memory files","Omitting verification means from every brief"],
- read:"Cherny tips compilation · Steinberger, Just Talk To It"},
+ read:[["R-20","Cherny tips compilation"],["R-21","Steinberger, Just Talk To It"],["R-22","Harness docs on rewind / checkpointing"]]},
 
 M4:{t:"Verification-First Development",st:1,pre:"M2",hrs:"8–12 h",kw:"keystone",
  star:"Every task gets a verifier the agent can run itself. No verifier, no autonomy — at any level.",
@@ -444,7 +462,7 @@ M4:{t:"Verification-First Development",st:1,pre:"M2",hrs:"8–12 h",kw:"keystone
   {id:"L4.5",t:"Close a non-test loop",h:"2 h",d:"Pick a task where tests are a bad fit — a UI change, a CLI's output format. Give the agent a way to observe its own output.",s:"A transcript showing the agent observing, judging and correcting itself without you."}],
  ev:"The audit with diagnosis, a sub-15-second fast lane, the same-context comparison, the gaming catalogue, one non-test loop transcript.",
  fails:["Treating 'the tests pass' as sufficient","Slow test suites left slow","Letting the agent write both test and assertion unreviewed","Copying 'I don't read code' without first building rungs 4–7"],
- read:"Beck, Augmented Coding · Cherny on verification · Steinberger, Shipping at Inference-Speed (read critically)"},
+ read:[["R-30","Beck, Augmented Coding: Beyond the Vibes"],["R-33","Beck on TDD with agents (extended)"],["R-27","Cherny on verification"],["R-20","Cherny tips compilation"],["R-32","Steinberger, Shipping at Inference-Speed (read critically — note what substitutes for reading)"]]},
 
 M5:{t:"Reading the Machine: Review Discipline",st:1,pre:"M4",hrs:"6–8 h",
  star:"Choose where you spend your scarce reading attention — research, plan, or diff — and know what that choice leaves uncovered.",
@@ -458,7 +476,7 @@ M5:{t:"Reading the Machine: Review Discipline",st:1,pre:"M4",hrs:"6–8 h",
   {id:"L5.4",t:"The upstream experiment",h:"2 h",d:"Spend one change's entire review budget on the plan and none on the diff. Spend a comparable change's entirely on the diff.",s:"A written comparison including an honest statement of which you trust and why."}],
  ev:"Review-method comparison, comprehension audit with one repayment, a tuned reviewer with a confusion table, the upstream experiment.",
  fails:["Rubber-stamping large diffs","Reading linearly","Same-context self-review","Treating tidy code as correct code","Never measuring read ratio"],
- read:"Horthy, ACE-FCA (review-the-plan) · Osmani on comprehension debt · DORA 2026 · DHH on code aesthetics"},
+ read:[["R-40","Horthy, ACE-FCA (review-the-plan section)"],["R-101","Osmani on comprehension debt"],["R-03","DORA 2026 (verification tax, instability)"],["R-45","DHH on risk-tiered review (current)"],["R-43","DHH’s April 2026 workflow (superseded in part)"]]},
 
 M6:{t:"Context Engineering",st:2,pre:"M2",hrs:"8–10 h",
  star:"Context is a budget, not a bucket. Something must be evicted; decide what, deliberately, rather than letting the harness decide by truncation.",
@@ -473,7 +491,7 @@ M6:{t:"Context Engineering",st:2,pre:"M2",hrs:"8–10 h",
   {id:"L6.5",t:"Firewall a subagent",h:"2 h",d:"Run a high-volume research task in the main context, measure tokens; then via an isolated subagent with a specified return format.",s:"Token comparison plus the return-format spec you converged on."}],
  ev:"Census with a deletion, before/after audit, a compaction artifact with comparison, a rot threshold, a subagent return spec.",
  fails:["Treating the memory file as documentation","Optimizing size before correctness","Letting auto-compaction be the strategy","Leaving every MCP server connected permanently","Copying someone else's memory file wholesale"],
- read:"Anthropic, Effective context engineering · Horthy, ACE-FCA · Ronacher on MCP tool bloat"},
+ read:[["R-50","Anthropic, Effective context engineering for AI agents"],["R-40","Horthy, ACE-FCA"],["R-11","Harness docs: memory, skills, rules, subagents"],["R-160","Memory-file standards: state of play"],["R-52","Ronacher on MCP tool bloat"]]},
 
 M7:{t:"Research → Plan → Implement",st:2,pre:"M6, M5",hrs:"8–10 h",
  star:"Front-load the expensive thinking into reviewable artifacts. Review the research and the plan; let the implementation be mechanical.",
@@ -488,7 +506,7 @@ M7:{t:"Research → Plan → Implement",st:2,pre:"M6, M5",hrs:"8–10 h",
   {id:"L7.5",t:"Spec-driven trial",h:"2 h (optional)",d:"Run one feature through a spec-driven toolkit end to end.",s:"A completed feature and a one-page verdict with a rule for when you'd use it again."}],
  ev:"A verified research document on unfamiliar code, a plan with a scored objection list, the ratio experiment, a reused plan.",
  fails:["Letting the agent edit during research — it starts justifying its edits","Accepting research without spot-checking","Vague plans","Planning two-line changes","Keeping plans in chat where they die with the session"],
- read:"Horthy, ACE-FCA · Horthy's context-engineering talk · Spec-driven toolkits · Grove, The New Code"},
+ read:[["R-40","Horthy, ACE-FCA"],["R-60","Horthy talk, Context Engineering for Complex Codebases"],["R-61","Spec-driven development toolkits"],["R-63","Horthy interviewed on context engineering"],["R-62","Grove, The New Code"]]},
 
 M8:{t:"Designing Codebases for Agents",st:2,pre:"M4",hrs:"10–14 h",
  star:"Agent-legibility is a codebase property you can measure and improve, and it pays off for humans too.",
@@ -503,7 +521,7 @@ M8:{t:"Designing Codebases for Agents",st:2,pre:"M4",hrs:"10–14 h",
   {id:"L8.5",t:"Convention extraction",h:"2 h",d:"Have an agent infer your implicit conventions from the code. What it gets right is legible; what it gets wrong is folklore.",s:"An inferred list, corrected, with ≥2 conventions encoded as enforceable checks."}],
  ev:"Scored audit with remediation, a merged hygiene sweep, a deterministic suite, one greppability repair with measurement, ≥2 enforced conventions.",
  fails:["Rewriting working code for aesthetics","Treating agent-legibility as the only goal","Putting conventions in the memory file instead of enforcing them in lint","Leaving flaky tests because 'everyone knows which ones are flaky' — the agent doesn't"],
- read:"Ronacher, A Language For Agents · Ronacher, Agentic Coding Recommendations · DHH on Rails and token efficiency"},
+ read:[["R-70","Ronacher, A Language For Agents"],["R-71","Ronacher, Agentic Coding Recommendations"],["R-73","Ronacher, Things That Didn’t Work"],["R-43","DHH on Rails and token efficiency"],["R-32","Steinberger on the refactoring budget"]]},
 
 M9:{t:"The Extension Surface",st:2,pre:"M6",hrs:"6–8 h",
  star:"Match the mechanism to the requirement: guarantees go in hooks, knowledge goes in skills, always-true rules go in memory, volume goes in subagents.",
@@ -517,7 +535,7 @@ M9:{t:"The Extension Surface",st:2,pre:"M6",hrs:"6–8 h",
   {id:"L9.4",t:"MCP cost/benefit",h:"1.5 h",d:"Measure the context cost of each connected server. Try replacing the most expensive with CLI calls.",s:"A cost table and one justified connect/disconnect/replace decision."}],
  ev:"A correction taxonomy with three traced extensions, a working blocking hook, a tuned review subagent, an MCP cost table with a decision.",
  fails:["Copying someone else's kit","Building extensions before having the triggers","Instructions where enforcement is required","Skills with vague descriptions that never trigger, or trigger wrongly"],
- read:"Harness extensibility docs · mechanism-selection guidance · Ronacher on MCP"},
+ read:[["R-11","Harness extensibility docs"],["R-81","“Steering” guidance on choosing between mechanisms"],["R-52","Ronacher on MCP"],["R-20","Cherny on hooks and skills"]]},
 
 M10:{t:"Parallelism",st:3,pre:"M4, M5 (Gate 1)",hrs:"8–10 h",
  star:"Parallelism moves the bottleneck from generation to your attention. If you cannot review and integrate N streams, running N agents produces a queue, not throughput.",
@@ -531,7 +549,7 @@ M10:{t:"Parallelism",st:3,pre:"M4, M5 (Gate 1)",hrs:"8–10 h",
   {id:"L10.4",t:"Build the control plane",h:"2 h",d:"Session naming, colours, switching, completion notification.",s:"A documented setup you can start in under a minute, plus a before/after switching-time measurement."}],
  ev:"Isolation comparison with a policy, a throughput curve with a stated ceiling, an executed decomposition, a working control plane.",
  fails:["Parallelizing coupled work","Running more agents than you can review","No isolation on destructive tasks","Losing the gains to context switching"],
- read:"Cherny on worktrees · Steinberger on same-folder parallelism · git worktree docs"},
+ read:[["R-20","Cherny on worktrees"],["R-21","Steinberger on same-folder parallelism"],["R-90","git worktree docs"]]},
 
 M11:{t:"Loop Engineering",st:3,pre:"M10, M4, M13",hrs:"10–14 h",kw:"frontier",
  star:"A loop is only as good as its fitness function and its stop condition. Build those first; the loop itself is ten lines.",
@@ -546,7 +564,7 @@ M11:{t:"Loop Engineering",st:3,pre:"M10, M4, M13",hrs:"10–14 h",kw:"frontier",
   {id:"L11.5",t:"Scheduled triage loop",h:"3 h",d:"A loop on a schedule against something real — dependency updates, issue triage, failing-test sweep — with escalation for what it shouldn't decide. Run a week.",s:"Seven days of logs, what it handled vs escalated, and a written correctness assessment."}],
  ev:"A terminating loop with a log, three demonstrated stop conditions, an overbaking account, a verified fan-out with a caught defect, a week of scheduled-loop logs.",
  fails:["Running loops before M13","No budget cap","No persistent state, so the loop re-derives everything","Model grading its own work","Looping exploratory work","Spec quality unexamined","No rollback test"],
- read:"A Brief History of Ralph · Osmani, Loop Engineering · Karpathy on autonomy and AutoResearch"},
+ read:[["R-100","History and mechanics of the Ralph technique"],["R-101","Osmani, Loop Engineering"],["R-102","Karpathy, Sequoia 2026"],["R-104","Karpathy on No Priors (AutoResearch, the loopy era)"],["R-103","Huntley’s original writing"]]},
 
 M12:{t:"Async, Remote & Cloud Agents",st:3,pre:"M11",hrs:"5–7 h",
  star:"Async multiplies production and does nothing for review. Design the review path before you turn on the production path.",
@@ -560,7 +578,7 @@ M12:{t:"Async, Remote & Cloud Agents",st:3,pre:"M11",hrs:"5–7 h",
   {id:"L12.4",t:"CI agent, safely",h:"2 h",d:"An agent triggered by a repository event with least-privilege credentials, egress restrictions, and no write access to what it evaluates.",s:"A working CI agent plus a threat model naming untrusted inputs and what it could exfiltrate if compromised."}],
  ev:"A timed handoff breakdown, a phone friction list with fixes, a validated review policy, a CI agent with a written threat model.",
  fails:["Turning on async production without a review path","Production credentials in cloud agents","Agents that ask open-ended questions you cannot answer from a phone","Treating CI agents as trusted"],
- read:"Harness docs on remote sessions and scheduling · the CVE-2025-66032 case study"},
+ read:[["R-11","Harness docs on remote / cloud sessions and scheduling"],["R-121","The CVE-2025-66032 case study (also M13)"],["R-20","Cherny on mobile and session teleport"]]},
 
 M13:{t:"Security & Safety for Agentic Development",st:3,pre:"M9",hrs:"8–10 h",kw:"gate",
  star:"An agent cannot reliably distinguish data from instructions. Architect on that assumption; do not prompt your way around it.",
@@ -575,7 +593,7 @@ M13:{t:"Security & Safety for Agentic Development",st:3,pre:"M9",hrs:"8–10 h",
   {id:"L13.5",t:"Supply-chain guardrail",h:"1.5 h",d:"Enforcement that flags any agent-added dependency for human review; pin CI actions to SHAs.",s:"A demonstrated flag on a test dependency addition; pinned actions merged."}],
  ev:"A trifecta audit with remediations, a red-team results table, a verified sandbox, a threat model with a fix, a working supply-chain guardrail.",
  fails:["Blanket permission-skipping as the default","Treating prompt injection as solvable by instructions","Production credentials in unattended runs","Trusting MCP servers as configuration rather than dependencies","Assuming the vendor handles it"],
- read:"Willison, The lethal trifecta · CSA research note on CVE-2025-66032 · 2026 agentic security state of practice"},
+ read:[["R-120","Willison, The lethal trifecta"],["R-121","CVE-2025-66032 / CI prompt injection research note"],["R-122","2026 agentic security state of practice"],["R-123","Supply-chain and package-verification findings"],["R-124","2026 supply-chain attack landscape"]]},
 
 M14:{t:"Evals for Your Own Work",st:4,pre:"M7, M8 (Gate 2)",hrs:"8–10 h",
  star:"If you cannot measure whether a change to your setup helped, you are not engineering your workflow — you are decorating it.",
@@ -589,7 +607,7 @@ M14:{t:"Evals for Your Own Work",st:4,pre:"M7, M8 (Gate 2)",hrs:"8–10 h",
   {id:"L14.4",t:"Eval your memory file",h:"2 h",d:"Run the suite with your memory file, without it, and with the trimmed version from L6.2.",s:"Three scores and a decision about what actually earns its context."}],
  ev:"A runnable suite with ≥10 tasks, a variance table with a minimum effect size, one controlled comparison, a memory-file eval that changed a decision.",
  fails:["Benchmarks instead of your own tasks","Single runs","Changing two things at once","Building 50 tasks and never running them","No known-failure tasks, so improvements are invisible"],
- read:"Benchmark landscape and critiques · eval tooling"},
+ read:[["R-130","Benchmark landscape, critiques, and harness-vs-model scoring effects"],["R-131","Eval tooling"]]},
 
 M15:{t:"Building Harnesses & Agent Systems",st:4,pre:"M2, M6",hrs:"10–14 h",
  star:"Build agents for the workflows only you have. Buy the general harness.",
@@ -603,7 +621,7 @@ M15:{t:"Building Harnesses & Agent Systems",st:4,pre:"M2, M6",hrs:"10–14 h",
   {id:"L15.4",t:"Orchestration comparison",h:"2 h",d:"Implement the same non-trivial task as a sequential pipeline and as fan-out/verify.",s:"A comparison with a stated rule for which to use when."}],
  ev:"An extended agent surviving compaction and restart, a tool-result token improvement, one workflow agent with a keep/kill decision, an orchestration comparison.",
  fails:["Rebuilding a commercial harness","Too many narrow tools","Compaction that loses the failure state","Subagents with unspecified returns","No persistence, so nothing can run long"],
- read:"Ball · agent SDK documentation · Anthropic context engineering · orchestration patterns"},
+ read:[["R-10","Ball, How to Build an Agent"],["R-140","Agent SDK documentation"],["R-50","Anthropic context engineering"],["R-141","Orchestration patterns"]]},
 
 M16:{t:"Teams, Orgs & Comprehension Debt",st:4,pre:"M13, M14 (Gate 3)",hrs:"6–8 h",
  star:"The bottleneck moves to review, integration and understanding. Plan for the bottleneck you are creating.",
@@ -617,7 +635,7 @@ M16:{t:"Teams, Orgs & Comprehension Debt",st:4,pre:"M13, M14 (Gate 3)",hrs:"6–
   {id:"L16.4",t:"Debt register",h:"1.5 h",d:"Subsystem, owner, comprehension level, last-read date, risk. Schedule repayment for the top item.",s:"A register with ≥10 entries and one repayment completed."}],
  ev:"A quantified bottleneck analysis, a merged evidence-derived team memory file, a circulated review policy with feedback, a debt register with one repayment.",
  fails:["Rolling out tools without moving the bottleneck","Promising uniform gains","Ignoring stability metrics","No plan for juniors","Memory files that are opinion rather than evidence"],
- read:"DORA 2026 ROI report · DORA 2025 · Fowler/Thoughtworks field observations"},
+ read:[["R-03","DORA 2026 ROI report"],["R-04","DORA 2025 State of AI-assisted Software Development"],["R-101","Osmani on comprehension debt"],["R-151","Field observations from consulting practice"]]},
 
 M17:{t:"Capstone C, Doctrine & Continuous Practice",st:4,pre:"M16",hrs:"20–30 h",
  star:"The deliverable of this course is not a skill set. It is a method for acquiring skill sets faster than they expire.",
@@ -691,27 +709,47 @@ const RES = [
  ["R-01","METR, Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity","https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/",1,"D","evidence","The 19%-slower / 20%-faster-feeling result. Read the methodology and caveats, not the headline."],
  ["R-02","METR, We are Changing our Developer Productivity Experiment Design","https://metr.org/blog/2026-02-24-uplift-update/",1,"M","evidence","The 2026 update: the effect narrowed and the study design is breaking because developers refuse to work without AI. The reason M1 exists."],
  ["R-03","DORA, ROI of AI-Assisted Software Development (2026)","https://www.infoq.com/news/2026/05/dora-roi-ai-assisted-dev-report/",1,"M","evidence","The J-curve, the verification tax, the instability tax, AI-amplifies-the-system."],
+ ["R-04","DORA, State of AI-assisted Software Development (2025)","https://cloud.google.com/blog/products/ai-machine-learning/announcing-the-2025-dora-report",2,"M","evidence","The prior year's baseline; useful for seeing what changed."],
  ["R-10","Thorsten Ball, How to Build an Agent","https://ampcode.com/notes/how-to-build-an-agent",1,"D","foundations","Build the loop in under 400 lines. The single highest-value technical artifact here."],
+ ["R-12","Changelog interview with Thorsten Ball on agents","https://changelog.com/podcast/648",3,"M","foundations","Conversational version of R-10."],
  ["R-50","Anthropic, Effective context engineering for AI agents","https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",1,"M","foundations","The canonical treatment of context as a budgeted resource."],
  ["R-11","Your harness's own documentation","https://code.claude.com/docs/en/features-overview",1,"F","foundations","The extension surface, authoritative and current. Re-read after every major release."],
+ ["R-22","Your harness's documentation on rewind / checkpointing and session management","",2,"F","foundations","The mechanism behind “discard context rather than argue with it” (M3). Every harness names this differently; find yours."],
+ ["R-81","Steering Claude Code: when to use CLAUDE.md, skills, hooks, rules and subagents","https://claude.com/blog/steering-claude-code-skills-hooks-rules-subagents-and-more",2,"F","foundations","Mechanism-selection guidance; cited from the official docs. M9."],
+ ["R-160","AGENTS.md vs CLAUDE.md state of play (2026)","https://bestagent.dev/claude-md-vs-agents-md-2026/",2,"F","foundations","Third-party but well-dated summary of the vendor-neutral memory-file standard and the import-shim pattern. Verify against your harness's own docs."],
+ ["R-140","Agent SDK documentation for your harness","",2,"F","foundations","Building your own agents and workflow tools. M15. No single link — find your harness's."],
  ["R-40","Horthy, Advanced Context Engineering for Coding Agents (ACE-FCA)","https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/ace-fca.md",1,"M","method","Research→Plan→Implement, intentional compaction, the 40–60% band, review leverage."],
+ ["R-60","Horthy, Context Engineering for Complex Codebases (talk)","https://ai.engineer/talks/rmvDxxNubIg-context-engineering-for-complex-codebases",2,"M","method","The talk version, with the worked examples."],
+ ["R-63","Context engineering with Dex Horthy (Pragmatic Engineer)","https://newsletter.pragmaticengineer.com/p/context-engineering-with-dex-horthy",2,"M","method","Interview format; good for the reasoning behind the method."],
  ["R-30","Kent Beck, Augmented Coding: Beyond the Vibes","https://newsletter.kentbeck.com/p/augmented-coding-beyond-the-vibes",1,"D","method","The value distinction between augmented and vibe coding; TDD as the agent's stop condition."],
+ ["R-33","TDD, AI agents and coding with Kent Beck (Pragmatic Engineer)","https://newsletter.pragmaticengineer.com/p/tdd-ai-agents-and-coding-with-kent",2,"M","method","Extended treatment of the same material."],
  ["R-101","Addy Osmani, Loop Engineering","https://addyosmani.com/blog/loop-engineering/",1,"M","method","The clearest definition of the 2026 shift; five components, three failure modes."],
  ["R-100","HumanLayer, A Brief History of Ralph","https://www.humanlayer.dev/blog/brief-history-of-ralph",2,"M","method","Origin, mechanics and documented failures — bad specs, overbaking, merge behaviour."],
+ ["R-103","Geoffrey Huntley's writing","https://ghuntley.com/",2,"M","method","Primary source for Ralph and autonomous loops; verify the specific post before citing."],
+ ["R-61","Spec-driven development toolkits and comparisons (2026)","https://www.marktechpost.com/2026/05/08/9-best-ai-tools-for-spec-driven-development-in-2026-kiro-bmad-gsd-and-more-compare/",3,"F","method","Landscape overview. Treat tool names as perishable; the durable idea is “write intent down before generating”."],
+ ["R-62","Sean Grove, The New Code","",2,"M","method","The argument that the spec is the primary artifact. Link unverified — find the current canonical one."],
+ ["R-141","12-Factor Agents (HumanLayer)","",2,"M","method","Design principles for agent systems. Widely referenced; link unverified — locate the current canonical repo."],
+ ["R-90","git worktree documentation","https://git-scm.com/docs/git-worktree",2,"D","method","The primitive under nearly all agent-parallelism tooling. Learn it directly rather than through a wrapper (M10)."],
  ["R-21","Peter Steinberger, Just Talk To It","https://steipete.me/posts/just-talk-to-it",1,"M","practitioners","The fullest statement of his workflow: parallel agents, blast radius, same-session tests, MCP scepticism."],
  ["R-32","Steinberger, Shipping at Inference-Speed","https://steipete.me/posts/2025/shipping-at-inference-speed",1,"M","practitioners","'I don't read much code anymore.' Read it looking for what substitutes for reading."],
  ["R-20","How Boris Uses Claude Code (fan-compiled)","https://howborisusesclaudecode.com/",1,"F","practitioners","The most complete collection of Cherny's tips, dated and thematic. Secondary source — verify anything load-bearing."],
+ ["R-27","Boris Cherny, Building Claude Code (YC)","https://www.ycombinator.com/library/UN-boris-cherny-building-claude-code",2,"M","practitioners","How the tool was built; the design reasoning behind the extension surface."],
  ["R-42","DHH, Promoting AI agents","https://world.hey.com/dhh/promoting-ai-agents-3ee04945",1,"D","practitioners","The public position change in his own words, and the 'supervised collaboration' framing."],
  ["R-45","DHH on Lex Fridman #501 — risk-tiered review (Aug 2026)","https://lexfridman.com/dhh-2-transcript/",1,"M","practitioners","His current position, superseding R-43 in part: the shape of all of it, the lines only where risk concentrates."],
  ["R-43","DHH's new way of writing code (Pragmatic Engineer) — superseded in part by R-45","https://newsletter.pragmaticengineer.com/p/dhhs-new-way-of-writing-code",1,"M","practitioners","His actual current workflow: multi-model terminal splits, diff review, Rails as token-efficient."],
  ["R-104","Karpathy on No Priors: code agents, AutoResearch, the loopy era","https://podscripts.co/podcasts/no-priors-artificial-intelligence-technology-startups/andrej-karpathy-on-code-agents-autoresearch-and-the-loopy-era-of-ai",1,"M","practitioners","'Remove yourself as the bottleneck.' The AutoResearch result and the jaggedness caveat."],
+ ["R-102","Karpathy, From Vibe Coding to Agentic Engineering (Sequoia Ascent 2026)","https://www.youtube.com/watch?v=96jN2OCOfLs",1,"M","practitioners","The autonomy framing. His own notes are at karpathy.bearblog.dev/sequoia-ascent-2026/."],
  ["R-70","Armin Ronacher, A Language For Agents","https://lucumr.pocoo.org/2026/2/9/a-language-for-agents/",1,"D","practitioners","What agents want from code. The intellectual core of M8."],
  ["R-71","Ronacher, Agentic Coding Recommendations","https://lucumr.pocoo.org/2025/6/12/agentic-coding/",1,"M","practitioners","The practical baseline: tooling, sandboxing, what to automate."],
  ["R-73","Ronacher, Agentic Coding Things That Didn't Work","https://lucumr.pocoo.org/2025/7/30/things-that-didnt-work/",2,"M","practitioners","Negative results, published. Rare and valuable."],
+ ["R-52","Ronacher, A Year Of Vibes (2025-12-22)","https://lucumr.pocoo.org/2025/12/22/a-year-of-vibes/",2,"M","practitioners","Year-in-review including MCP scepticism and the infrastructure gaps (version control, review, observability)."],
  ["R-120","Simon Willison, The lethal trifecta for AI agents","https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/",1,"D","security","Private data + untrusted content + external communication. The clearest security frame in the field."],
  ["R-121","CSA research note: coding-agent GitHub Action prompt injection (CVE-2025-66032)","https://labs.cloudsecurityalliance.org/research/csa-research-note-claude-code-github-action-prompt-injection/",1,"D","security","The full attack chain: crafted issue → permission bypass → env exfiltration → OIDC token → supply-chain commit."],
  ["R-122","Prompt injection still drives most agentic AI security failures in production","https://www.helpnetsecurity.com/2026/06/11/owasp-prompt-injection-ai-security-failures/",2,"M","security","2026 state of practice. Confirms this is not theoretical."],
+ ["R-123","Reporting on agents skipping package verification (2026-07)","https://www.techtimes.com/articles/319457/20260701/ai-coding-agents-skip-package-verification-attackers-are-exploiting-it.htm",2,"M","security","Supply-chain angle. Secondary source; find the underlying research before citing in anger."],
+ ["R-124","Supply-chain attack landscape 2026 (npm, PyPI, VS Code marketplace, AI agents)","https://phoenix.security/accelerating-supply-chain-attacks-npm-pypi-vsx-ai-enabled-2026/",3,"M","security","Context on the wider ecosystem."],
  ["R-130","Benchmark landscape and critiques","https://www.codesota.com/code-generation",2,"F","evidence","Read for the caveats, not the scores. Harness choice moves the same base model by double digits."],
+ ["R-131","Eval and observability tooling for agents","",3,"F","evidence","Optional infrastructure for M14. A directory of JSON files and a shell script is a legitimate starting point; reach for these when you outgrow it."],
  ["R-151","Fowler / Thoughtworks, Exploring Generative AI","https://martinfowler.com/articles/exploring-gen-ai.html",2,"M","evidence","Field observations across many client codebases — the best corrective to single-practitioner survivorship bias."]
 ];
 
@@ -817,7 +855,21 @@ function go(t, mod){
   TABS.forEach(([k]) => { $("#v-"+k).hidden = (k !== t); });
   renderTabs();
   if(t==="modules") renderModules();
-  window.scrollTo({top:0, behavior:"instant"});
+  if(!(t==="modules" && mod && toPane(false))) window.scrollTo({top:0, behavior:"instant"});
+}
+function toPane(smooth){   // narrow screens stack the rail above the module, so picking one must bring it into view
+  const pane = $("#modpane");
+  if(!pane || !matchMedia("(max-width:820px)").matches) return false;
+  const calm = matchMedia("(prefers-reduced-motion:reduce)").matches;
+  const bar = $(".top"), clear = (bar ? bar.getBoundingClientRect().bottom : 0) + 12;   // the sticky header's height varies with width
+  window.scrollTo({top: pane.getBoundingClientRect().top + window.scrollY - clear, behavior: smooth && !calm ? "smooth" : "instant"});
+  return true;
+}
+function goRes(id){   // open the Resources tab on one entry, clearing any filter that would hide it
+  resFilter = "all"; resStatFilter = "any"; renderResources(); go("resources");
+  const row = document.getElementById("res-" + id); if(!row) return;
+  row.scrollIntoView({behavior:"instant", block:"center"});
+  row.classList.add("flash"); setTimeout(() => row.classList.remove("flash"), 1600);
 }
 
 /* ---------- overview ---------- */
@@ -965,7 +1017,7 @@ function renderModules(){
   $("#v-modules").innerHTML = '<div class="mod-wrap"><aside class="rail" id="rail">'+rail+
     '</aside><article class="mod" id="modpane"></article></div>';
   $("#rail").onclick = e => { const b = e.target.closest("[data-m]");
-    if(b){ current = b.dataset.m; renderModules(); } };
+    if(b){ current = b.dataset.m; renderModules(); toPane(true); } };
   renderModule(current);
 }
 
@@ -1006,7 +1058,11 @@ function renderModule(id){
     'Answer from memory before revealing \u2014 the effort of recalling is what does the work. '+
     'Nothing is recorded.</p>'+
     SC[id].map(function(qa,i){return '<details class="sc"><summary>'+esc(qa[0])+'</summary><div>'+esc(qa[1])+'</div></details>';}).join("") : '')+
-  '<h3>Reading</h3><p class="why">'+esc(m.read)+'</p>'+
+  '<h3>Reading</h3>'+ (typeof m.read === "string" ? '<p class="why">'+esc(m.read)+'</p>' :
+    '<ul class="reading">'+ m.read.map(x => { const r = RES.find(q => q[0]===x[0]), st = resStat(x[0]);
+      return '<li'+(st?' class="is-'+st+'"':'')+'><button class="rid" data-res="'+x[0]+'" title="Show '+x[0]+' in Resources">'+x[0]+'</button>'+
+        (r && r[2] ? '<a href="'+r[2]+'" target="_blank" rel="noopener">'+esc(x[1])+'</a>' : '<span>'+esc(x[1])+'</span>')+
+        (st ? '<span class="rs">'+RSTAT.find(o => o[0]===st)[1]+'</span>' : '')+'</li>'; }).join("") +'</ul>')+
 
   '<div class="mod-foot">'+
    '<button class="btn pri '+(modDone(id)?"":"off")+'" id="donebtn">'+
@@ -1019,7 +1075,9 @@ function renderModule(id){
     const cb = e.target.closest("[data-lab]");
     if(cb){ toggleLab(cb.dataset.lab); return; }
     const d = e.target.closest("[data-goto]");
-    if(d){ current = d.dataset.goto; renderModules(); window.scrollTo({top:0,behavior:"instant"}); return; }
+    if(d){ current = d.dataset.goto; renderModules(); if(!toPane(false)) window.scrollTo({top:0,behavior:"instant"}); return; }
+    const rr = e.target.closest("[data-res]");
+    if(rr){ goRes(rr.dataset.res); return; }
     if(e.target.closest("#donebtn")) toggleMod(id);
   };
 }
@@ -1060,7 +1118,7 @@ function renderPeople(){
 
 /* ---------- resources ---------- */
 let resFilter = "all", resStatFilter = "any";
-const RSTAT = [["","Unread"],["p","In progress"],["r","Read"]];
+const RSTAT = [["","Unread"],["p","In progress"],["r","Read"],["x","DNR"]];   // DNR: do not read — looked, not worth it
 function renderResources(){
   const cats = ["all","evidence","foundations","method","practitioners","security"];
   const count = v => RES.filter(r => resStat(r[0])===v).length;
@@ -1068,7 +1126,7 @@ function renderResources(){
                                (resStatFilter==="any" || resStat(r[0])===resStatFilter));
   $("#v-resources").innerHTML =
   '<h2 class="sec">Resource index · verified 2026-09-17</h2>'+
-  '<p class="note">Tier ① core, ② recommended. Volatility: <b>D</b> durable (2+ yr), <b>M</b> technique (~12 mo), '+
+  '<p class="note">Tier ① core, ② recommended, ③ reference. Volatility: <b>D</b> durable (2+ yr), <b>M</b> technique (~12 mo), '+
   '<b>F</b> fast (tools and numbers, ~3 mo). Fast-volatility entries are the first to rot — the shipped linter flags '+
   'them automatically. Full index, including secondary sources and deliberate exclusions, ships as markdown.</p>'+
   '<div class="filters">'+ cats.map(c =>
@@ -1078,14 +1136,14 @@ function renderResources(){
     (o[0]==="any" ? '' : ' · '+count(o[0]))+'</button>').join("") +'</div>'+
   (list.length ? '' : '<p class="note">Nothing matches these filters.</p>')+
   list.map(r => { const st = resStat(r[0]);
-    return '<div class="res'+(st?' is-'+st:'')+'"><span class="rid">'+r[0]+'</span><span class="body" style="flex:1 1 260px;min-width:0">'+
-    '<a class="rt" href="'+r[2]+'" target="_blank" rel="noopener">'+esc(r[1])+'</a>'+
+    return '<div class="res'+(st?' is-'+st:'')+'" id="res-'+r[0]+'"><span class="rid">'+r[0]+'</span><span class="body" style="flex:1 1 260px;min-width:0">'+
+    (r[2] ? '<a class="rt" href="'+r[2]+'" target="_blank" rel="noopener">'+esc(r[1])+'</a>' : '<span class="rt">'+esc(r[1])+'</span>')+
     '<div class="rw">'+esc(r[6])+'</div>'+
-    '<div class="tags"><span class="tag t'+r[3]+'">Tier '+(r[3]===1?"①":"②")+'</span>'+
+    '<div class="tags"><span class="tag t'+r[3]+'">Tier '+"①②③"[r[3]-1]+'</span>'+
     '<span class="tag v'+r[4]+'">'+({D:"durable",M:"technique",F:"fast — recheck"}[r[4]])+'</span>'+
     '<span class="tag">'+r[5]+'</span></div></span>'+
     '<span class="rstat" role="group" aria-label="Reading status for '+r[0]+'">'+ RSTAT.map(o =>
-      '<button class="s'+o[0]+'" data-rs="'+r[0]+'" data-v="'+o[0]+'" aria-pressed="'+(st===o[0])+'">'+o[1]+'</button>').join("")+
+      '<button class="s'+o[0]+'" data-rs="'+r[0]+'" data-v="'+o[0]+'" aria-pressed="'+(st===o[0])+'"'+(o[0]==="x"?' title="Do not read"':'')+'>'+o[1]+'</button>').join("")+
     '</span></div>'; }).join("");
   $("#v-resources").onclick = e => {
     const f = e.target.closest("[data-f]"), sf = e.target.closest("[data-sf]"), rs = e.target.closest("[data-rs]");
@@ -1236,7 +1294,7 @@ function itemKeys(st){
   return keys;
 }
 function mergeState(remote){   // folds `remote` into `state`; returns true if `state` changed
-  const further = {"":0, p:1, r:2, "false":0, "true":1};
+  const further = {"":0, p:1, r:2, x:3, "false":0, "true":1};
   let changed = false;
   for(const key of new Set([...itemKeys(state), ...itemKeys(remote)])){
     const i = key.indexOf(":"), kind = key.slice(0, i), id = key.slice(i + 1);
